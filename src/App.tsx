@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Client } from './api/Client';
 import registerRootHandler from './events/rootHandler';
 import registerScreenHandler from './events/screenHandler';
+import './index.css';
 
-import { default as renderCenturionView } from './handlers/centurion';
-import { default as renderSpotifyView } from './handlers/spotify';
-import { default as renderDefaultView } from './handlers/default';
+import { default as CenturionView }  from './handlers/centurion';
+import { default as SpotifyView } from './handlers/spotify';
+import { default as DefaultView } from './handlers/default';
 
 
 export enum Handlers {
@@ -47,10 +48,10 @@ export default function App() {
 
   switch (currentHandler) {
     case Handlers.CENTURION:
-      return renderCenturionView();
+      return <CenturionView/>;
     case Handlers.SPOTIFY:
-      return renderSpotifyView();
+      return <SpotifyView/>;
     default:
-      return renderDefaultView();
+      return <DefaultView/>;
   }
 }
