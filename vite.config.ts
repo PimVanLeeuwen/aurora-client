@@ -5,11 +5,19 @@ export default defineConfig({
   base: '/',
   plugins: [react()],
   server: {
+    host: '0.0.0.0',
     port: 8081,
     proxy: {
       "/api": {
         target: "http://localhost:3000",
-      }
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      },
+      '/socket.io': {
+        target: 'ws://localhost:3000',
+        ws: true,
+      },
     }
   },
   build: {

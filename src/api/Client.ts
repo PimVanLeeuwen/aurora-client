@@ -474,9 +474,67 @@ export class Client {
     }
 
     /**
+     * @return Skip commands sent
+     */
+    skipCenturion(body: SkipCenturionRequest): Promise<Anonymous2> {
+        let url_ = this.baseUrl + "/modes/centurion/skip";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processSkipCenturion(_response);
+        });
+    }
+
+    protected processSkipCenturion(response: Response): Promise<Anonymous2> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            let result204: any = null;
+            let resultData204 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result204 = resultData204 !== undefined ? resultData204 : <any>null;
+    
+            return result204;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result400 = resultData400 !== undefined ? resultData400 : <any>null;
+    
+            return throwException("Invalid timestamp provided", status, _responseText, _headers, result400);
+            });
+        } else if (status === 411) {
+            return response.text().then((_responseText) => {
+            let result411: any = null;
+            let resultData411 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result411 = resultData411 !== undefined ? resultData411 : <any>null;
+    
+            return throwException("Centurion nog enabled", status, _responseText, _headers, result411);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Anonymous2>(null as any);
+    }
+
+    /**
      * @return Start commands sent
      */
-    stopCenturion(): Promise<Anonymous2> {
+    stopCenturion(): Promise<Anonymous3> {
         let url_ = this.baseUrl + "/modes/centurion/stop";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -492,7 +550,7 @@ export class Client {
         });
     }
 
-    protected processStopCenturion(response: Response): Promise<Anonymous2> {
+    protected processStopCenturion(response: Response): Promise<Anonymous3> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -516,7 +574,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Anonymous2>(null as any);
+        return Promise.resolve<Anonymous3>(null as any);
     }
 
     enableCenturion(body: CenturionParams): Promise<string> {
@@ -594,7 +652,7 @@ export class Client {
     /**
      * @return Ok
      */
-    getAudioHandlers(): Promise<Anonymous3[]> {
+    getAudioHandlers(): Promise<Anonymous4[]> {
         let url_ = this.baseUrl + "/handler/audio";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -610,7 +668,7 @@ export class Client {
         });
     }
 
-    protected processGetAudioHandlers(response: Response): Promise<Anonymous3[]> {
+    protected processGetAudioHandlers(response: Response): Promise<Anonymous4[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -620,7 +678,7 @@ export class Client {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(Anonymous3.fromJS(item));
+                    result200!.push(Anonymous4.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -632,7 +690,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Anonymous3[]>(null as any);
+        return Promise.resolve<Anonymous4[]>(null as any);
     }
 
     /**
@@ -678,7 +736,7 @@ export class Client {
     /**
      * @return Ok
      */
-    getLightsHandlers(): Promise<Anonymous4[]> {
+    getLightsHandlers(): Promise<Anonymous5[]> {
         let url_ = this.baseUrl + "/handler/lights";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -694,7 +752,7 @@ export class Client {
         });
     }
 
-    protected processGetLightsHandlers(response: Response): Promise<Anonymous4[]> {
+    protected processGetLightsHandlers(response: Response): Promise<Anonymous5[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -704,7 +762,7 @@ export class Client {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(Anonymous4.fromJS(item));
+                    result200!.push(Anonymous5.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -716,7 +774,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Anonymous4[]>(null as any);
+        return Promise.resolve<Anonymous5[]>(null as any);
     }
 
     /**
@@ -1475,7 +1533,7 @@ export class Client {
      * @param error (optional) 
      * @return Ok
      */
-    spotifyLoginCallback(state: string, code: string | undefined, error: string | undefined): Promise<Anonymous5> {
+    spotifyLoginCallback(state: string, code: string | undefined, error: string | undefined): Promise<Anonymous6> {
         let url_ = this.baseUrl + "/spotify/callback?";
         if (state === undefined || state === null)
             throw new Error("The parameter 'state' must be defined and cannot be null.");
@@ -1503,7 +1561,7 @@ export class Client {
         });
     }
 
-    protected processSpotifyLoginCallback(response: Response): Promise<Anonymous5> {
+    protected processSpotifyLoginCallback(response: Response): Promise<Anonymous6> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1519,7 +1577,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Anonymous5>(null as any);
+        return Promise.resolve<Anonymous6>(null as any);
     }
 
     /**
@@ -2136,6 +2194,42 @@ export interface IPartial_MessageParams_ {
     message?: string;
 
     [key: string]: any;
+}
+
+export class SkipCenturionRequest implements ISkipCenturionRequest {
+    seconds!: number;
+
+    constructor(data?: ISkipCenturionRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.seconds = _data["seconds"];
+        }
+    }
+
+    static fromJS(data: any): SkipCenturionRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new SkipCenturionRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["seconds"] = this.seconds;
+        return data;
+    }
+}
+
+export interface ISkipCenturionRequest {
+    seconds: number;
 }
 
 export class CenturionParams implements ICenturionParams {
@@ -4740,75 +4834,13 @@ export enum Anonymous2 {
     Empty = "",
 }
 
-export class Anonymous3 implements IAnonymous3 {
-    entities!: Audio[];
-    id!: string;
-    name!: string;
-
-    [key: string]: any;
-
-    constructor(data?: IAnonymous3) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        if (!data) {
-            this.entities = [];
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            if (Array.isArray(_data["entities"])) {
-                this.entities = [] as any;
-                for (let item of _data["entities"])
-                    this.entities!.push(Audio.fromJS(item));
-            }
-            this.id = _data["id"];
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): Anonymous3 {
-        data = typeof data === 'object' ? data : {};
-        let result = new Anonymous3();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        if (Array.isArray(this.entities)) {
-            data["entities"] = [];
-            for (let item of this.entities)
-                data["entities"].push(item.toJSON());
-        }
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data;
-    }
-}
-
-export interface IAnonymous3 {
-    entities: Audio[];
-    id: string;
-    name: string;
-
-    [key: string]: any;
+export enum Anonymous3 {
+    Centurion_not_enabled = "Centurion not enabled",
+    Empty = "",
 }
 
 export class Anonymous4 implements IAnonymous4 {
-    entities!: LightsGroup[];
+    entities!: Audio[];
     id!: string;
     name!: string;
 
@@ -4835,7 +4867,7 @@ export class Anonymous4 implements IAnonymous4 {
             if (Array.isArray(_data["entities"])) {
                 this.entities = [] as any;
                 for (let item of _data["entities"])
-                    this.entities!.push(LightsGroup.fromJS(item));
+                    this.entities!.push(Audio.fromJS(item));
             }
             this.id = _data["id"];
             this.name = _data["name"];
@@ -4867,7 +4899,7 @@ export class Anonymous4 implements IAnonymous4 {
 }
 
 export interface IAnonymous4 {
-    entities: LightsGroup[];
+    entities: Audio[];
     id: string;
     name: string;
 
@@ -4875,10 +4907,77 @@ export interface IAnonymous4 {
 }
 
 export class Anonymous5 implements IAnonymous5 {
+    entities!: LightsGroup[];
+    id!: string;
+    name!: string;
 
     [key: string]: any;
 
     constructor(data?: IAnonymous5) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.entities = [];
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["entities"])) {
+                this.entities = [] as any;
+                for (let item of _data["entities"])
+                    this.entities!.push(LightsGroup.fromJS(item));
+            }
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): Anonymous5 {
+        data = typeof data === 'object' ? data : {};
+        let result = new Anonymous5();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.entities)) {
+            data["entities"] = [];
+            for (let item of this.entities)
+                data["entities"].push(item.toJSON());
+        }
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface IAnonymous5 {
+    entities: LightsGroup[];
+    id: string;
+    name: string;
+
+    [key: string]: any;
+}
+
+export class Anonymous6 implements IAnonymous6 {
+
+    [key: string]: any;
+
+    constructor(data?: IAnonymous6) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -4896,9 +4995,9 @@ export class Anonymous5 implements IAnonymous5 {
         }
     }
 
-    static fromJS(data: any): Anonymous5 {
+    static fromJS(data: any): Anonymous6 {
         data = typeof data === 'object' ? data : {};
-        let result = new Anonymous5();
+        let result = new Anonymous6();
         result.init(data);
         return result;
     }
@@ -4913,7 +5012,7 @@ export class Anonymous5 implements IAnonymous5 {
     }
 }
 
-export interface IAnonymous5 {
+export interface IAnonymous6 {
 
     [key: string]: any;
 }
