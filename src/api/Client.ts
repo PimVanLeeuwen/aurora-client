@@ -1743,15 +1743,20 @@ export class Client {
     }
 
     /**
+     * @param body (optional) 
      * @return No content
      */
-    authMock(): Promise<void> {
+    authMock(body: MockAuthRequest | undefined): Promise<void> {
         let url_ = this.baseUrl + "/auth/mock";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_: RequestInit = {
+            body: content_,
             method: "POST",
             headers: {
+                "Content-Type": "application/json",
             }
         };
 
@@ -2316,6 +2321,9 @@ export class Audio implements IAudio {
     deletedAt?: Date;
     currentHandler?: string;
     name!: string;
+    /** ID of the socket connection if present.
+Required to send events specifically and only to this entity */
+    socketId?: string;
     /** Whether this audio object is currently playing anything */
     playing?: boolean;
 
@@ -2339,6 +2347,7 @@ export class Audio implements IAudio {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.currentHandler = _data["currentHandler"];
             this.name = _data["name"];
+            this.socketId = _data["socketId"];
             this.playing = _data["playing"] !== undefined ? _data["playing"] : false;
         }
     }
@@ -2358,6 +2367,7 @@ export class Audio implements IAudio {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["currentHandler"] = this.currentHandler;
         data["name"] = this.name;
+        data["socketId"] = this.socketId;
         data["playing"] = this.playing;
         return data;
     }
@@ -2370,6 +2380,9 @@ export interface IAudio {
     deletedAt?: Date;
     currentHandler?: string;
     name: string;
+    /** ID of the socket connection if present.
+Required to send events specifically and only to this entity */
+    socketId?: string;
     /** Whether this audio object is currently playing anything */
     playing?: boolean;
 }
@@ -2381,6 +2394,9 @@ export class LightsGroup implements ILightsGroup {
     deletedAt?: Date;
     currentHandler?: string;
     name!: string;
+    /** ID of the socket connection if present.
+Required to send events specifically and only to this entity */
+    socketId?: string;
     controller!: LightsController;
     pars!: LightsGroupPars[];
     movingHeadWheels!: LightsGroupMovingHeadWheels[];
@@ -2409,6 +2425,7 @@ export class LightsGroup implements ILightsGroup {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.currentHandler = _data["currentHandler"];
             this.name = _data["name"];
+            this.socketId = _data["socketId"];
             this.controller = _data["controller"] ? LightsController.fromJS(_data["controller"]) : new LightsController();
             if (Array.isArray(_data["pars"])) {
                 this.pars = [] as any;
@@ -2443,6 +2460,7 @@ export class LightsGroup implements ILightsGroup {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["currentHandler"] = this.currentHandler;
         data["name"] = this.name;
+        data["socketId"] = this.socketId;
         data["controller"] = this.controller ? this.controller.toJSON() : <any>undefined;
         if (Array.isArray(this.pars)) {
             data["pars"] = [];
@@ -2470,6 +2488,9 @@ export interface ILightsGroup {
     deletedAt?: Date;
     currentHandler?: string;
     name: string;
+    /** ID of the socket connection if present.
+Required to send events specifically and only to this entity */
+    socketId?: string;
     controller: LightsController;
     pars: LightsGroupPars[];
     movingHeadWheels: LightsGroupMovingHeadWheels[];
@@ -2483,6 +2504,9 @@ export class LightsController implements ILightsController {
     deletedAt?: Date;
     currentHandler?: string;
     name!: string;
+    /** ID of the socket connection if present.
+Required to send events specifically and only to this entity */
+    socketId?: string;
     lightsGroups!: LightsGroup[];
 
     constructor(data?: ILightsController) {
@@ -2505,6 +2529,7 @@ export class LightsController implements ILightsController {
             this.deletedAt = _data["deletedAt"] ? new Date(_data["deletedAt"].toString()) : <any>undefined;
             this.currentHandler = _data["currentHandler"];
             this.name = _data["name"];
+            this.socketId = _data["socketId"];
             if (Array.isArray(_data["lightsGroups"])) {
                 this.lightsGroups = [] as any;
                 for (let item of _data["lightsGroups"])
@@ -2528,6 +2553,7 @@ export class LightsController implements ILightsController {
         data["deletedAt"] = this.deletedAt ? this.deletedAt.toISOString() : <any>undefined;
         data["currentHandler"] = this.currentHandler;
         data["name"] = this.name;
+        data["socketId"] = this.socketId;
         if (Array.isArray(this.lightsGroups)) {
             data["lightsGroups"] = [];
             for (let item of this.lightsGroups)
@@ -2544,6 +2570,9 @@ export interface ILightsController {
     deletedAt?: Date;
     currentHandler?: string;
     name: string;
+    /** ID of the socket connection if present.
+Required to send events specifically and only to this entity */
+    socketId?: string;
     lightsGroups: LightsGroup[];
 }
 
@@ -4599,6 +4628,66 @@ export interface ISpotifyUserResponse {
     active: boolean;
 }
 
+export class MockAuthRequest implements IMockAuthRequest {
+    name?: string;
+    roles?: string[];
+
+    [key: string]: any;
+
+    constructor(data?: IMockAuthRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.name = _data["name"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): MockAuthRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new MockAuthRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["name"] = this.name;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IMockAuthRequest {
+    name?: string;
+    roles?: string[];
+
+    [key: string]: any;
+}
+
 export class OIDCParameters implements IOIDCParameters {
     state?: string;
     session_state?: string;
@@ -5033,6 +5122,7 @@ export enum LightsWheelChannelValue_ColorWheelColors_Channel {
     GoboRotateChannel = "goboRotateChannel",
     ColorWheelChannelValues = "colorWheelChannelValues",
     GoboWheelChannelValues = "goboWheelChannelValues",
+    Blackout = "blackout",
     SetCurrentValues = "setCurrentValues",
     ChannelValues = "channelValues",
     ToDmx = "toDmx",
@@ -5061,6 +5151,7 @@ export enum LightsWheelChannelValue_string_Channel {
     GoboRotateChannel = "goboRotateChannel",
     ColorWheelChannelValues = "colorWheelChannelValues",
     GoboWheelChannelValues = "goboWheelChannelValues",
+    Blackout = "blackout",
     SetCurrentValues = "setCurrentValues",
     ChannelValues = "channelValues",
     ToDmx = "toDmx",

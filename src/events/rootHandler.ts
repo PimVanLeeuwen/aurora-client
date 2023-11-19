@@ -9,8 +9,7 @@ export default function registerRootHandler(setCurrentHandler: (value: (((prevSt
   rootSocket.on('connect', () => {
     const engine = rootSocket.io.engine;
     engine.on('packet', ({ type, data }) => {
-      console.log(type, data);
-      setCurrentHandler(Handlers.SPOTIFY);
+      setCurrentHandler(Handlers.CENTURION);
     });
   });
 }

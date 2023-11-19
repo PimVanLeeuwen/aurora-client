@@ -7,6 +7,7 @@ import './index.css';
 import { default as CenturionView }  from './handlers/centurion';
 import { default as SpotifyView } from './handlers/spotify';
 import { default as DefaultView } from './handlers/default';
+import { Socket } from 'socket.io-client';
 
 
 export enum Handlers {
@@ -19,13 +20,14 @@ export default function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
   const [currentHandler, setCurrentHandler] = useState<Handlers | null>(null);
+  const [screenSocket, setScreenSocket] = useState<Socket>(null);
 
   useEffect(() => {
     let client = new Client();
     client.authMock()
       .then(() => {
         registerRootHandler(setCurrentHandler);
-        registerScreenHandler();
+        registerScreenHandler(setScreenSocket);
       })
       .catch((e) => setError(e))
       .finally(() => setLoading(false));
@@ -48,10 +50,10 @@ export default function App() {
 
   switch (currentHandler) {
     case Handlers.CENTURION:
-      return <CenturionView/>;
+      return <CenturionView socket={screenSocket}/>;
     case Handlers.SPOTIFY:
-      return <SpotifyView/>;
+      return <SpotifyView socket={screenSocket}/>;
     default:
-      return <DefaultView/>;
+      return <DefaultView />;
   }
 }
