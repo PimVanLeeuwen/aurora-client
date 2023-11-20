@@ -1,40 +1,95 @@
-.gradient {
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
-    height: 100vh;
+:root {
+    --start-color: #ee7752;
+    --end-color: #23d5ab;
 }
 
-@keyframes gradient {
+/* General styling */
+.romanText {
+    font-family: 'Bebas Neue', sans-serif;
+    text-shadow: #333333 0 0 70px;
+}
+
+/* Strobe animations */
+@-webkit-keyframes strobe {
     0% {
-        background-position: 0% 50%;
+        background-color: #fff;
+    }
+    49% {
+        background-color: #fff;
     }
     50% {
-        background-position: 100% 50%;
+        background-color: #000;
+    }
+    99% {
+        background-color: #000;
     }
     100% {
-        background-position: 0% 50%;
+        background-color: #fff;
     }
 }
 
-@-webkit-keyframes swinging{
-    0%{-webkit-transform: rotate(var(--swingStart));}
-    50%{-webkit-transform: rotate(var(--swingMid))}
-    100%{-webkit-transform: rotate(var(--swingEnd));}
+@-moz-keyframes strobe {
+    0% {
+        background-color: #fff;
+    }
+    49% {
+        background-color: #fff;
+    }
+    50% {
+        background-color: #000;
+    }
+    99% {
+        background-color: #000;
+    }
+    100% {
+        background-color: #fff;
+    }
 }
 
-@keyframes swinging{
-    0%{transform: rotate(var(--swingStart));}
-    50%{transform: rotate(var(--swingMid))}
-    100%{transform: rotate(var(--swingEnd));}
+@keyframes strobe {
+    0% {
+        background-color: #fff;
+    }
+    49% {
+        background-color: #fff;
+    }
+    50% {
+        background-color: #000;
+    }
+    99% {
+        background-color: #000;
+    }
+    100% {
+        background-color: #fff;
+    }
 }
 
-.swingimage{
-    --swingStart: 60deg;
-    --swingMid: -60deg;
-    --swingEnd: 60deg;
-    -webkit-transform-origin: 50% 0;
-    transform-origin: 50% 0;
-    -webkit-animation: swinging 3.5s ease-in-out forwards infinite;
-    animation: swinging 3.5s ease-in-out forwards infinite;
+.strobeDiv {
+    -webkit-animation: strobe 0.1s infinite;
+    -moz-animation: strobe 0.1s infinite;
+    animation: strobe 0.1s infinite;
+}
+
+/* Background */
+.dots{
+    background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-183/dots-transparent.png);
+    width: 100%;
+    height:100%;
+    opacity: .1;
+    background-repeat: repeat;
+}
+
+.fullSize {
+    position:absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height:100%;
+}
+
+.gradient {
+    background: -webkit-linear-gradient(left top, var(--start-color), var(--end-color)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(bottom right, var(--start-color), var(--end-color)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(bottom right, var(--start-color), var(--end-color)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom right, var(--start-color), var(--end-color)); /* Standard syntax */
 }
