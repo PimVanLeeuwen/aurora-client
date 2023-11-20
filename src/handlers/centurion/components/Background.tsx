@@ -290,14 +290,13 @@ export default function Background(props: Props) {
       </Helmet>
 
       <div
-        className={clsx(styles.fullSize, styles.gradient)}
+        className={clsx(styles.fullscreenOverlay, '-z-20')}
         style={{
           ['--start-color' as any]: endColor,
           ['--end-color' as any]: startColor,
         }}
       >
-        <div className={styles.dots}></div>
-        <canvas id="metaball-canvas" className={styles.fullSize}></canvas>
+        <canvas id="metaball-canvas" className={clsx(styles.fullscreenOverlay, styles.gradientBackground)}></canvas>
       </div>
     </div>
   );

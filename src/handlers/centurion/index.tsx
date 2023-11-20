@@ -91,13 +91,13 @@ export default function View({ socket }: Props) {
     socket.on('start', () => {
       setArtists('GET READY');
       setSong(null);
-      setHornCount(0);
+      setHornCount(-1);
     });
 
     socket.on('stop', () => {
       setArtists('STOPPED');
       setSong(null);
-      setHornCount(0);
+      setHornCount(-1);
     });
 
     socket.on('change_track', (trackChangeEvent: any) => {
@@ -111,7 +111,6 @@ export default function View({ socket }: Props) {
       setStrobe(true);
       setTimeout(() => {
         setStrobe(false);
-        console.log('false again');
       }, hornEvent.strobeTime);
     });
 
@@ -125,33 +124,51 @@ export default function View({ socket }: Props) {
     };
   }, []);
 
+  const getRandomInt = () => {
+    return Math.floor(Math.random() * 2 * hornCount) - hornCount;
+  };
+
+  const makeTextDrunk = (note: any) => {
+    return [...note].map(letter => {
+      // Range [-#shots, #shots]
+      let randomInt = getRandomInt();
+      return (
+        <span className={clsx(styles.letterAnimation, 'z-20')} style={{
+          ['--random-rotation' as any]: `${randomInt / 2}deg`,
+          ['--random-time' as any]: `${hornCount === 0 ? '500s' : `${1 / hornCount * 500}s`}`,
+          'display': 'inline-block',
+        }}>{letter === ' ' ? '\u00A0' : letter}</span>
+      );
+    });
+  };
+
   const renderHornCount = () => {
     return (
       <p className={clsx(
-        'text-white stroke-blue-200 text-[400px] m-5',
+        'text-white text-[550px] -m-20',
         styles.swingimage,
         styles.largeStroke,
         styles.effectTest,
       )}>
-        {hornCount}
+        {makeTextDrunk(hornCount.toString())}
       </p>
     );
   };
 
   return (
     <>
-      <div className="h-screen flex items-center justify-center z-10">
-        <div className={clsx('w-fit flex flex-col justify-center text-center', styles.romanText)}>
-          { hornCount >= 0 && renderHornCount() }
-          <p className={clsx('text-white text-8xl p-4 font-bold', styles.swingimage, styles.smallStroke)}>
-            {artist.toUpperCase()}
+      <div className="h-screen flex items-center justify-center">
+        <div className={clsx('w-fit flex flex-col justify-center text-center', styles.displayText)}>
+          {hornCount >= 0 && renderHornCount()}
+          <p className={clsx('text-white text-8xl font-bold mb-10', styles.swingimage, styles.smallStroke)}>
+            {makeTextDrunk(artist.toUpperCase())}
           </p>
-          <p className={clsx('text-white text-8xl p-4', styles.swingimage, styles.smallStroke)}>
-            {song.toUpperCase()}
+          <p className={clsx('text-white text-8xl', styles.swingimage, styles.smallStroke)}>
+            {makeTextDrunk(song.toUpperCase())}
           </p>
         </div>
       </div>
-      {strobe && <Strobe/>}
+      {strobe && <Strobe hornCount={hornCount}/>}
       <Background
         startColor={startColor}
         endColor={endColor}

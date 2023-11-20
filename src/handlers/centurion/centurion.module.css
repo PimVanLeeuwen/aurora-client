@@ -1,16 +1,18 @@
 :root {
     --start-color: #ee7752;
     --end-color: #23d5ab;
+    --random-rotation: 6deg;
+    --random-time: 10s;
 }
 
 /* General styling */
-.romanText {
+.displayText {
     font-family: 'Bebas Neue', sans-serif;
-    text-shadow: #333333 0 0 70px;
+    text-shadow: #777777 0 0 20px;
 }
 
 /* Strobe animations */
-@-webkit-keyframes strobe {
+@-webkit-keyframes strobeAnimation {
     0% {
         background-color: #fff;
     }
@@ -28,7 +30,7 @@
     }
 }
 
-@-moz-keyframes strobe {
+@-moz-keyframes strobeAnimation {
     0% {
         background-color: #fff;
     }
@@ -46,7 +48,7 @@
     }
 }
 
-@keyframes strobe {
+@keyframes strobeAnimation {
     0% {
         background-color: #fff;
     }
@@ -64,32 +66,42 @@
     }
 }
 
-.strobeDiv {
-    -webkit-animation: strobe 0.1s infinite;
-    -moz-animation: strobe 0.1s infinite;
-    animation: strobe 0.1s infinite;
+.strobe {
+    -webkit-animation: strobeAnimation 0.1s infinite;
+    -moz-animation: strobeAnimation 0.1s infinite;
+    animation: strobeAnimation 0.1s infinite;
 }
 
 /* Background */
-.dots{
-    background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-183/dots-transparent.png);
-    width: 100%;
-    height:100%;
-    opacity: .1;
-    background-repeat: repeat;
-}
-
-.fullSize {
-    position:absolute;
-    top:0;
-    left:0;
-    width: 100%;
-    height:100%;
-}
-
-.gradient {
+.gradientBackground {
+    filter: brightness(95%);
     background: -webkit-linear-gradient(left top, var(--start-color), var(--end-color)); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(bottom right, var(--start-color), var(--end-color)); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(bottom right, var(--start-color), var(--end-color)); /* For Firefox 3.6 to 15 */
     background: linear-gradient(to bottom right, var(--start-color), var(--end-color)); /* Standard syntax */
+}
+
+.fullscreenOverlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Text effects */
+@keyframes moveLetterAnimation {
+    0% {
+        transform: rotate(var(--random-rotation));
+    }
+    50% {
+        transform: rotate(calc(var(--random-rotation) * -1));
+    }
+    100% {
+        transform: rotate(var(--random-rotation));
+    }
+}
+
+.letterAnimation {
+    animation: ease-in-out moveLetterAnimation var(--random-time) infinite;
 }
