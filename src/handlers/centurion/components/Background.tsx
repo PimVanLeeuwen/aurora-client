@@ -1,16 +1,29 @@
 import styles from '../centurion.module.css';
+import stylesextra from '../centurion.extra.module.css';
 import { clsx } from 'clsx';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { usePrevious } from '../../../helpers/usePrevious';
 
 interface Props {
   startColor: string,
   endColor: string,
 }
 
+const usePreviousValue = value => {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+};
+
+
 export default function Background(props: Props) {
 
   const { startColor, endColor } = props;
+  const prevStartColor = usePreviousValue(startColor);
+  const prevEndColor = usePreviousValue(endColor);
 
   return (
     <div className="h-screen w-full top-0 left-0 absolute -z-20" >
@@ -290,7 +303,16 @@ export default function Background(props: Props) {
       </Helmet>
 
       <div
-        className={clsx(styles.fullscreenOverlay, '-z-20')}
+        className={clsx(stylesextra.fullscreenOverlay, stylesextra.gradientBackground, '-z-30')}
+        style={{
+          ['--start-color' as any]: prevEndColor,
+          ['--end-color' as any]: prevStartColor,
+        }}
+      />
+
+      <div
+        key={startColor}
+        className={clsx(styles.fullscreenOverlay, styles.fadeOver, '-z-20')}
         style={{
           ['--start-color' as any]: endColor,
           ['--end-color' as any]: startColor,

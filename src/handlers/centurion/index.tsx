@@ -91,7 +91,7 @@ export default function View({ socket }: Props) {
     socket.on('start', () => {
       setArtists('GET READY');
       setSong(null);
-      setHornCount(-1);
+      setHornCount(0);
     });
 
     socket.on('stop', () => {
@@ -101,7 +101,6 @@ export default function View({ socket }: Props) {
     });
 
     socket.on('change_track', (trackChangeEvent: any) => {
-      console.log(trackChangeEvent);
       setArtists(trackChangeEvent[0].artists.toString());
       setSong(trackChangeEvent[0].title);
     });
@@ -160,16 +159,22 @@ export default function View({ socket }: Props) {
       <div className="h-screen flex items-center justify-center">
         <div className={clsx('w-fit flex flex-col justify-center text-center', styles.displayText)}>
           {hornCount >= 0 && renderHornCount()}
-          <p className={clsx('text-white text-8xl font-bold mb-10', styles.swingimage, styles.smallStroke)}>
+          <p
+            key={artist}
+            className={clsx('text-white text-7xl font-bold mb-10', styles.swingimage, styles.smallStroke, styles.fadeOver)}
+          >
             {makeTextDrunk(artist.toUpperCase())}
           </p>
-          <p className={clsx('text-white text-8xl', styles.swingimage, styles.smallStroke)}>
+          <p
+            key={song}
+            className={clsx('text-white text-7xl', styles.swingimage, styles.smallStroke, styles.fadeOver)}>
             {makeTextDrunk(song.toUpperCase())}
           </p>
         </div>
       </div>
       {strobe && <Strobe hornCount={hornCount}/>}
       <Background
+        key={startColor}
         startColor={startColor}
         endColor={endColor}
       />
