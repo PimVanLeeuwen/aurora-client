@@ -67,7 +67,7 @@ export default function Background({ colors }: Props) {
         }
 
         function initialize(){
-          canvas = document.getElementById('metaball-canvas');
+          canvas = document.getElementById('lavalamp-canvas');
           canvas.width = window.innerWidth;
           canvas.height = window.innerHeight;
           var glConfig = {
@@ -290,22 +290,13 @@ export default function Background({ colors }: Props) {
       </Helmet>
 
       <div
-        className={clsx(styles.fullscreenOverlay, styles.backdropBackground, '-z-30')}
-        style={{
-          ['--start-color-backdrop' as any]: previous.end,
-          ['--end-color-backdrop' as any]: previous.start,
-        }}
-      />
-
-      <div
-        key={colors.start}
-        className={clsx(styles.fullscreenOverlay, styles.animationBackground, '-z-20')}
+        className={clsx(styles.fullscreen, styles.wallpaper, '-z-20')}
         style={{
           ['--start-color-animation' as any]: colors.end,
           ['--end-color-animation' as any]: colors.start,
         }}
       >
-        <canvas id="metaball-canvas" className={clsx(styles.fullscreenOverlay, styles.gradientBackground)}></canvas>
+        <canvas id="lavalamp-canvas" className={clsx(styles.fullscreen)}></canvas>
       </div>
     </div>
   );

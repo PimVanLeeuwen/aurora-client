@@ -160,7 +160,7 @@ export default function View({ socket }: Props) {
       // Range [-#shots, #shots]
       let randomInt = getRandomInt();
       return (
-        <span className={clsx(styles.letterAnimation, 'z-20')} style={{
+        <span className={clsx(styles.drunk, 'z-20')} style={{
           ['--random-rotation' as any]: `${randomInt / 3}deg`,
           ['--random-time' as any]: `${hornCount === 0 ? '500s' : `${1 / hornCount * 500}s`}`,
           'display': 'inline-block',
@@ -171,12 +171,7 @@ export default function View({ socket }: Props) {
 
   const renderHornCount = () => {
     return (
-      <p className={clsx(
-        'text-white text-[550px] -m-20',
-        styles.swingimage,
-        styles.largeStroke,
-        styles.effectTest,
-      )}>
+      <p className='text-white text-[550px] -m-20'>
         {makeTextDrunk(hornCount.toString())}
       </p>
     );
@@ -194,16 +189,12 @@ export default function View({ socket }: Props) {
 
       {status === Status.PLAYING &&
           <div className="h-screen flex items-center justify-center">
-            <div className={clsx('w-fit flex flex-col justify-center text-center', styles.displayText)}>
+            <div className={clsx('w-fit flex flex-col justify-center text-center', styles.text)}>
               {hornCount >= 0 && renderHornCount()}
-                <p
-                  className={clsx('text-white text-7xl font-bold mb-10', styles.swingimage, styles.smallStroke, styles.fadeOver)}
-                >
+                <p className='text-white text-7xl font-bold mb-10'>
                   {makeTextDrunk(artist.toUpperCase())}
                 </p>
-                <p
-                  className={clsx('text-white text-7xl', styles.swingimage, styles.smallStroke, styles.fadeOver)}
-                >
+                <p className='text-white text-7xl'>
                   {makeTextDrunk(song.toUpperCase())}
                 </p>
             </div>

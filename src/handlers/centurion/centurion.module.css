@@ -8,7 +8,7 @@
 }
 
 /* General styling */
-.displayText {
+.text {
     font-family: 'Bebas Neue', sans-serif;
     text-shadow: #777777 0 0 20px;
 }
@@ -74,16 +74,7 @@
     animation: strobeAnimation 0.1s infinite;
 }
 
-/* Background */
-.backdropBackground {
-    filter: brightness(95%);
-    background: -webkit-linear-gradient(left top, var(--start-color-backdrop), var(--end-color-backdrop)); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(bottom right, var(--start-color-backdrop), var(--end-color-backdrop)); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(bottom right, var(--start-color-backdrop), var(--end-color-backdrop)); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(to bottom right, var(--start-color-backdrop), var(--end-color-backdrop)); /* Standard syntax */
-}
-
-.animationBackground {
+.wallpaper {
     filter: brightness(95%);
     background: -webkit-linear-gradient(left top, var(--start-color-animation), var(--end-color-animation)); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(bottom right, var(--start-color-animation), var(--end-color-animation)); /* For Opera 11.1 to 12.0 */
@@ -91,7 +82,7 @@
     background: linear-gradient(to bottom right, var(--start-color-animation), var(--end-color-animation)); /* Standard syntax */
 }
 
-.fullscreenOverlay {
+.fullscreen {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -100,7 +91,7 @@
 }
 
 /* Text effects */
-@keyframes moveLetterAnimation {
+@keyframes drunkAnimation {
     0% {
         transform: rotate(var(--random-rotation));
     }
@@ -112,15 +103,6 @@
     }
 }
 
-.letterAnimation {
-    animation: ease-in-out moveLetterAnimation var(--random-time) infinite;
-}
-
-@keyframes fadeOver {
-    0% { opacity: 0 }
-    100% { opacity: 1 }
-}
-
-.fadeOver {
-    animation: fadeOver 4s;
+.drunk {
+    animation: ease-in-out drunkAnimation var(--random-time) infinite;
 }
