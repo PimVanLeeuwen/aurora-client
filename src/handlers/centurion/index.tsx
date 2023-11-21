@@ -5,6 +5,7 @@ import { Socket } from 'socket.io-client';
 import styles from './centurion.module.css';
 import Strobe from './components/Strobe';
 import { clsx } from 'clsx';
+import Information from './components/Information';
 
 interface Props {
   socket: Socket;
@@ -17,6 +18,7 @@ interface TrackChangeEvent {
 }
 
 interface MixTape {
+  coverUrl: string;
   name: string;
   songFile: string;
   feed: FeedEvent[];
@@ -72,50 +74,76 @@ enum Colors {
   'lightblue' = '#98e7ff',
 }
 
+export interface CurrentColors {
+  start: Colors
+  end: Colors
+}
+
+enum Status {
+  'STOPPED' = 'Stopped',
+  'READY' = 'Get ready!',
+  'PLAYING' = 'Playing',
+}
+
 export default function View({ socket }: Props) {
 
   const [artist, setArtists] = useState<string | null>('Roy Kakkenberg, Gijs de Man & Samuel Oosterholt');
   const [song, setSong] = useState<string | null>('Wie dit leest, trekt een bak!');
-  const [hornCount, setHornCount] = useState<number>(0);
+
+  const [mixtape, setMixtape] = useState<MixTape | null>(null);
+  const [status, setStatus] = useState<Status>(Status.STOPPED);
+
+
+  const [hornCount, setHornCount] = useState<number>(-1);
   const [strobe, setStrobe] = useState<boolean>(false);
-  const [startColor, setStartColor] = useState<Colors>(Colors.lightpink);
-  const [endColor, setEndColor] = useState<Colors>(Colors.orange);
+  const [colors, setColors] = useState<CurrentColors>({
+    start: Colors.lightpink,
+    end: Colors.orange,
+  });
 
   React.useEffect(() => {
     socket.on('loaded', (mixTape: MixTape) => {
-      setArtists(mixTape.name);
-      setSong(mixTape.name);
-      setHornCount(0);
+      setMixtape(mixTape);
+      setStatus(Status.READY);
+      setHornCount(-1);
     });
 
     socket.on('start', () => {
-      setArtists('GET READY');
-      setSong(null);
+      setArtists('GEWIS');
+      setSong('Narrowcasting Software ©');
+
       setHornCount(0);
     });
 
     socket.on('stop', () => {
-      setArtists('STOPPED');
-      setSong(null);
+      setArtists('GEWIS');
+      setSong('Narrowcasting Software ©');
+
+      setStatus(Status.STOPPED);
       setHornCount(-1);
     });
 
     socket.on('change_track', (trackChangeEvent: any) => {
       setArtists(trackChangeEvent[0].artists.toString());
       setSong(trackChangeEvent[0].title);
+      setStatus(Status.PLAYING);
     });
 
     socket.on('horn', (hornEvent: HornEvent) => {
-      setHornCount(hornEvent.counter);
       setStrobe(true);
       setTimeout(() => {
         setStrobe(false);
       }, hornEvent.strobeTime);
+
+      setStatus(Status.PLAYING);
+      setHornCount(hornEvent.counter);
     });
 
     socket.on('change_colors', (newColors: string[]) => {
-      setStartColor(Colors[newColors[0]]);
-      setEndColor(Colors[newColors[1]]);
+      setColors({
+        start: Colors[newColors[0]],
+        end: Colors[newColors[1]],
+      });
     });
 
     return () => {
@@ -133,7 +161,7 @@ export default function View({ socket }: Props) {
       let randomInt = getRandomInt();
       return (
         <span className={clsx(styles.letterAnimation, 'z-20')} style={{
-          ['--random-rotation' as any]: `${randomInt / 2}deg`,
+          ['--random-rotation' as any]: `${randomInt / 3}deg`,
           ['--random-time' as any]: `${hornCount === 0 ? '500s' : `${1 / hornCount * 500}s`}`,
           'display': 'inline-block',
         }}>{letter === ' ' ? '\u00A0' : letter}</span>
@@ -156,27 +184,36 @@ export default function View({ socket }: Props) {
 
   return (
     <>
-      <div className="h-screen flex items-center justify-center">
-        <div className={clsx('w-fit flex flex-col justify-center text-center', styles.displayText)}>
-          {hornCount >= 0 && renderHornCount()}
-          <p
-            key={artist}
-            className={clsx('text-white text-7xl font-bold mb-10', styles.swingimage, styles.smallStroke, styles.fadeOver)}
-          >
-            {makeTextDrunk(artist.toUpperCase())}
-          </p>
-          <p
-            key={song}
-            className={clsx('text-white text-7xl', styles.swingimage, styles.smallStroke, styles.fadeOver)}>
-            {makeTextDrunk(song.toUpperCase())}
-          </p>
-        </div>
-      </div>
+      {hornCount === -1 && mixtape &&
+          <Information
+              title={mixtape.name}
+              albumCover={mixtape.coverUrl}
+              description={status}
+          />
+      }
+
+      {status === Status.PLAYING &&
+          <div className="h-screen flex items-center justify-center">
+            <div className={clsx('w-fit flex flex-col justify-center text-center', styles.displayText)}>
+              {hornCount >= 0 && renderHornCount()}
+                <p
+                  className={clsx('text-white text-7xl font-bold mb-10', styles.swingimage, styles.smallStroke, styles.fadeOver)}
+                >
+                  {makeTextDrunk(artist.toUpperCase())}
+                </p>
+                <p
+                  className={clsx('text-white text-7xl', styles.swingimage, styles.smallStroke, styles.fadeOver)}
+                >
+                  {makeTextDrunk(song.toUpperCase())}
+                </p>
+            </div>
+          </div>
+      }
+
       {strobe && <Strobe hornCount={hornCount}/>}
+
       <Background
-        key={startColor}
-        startColor={startColor}
-        endColor={endColor}
+        colors={colors}
       />
     </>
   );
