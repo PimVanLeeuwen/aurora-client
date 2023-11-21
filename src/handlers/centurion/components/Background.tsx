@@ -2,7 +2,6 @@ import styles from '../centurion.module.css';
 import { clsx } from 'clsx';
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { usePrevious } from '../../../helpers/usePrevious';
 import { CurrentColors } from '../index';
 import { imports, tweenMax } from '../scripts/imports';
 import { lavalampFragment, lavalampJavascript, lavalampVertex } from '../scripts/lavalamp';
@@ -12,8 +11,6 @@ interface Props {
 }
 
 export default function Background({ colors }: Props) {
-  const previous = usePrevious(colors);
-
   return (
     <div className="h-screen w-full top-0 left-0 absolute -z-20" >
       <Helmet>

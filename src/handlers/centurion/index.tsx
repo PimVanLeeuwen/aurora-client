@@ -113,6 +113,7 @@ export default function View({ socket }: Props) {
       setSong('Narrowcasting Software ©');
 
       setHornCount(0);
+      setStatus(Status.PLAYING);
     });
 
     socket.on('stop', () => {
