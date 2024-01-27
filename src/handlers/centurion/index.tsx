@@ -85,7 +85,7 @@ enum Status {
   'PLAYING' = 'Playing',
 }
 
-export default function View({ socket }: Props) {
+export default function CenturionView({ socket }: Props) {
 
   const [artist, setArtists] = useState<string | null>('Roy Kakkenberg, Gijs de Man & Samuel Oosterholt');
   const [song, setSong] = useState<string | null>('Wie dit leest, trekt een bak!');

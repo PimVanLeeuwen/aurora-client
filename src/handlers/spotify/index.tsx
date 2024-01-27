@@ -52,7 +52,7 @@ type Beat = {
   type: 'beat',
 };
 
-export default function View({ socket }: Props) {
+export default function SpotifyView({ socket }: Props) {
 
   const [albumCover, setAlbumCover] = useState<string>('https://placekitten.com/g/200/200');
   const [artist, setArtists] = useState<string>('Roy Kakkenberg, Gijs de Man & Samuel Oosterholt');
@@ -71,14 +71,14 @@ export default function View({ socket }: Props) {
       setArtists(mixTape.name);
       setSong(mixTape.name);
     });
-    
+
     socket.on('change_track', (trackChange: TrackChangeEvent[]) => {
       console.log(trackChange);
       setArtists(trackChange[0].artists.toString());
       setSong(trackChange[0].title);
       setAlbumCover(trackChange[0].cover);
     });
-    
+
     socket.on('horn', (trackChange: any) => {
       console.log(trackChange);
 

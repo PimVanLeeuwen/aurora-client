@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { Handlers } from '../App';
+import { Handlers } from '../HandlerSwitcher';
 
 export default function registerRootHandler(setCurrentHandler: (value: (((prevState: Handlers) => Handlers) | Handlers)) => void) {
   let rootSocket = io('/', {
@@ -8,8 +8,10 @@ export default function registerRootHandler(setCurrentHandler: (value: (((prevSt
 
   rootSocket.on('connect', () => {
     const engine = rootSocket.io.engine;
-    engine.on('packet', ({ type, data }) => {
-      setCurrentHandler(Handlers.CENTURION);
-    });
+  });
+
+  rootSocket.on('handler_set', (handler) => {
+    console.log(handler);
+    setCurrentHandler(handler);
   });
 }
