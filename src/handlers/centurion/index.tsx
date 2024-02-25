@@ -102,7 +102,8 @@ export default function CenturionView({ socket }: Props) {
   });
 
   React.useEffect(() => {
-    socket.on('loaded', (mixTape: MixTape) => {
+    socket.on('loaded', (mixTapes: MixTape[]) => {
+      const mixTape = mixTapes[0];
       setMixtape(mixTape);
       setStatus(Status.READY);
       setHornCount(-1);
@@ -124,23 +125,26 @@ export default function CenturionView({ socket }: Props) {
       setHornCount(-1);
     });
 
-    socket.on('change_track', (trackChangeEvent: any) => {
-      setArtists(trackChangeEvent[0].artists.toString());
+    socket.on('change_track', (event: any[]) => {
+      const trackChangeEvent = event[0];
+      setArtists(trackChangeEvent[0].artists.join(', '));
       setSong(trackChangeEvent[0].title);
       setStatus(Status.PLAYING);
     });
 
-    socket.on('horn', (hornEvent: HornEvent) => {
+    socket.on('horn', (hornEvent: HornEvent[]) => {
+      const { strobeTime, counter } = hornEvent[0];
       setStrobe(true);
       setTimeout(() => {
         setStrobe(false);
-      }, hornEvent.strobeTime);
+      }, strobeTime);
 
       setStatus(Status.PLAYING);
-      setHornCount(hornEvent.counter);
+      setHornCount(counter);
     });
 
-    socket.on('change_colors', (newColors: string[]) => {
+    socket.on('change_colors', (newColorsEvent: string[][]) => {
+      const newColors = newColorsEvent[0];
       setColors({
         start: Colors[newColors[0]],
         end: Colors[newColors[1]],
