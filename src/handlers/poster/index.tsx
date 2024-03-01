@@ -32,7 +32,7 @@ export default function PosterView({ socket }: Props) {
     const nextP = posters[newIndex];
     console.log(nextP);
 
-    const timeout = setTimeout(() => nextPoster(newIndex), nextP.timeout * 1000000);
+    const timeout = setTimeout(() => nextPoster(newIndex), nextP.timeout * 300);
     setPosterTimeout(timeout);
   };
 

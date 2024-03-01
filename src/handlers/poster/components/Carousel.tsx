@@ -35,7 +35,14 @@ export default function PosterCarousel({ posters, currentPoster }: Props) {
   return (
     <div className="absolute w-full h-full top-0 left-0">
       {posters.map((p, i) => (
-        <div className={`absolute w-full h-full top-0 left-0 ${currentPoster !== i ? 'hidden' : ''}`}>
+        <div
+          className={`
+            absolute w-full h-full top-0 left-0
+            transition-opacity duration-500
+            ${[previousPoster, currentPoster].includes(i) ? 'opacity-100' : 'opacity-0'}
+            ${[currentPoster, nextPoster].includes(i) ? 'z-10' : 'z-0'}
+          `}
+        >
           {renderPoster(p, i)}
         </div>
       ))}

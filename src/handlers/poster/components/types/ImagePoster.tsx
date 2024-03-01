@@ -12,7 +12,7 @@ export default function ImagePoster({ source }: Props) {
   }
 
   return (
-    <>
+    <div className="w-full h-full bg-black relative">
       <div
         className="absolute w-full h-full blur-lg opacity-50 z-20 bg-no-repeat bg-cover bg-center"
         style={{ backgroundImage: `url("${sourceUrl}")` }}
@@ -22,6 +22,6 @@ export default function ImagePoster({ source }: Props) {
         className="object-contain block relative z-30 h-full bg-no-repeat bg-contain bg-center"
         style={{ backgroundImage: `url("${sourceUrl}")` }}
       />
-    </>
+    </div>
   );
 }
