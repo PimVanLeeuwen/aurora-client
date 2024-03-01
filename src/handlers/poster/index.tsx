@@ -15,11 +15,14 @@ export default function PosterView({ socket }: Props) {
   const [posters, setPosters] = useState<Poster[]>();
   const [posterIndex, setPosterIndex] = useState(-1);
   const [posterTimeout, setPosterTimeout] = useState<number | undefined>();
+  const [loading, setLoading] = useState(true);
 
   const refreshPosters = async () => {
+    setLoading(true);
     const client = new Client();
     const newPosters = await client.getPosters();
     setPosters((newPosters as Poster[]).filter((p) => true));
+    setLoading(false);
   };
 
   const handleNextPoster = (currentIndex: number) => {
@@ -32,7 +35,6 @@ export default function PosterView({ socket }: Props) {
     setPosterIndex(newIndex);
 
     const nextP = posters[newIndex];
-    console.log(nextP);
 
     const timeout = setTimeout(() => handleNextPoster(newIndex), nextP.timeout * 1000);
     setPosterTimeout(timeout);
@@ -54,10 +56,10 @@ export default function PosterView({ socket }: Props) {
   }, []);
 
   useEffect(() => {
-    if (posters && !posterTimeout) {
+    if (posters && !posterTimeout && !loading) {
       handleNextPoster(-1);
     }
-  }, [posters, posterTimeout]);
+  }, [posters, loading]);
 
   const selectedPoster = posters && posters.length > 0 && posterIndex >= 0 ? posters[posterIndex] : undefined;
 
