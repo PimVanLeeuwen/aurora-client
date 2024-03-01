@@ -2,13 +2,14 @@ import { Socket } from 'socket.io-client';
 import './index.scss';
 import ProgressBar from './components/ProgressBar';
 import { useEffect, useState } from 'react';
-import { Client, ErrorPoster, LocalPoster, MediaPoster, PhotoPoster } from '../../api/Client';
+import { Client } from '../../api/Client';
+import { Poster } from './entities/Poster';
+import PosterCarousel from './components/Carousel';
 
 interface Props {
   socket: Socket;
 }
 
-type Poster = LocalPoster | PhotoPoster | MediaPoster | ErrorPoster;
 
 export default function PosterView({ socket }: Props) {
   const [posters, setPosters] = useState<Poster[]>();
@@ -50,10 +51,11 @@ export default function PosterView({ socket }: Props) {
   }, [posters, posterTimeout]);
 
   return (
-    <>
-      <div className="overflow-hidden">
+    <div className="h-screen w-screen">
+      <div className="overflow-hidden w-full h-full">
+        <PosterCarousel posters={posters || []} currentPoster={posterIndex < 0 ? 0 : posterIndex} />
         <ProgressBar title="Yeee" />
       </div>
-    </>
+    </div>
   );
 }
