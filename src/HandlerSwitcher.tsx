@@ -9,6 +9,7 @@ import { default as DefaultView } from './handlers/default';
 import { Socket } from 'socket.io-client';
 import { AuthContext } from './contexts/AuthContext';
 import StageEffectsView from './handlers/stage-effects';
+import PosterView from './handlers/poster';
 
 
 export enum Handlers {
@@ -54,7 +55,7 @@ export default function HandlerSwitcher() {
     case Handlers.SPOTIFY:
       return <SpotifyView socket={screenSocket}/>;
     case Handlers.POSTER:
-      return <h1>Posters hier!</h1>;
+      return <PosterView socket={screenSocket} />;
     case Handlers.STAGE_EFFECTS:
       return <StageEffectsView socket={screenSocket} />;
     default:

@@ -1,0 +1,106 @@
+@import "https://fonts.googleapis.com/css?family=Source+Code+Pro";
+@import "https://fonts.googleapis.com/css?family=Raleway:400,700";
+@import "https://fonts.googleapis.com/css?family=Lato";
+
+* {
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+body {
+  transition: background ease-in-out;
+  font-family: "Raleway", sans-serif;
+  //font-size: 1.75em;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
+.text-shadow {
+  filter: drop-shadow(3px 5px 2px rgb(0 0 0 /0.4));
+}
+
+.screen-effects {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+
+.tvpc-content {
+  display: block;
+  position: relative;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: hidden;
+  transition: opacity;
+  transition-duration: 500ms;
+}
+
+.tvpc-bottom-bar {
+  position: absolute;
+  display: grid;
+  grid-template-rows: 5px 70px 5px;
+  grid-template-columns: 200px auto 200px;
+  width: 100%;
+  bottom: 0;
+  transition: background-color 500ms;
+  z-index: 10000;
+}
+
+.tvpc-bottom-progress-bar {
+  grid-column: 1 / 4;
+}
+
+.tvpc-progress-bar-inner {
+  background-color: #c40000;
+  height: 100%;
+  width: 100%;
+  transition: background-color 500ms;
+}
+
+.tvpc-bottom-progress-bar-top {
+  grid-row: 1;
+}
+
+.tvpc-gewis-logo {
+  grid-row: 2;
+  grid-column: 1;
+}
+
+.tvpc-gewis-logo > img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.tvpc-explanation {
+  grid-row: 2;
+  grid-column: 2;
+  transition: opacity 500ms;
+  font-size: 2em;
+  text-align: center;
+}
+
+.tvpc-label {
+  transition: opacity;
+  transition-duration: 500ms;
+}
+
+.tvpc-time {
+  grid-row: 2;
+  grid-column: 3;
+  font-size: 2em;
+  text-align: right;
+  font-family: "Lato", monospace;
+  font-weight: bold;
+  padding: 0 30px 0 0;
+  text-shadow: 0 0 10px black;
+}
+
+.tvpc-bottom-progress-bar-bottom {
+  grid-row: 3;
+}
