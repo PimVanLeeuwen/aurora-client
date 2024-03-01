@@ -1,5 +1,5 @@
 import { Poster } from '../entities/Poster';
-import { LocalPoster, LocalPosterType, LOGO, MediaPoster } from '../../../api/Client';
+import { MediaPoster } from '../../../api/Client';
 import LogoPoster from './types/LogoPoster';
 import { useMemo } from 'react';
 import ImagePoster from './types/ImagePoster';
@@ -33,7 +33,7 @@ export default function PosterCarousel({ posters, currentPoster }: Props) {
   };
 
   return (
-    <div className="absolute w-full h-full top-0 left-0">
+    <div className="w-full h-full top-0 left-0">
       {posters.map((p, i) => (
         <div
           className={`

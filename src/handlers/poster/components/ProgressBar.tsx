@@ -1,14 +1,17 @@
 import Clock from './Clock';
+import ProgressBarSlider from './ProgressBarSlider';
 
 interface Props {
   title?: string;
+  seconds?: number;
+  posterIndex?: number;
 }
 
-export default function ProgressBar({ title }: Props) {
+export default function ProgressBar({ title, seconds, posterIndex }: Props) {
   return (
     <div className="absolute w-full bottom-0 z-50 text-white flex flex-col text-4xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', height: 80 }}>
       <div id="w-full" style={{ height: 5 }}>
-        <div className=" h-full" style={{ backgroundColor: '#c40000', width: '50%' }} />
+        {seconds && posterIndex && (<ProgressBarSlider seconds={seconds} posterIndex={posterIndex} />)}
       </div>
       <div className="flex-grow flex justify-center items-center px-6">
         <div className="relative h-full py-3" style={{ width: 200 }}>

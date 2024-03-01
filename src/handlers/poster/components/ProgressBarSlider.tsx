@@ -1,0 +1,36 @@
+import { useEffect, useState } from 'react';
+
+interface Props {
+  seconds: number;
+  posterIndex: number;
+}
+
+export default function ProgressBarSlider({ seconds, posterIndex }: Props) {
+  const [hiding, setHiding] = useState(false);
+
+  useEffect(() => {
+    setHiding(true);
+
+    let timeout: number;
+
+    const startAnimation = () => {
+      setHiding(false);
+      clearTimeout(timeout);
+    };
+
+    timeout = setTimeout(startAnimation, 500);
+    return () => clearTimeout(timeout);
+  }, [seconds, posterIndex]);
+
+  return (
+    <div
+      className={`h-full w-full ${hiding ? 'transition-opacity opacity-0' : 'transition-transform opacity-100'}`}
+      style={{
+        backgroundColor: '#c40000',
+        transform: hiding ? 'translateX(-100%)' : 'translateX(0)',
+        transitionDuration: hiding ? '500ms' : `${Math.max(0.75, seconds) * 1000 - 750}ms`,
+        transitionTimingFunction: 'cubic-bezier(.2,0,.8,1)',
+      }}
+    />
+  );
+}

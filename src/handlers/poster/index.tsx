@@ -32,7 +32,7 @@ export default function PosterView({ socket }: Props) {
     const nextP = posters[newIndex];
     console.log(nextP);
 
-    const timeout = setTimeout(() => nextPoster(newIndex), nextP.timeout * 300);
+    const timeout = setTimeout(() => nextPoster(newIndex), nextP.timeout * 1000);
     setPosterTimeout(timeout);
   };
 
@@ -50,6 +50,8 @@ export default function PosterView({ socket }: Props) {
     }
   }, [posters, posterTimeout]);
 
+  const selectedPoster = posters && posters.length > 0 && posterIndex >= 0 ? posters[posterIndex] : undefined;
+
   return (
     <div
       className="h-screen w-screen bg-center bg-cover bg-no-repeat"
@@ -57,7 +59,7 @@ export default function PosterView({ socket }: Props) {
     >
       <div className="overflow-hidden w-full h-full">
         <PosterCarousel posters={posters || []} currentPoster={posterIndex < 0 ? 0 : posterIndex} />
-        <ProgressBar title="Yeee" />
+        <ProgressBar title={selectedPoster?.label} seconds={selectedPoster?.timeout} posterIndex={posterIndex} />
       </div>
     </div>
   );
