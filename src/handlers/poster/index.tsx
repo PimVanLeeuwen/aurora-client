@@ -2,7 +2,7 @@ import { Socket } from 'socket.io-client';
 import './index.scss';
 import ProgressBar from './components/ProgressBar';
 import { useEffect, useState } from 'react';
-import { Client } from '../../api/Client';
+import { Client, FooterSize } from '../../api/Client';
 import { Poster } from './entities/Poster';
 import PosterCarousel from './components/Carousel';
 
@@ -59,7 +59,13 @@ export default function PosterView({ socket }: Props) {
     >
       <div className="overflow-hidden w-full h-full">
         <PosterCarousel posters={posters || []} currentPoster={posterIndex < 0 ? 0 : posterIndex} />
-        <ProgressBar title={selectedPoster?.label} seconds={selectedPoster?.timeout} posterIndex={posterIndex} />
+        <ProgressBar
+          title={selectedPoster?.label}
+          seconds={selectedPoster?.timeout}
+          posterIndex={posterIndex}
+          minimal={selectedPoster?.footer === FooterSize.Minimal}
+          hide={selectedPoster?.footer === FooterSize.Hidden}
+        />
       </div>
     </div>
   );

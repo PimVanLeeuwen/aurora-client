@@ -5,15 +5,23 @@ interface Props {
   title?: string;
   seconds?: number;
   posterIndex?: number;
+  minimal?: boolean;
+  hide?: boolean;
 }
 
-export default function ProgressBar({ title, seconds, posterIndex }: Props) {
+export default function ProgressBar({ title, seconds, posterIndex, minimal, hide }: Props) {
   return (
-    <div className="absolute w-full bottom-0 z-50 text-white flex flex-col text-5xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', height: 80 }}>
-      <div id="w-full" style={{ height: 5, marginTop: -2 }}>
+    <div
+      className="absolute w-full bottom-0 z-50 text-white flex flex-col text-5xl"
+      style={{ backgroundColor: (!minimal && !hide) ? 'rgba(0, 0, 0, 0.5)' : '', height: 80 }}
+    >
+      <div
+        className="absolute w-full"
+        style={{ height: 5, marginTop: -2, bottom: minimal || hide ? 0 : '' }}
+      >
         {seconds !== undefined && posterIndex >= 0 && (<ProgressBarSlider seconds={seconds} posterIndex={posterIndex} />)}
       </div>
-      <div className="flex-grow flex justify-center items-center px-6">
+      <div className={`flex-grow flex justify-center items-center px-6 ${hide ? 'hidden' : ''}`}>
         <div className="relative h-full py-3" style={{ width: 200 }}>
           <div className="h-full">
             <svg
@@ -25,7 +33,7 @@ export default function ProgressBar({ title, seconds, posterIndex }: Props) {
             </svg>
           </div>
         </div>
-        <div className="flex-grow text-center text-shadow">{title}</div>
+        <div className="flex-grow text-center text-shadow">{!minimal && title}</div>
         <div className="text-right" style={{ width: 200 }}>
           <div>
             <Clock/>
@@ -35,3 +43,8 @@ export default function ProgressBar({ title, seconds, posterIndex }: Props) {
     </div>
   );
 }
+
+ProgressBar.defaultProps = ({
+  minimal: false,
+  hide: false,
+});
