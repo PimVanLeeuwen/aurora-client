@@ -1,10 +1,11 @@
 import { Poster } from '../entities/Poster';
-import { MediaPoster } from '../../../api/Client';
+import { MediaPoster, PhotoPoster as ClientPhotoPoster } from '../../../api/Client';
 import LogoPoster from './types/LogoPoster';
 import { useMemo } from 'react';
 import ImagePoster from './types/ImagePoster';
 import ExternalPoster from './types/ExternalPoster';
 import VideoPoster from './types/VideoPoster';
+import PhotoPoster from './types/PhotoPoster';
 
 interface Props {
   posters: Poster[]
@@ -27,6 +28,8 @@ export default function PosterCarousel({ posters, currentPoster }: Props) {
         return <ExternalPoster url={(poster as MediaPoster).source[0]} />;
       case 'video':
         return <VideoPoster source={(poster as MediaPoster).source} />;
+      case 'photo':
+        return <PhotoPoster poster={poster as ClientPhotoPoster} />;
       default:
         return <div>{poster.name}</div>;
     }
