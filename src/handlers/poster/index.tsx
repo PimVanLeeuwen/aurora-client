@@ -22,7 +22,9 @@ export default function PosterView({ socket }: Props) {
     setPosters((newPosters as Poster[]).filter((p) => true));
   };
 
-  const nextPoster = (currentIndex: number) => {
+  const handleNextPoster = (currentIndex: number) => {
+    if (posterTimeout) clearTimeout(posterTimeout);
+
     const newIndex = (currentIndex + 1) % posters.length;
     if (currentIndex === 0 && posterTimeout !== undefined) {
       refreshPosters().then(() => {});
@@ -32,8 +34,15 @@ export default function PosterView({ socket }: Props) {
     const nextP = posters[newIndex];
     console.log(nextP);
 
-    const timeout = setTimeout(() => nextPoster(newIndex), nextP.timeout * 1000);
+    const timeout = setTimeout(() => handleNextPoster(newIndex), nextP.timeout * 1000);
     setPosterTimeout(timeout);
+  };
+
+  const nextPoster = () => handleNextPoster(posterIndex);
+
+  const pausePoster = () => {
+    if (posterTimeout) clearTimeout(posterTimeout);
+    setPosterTimeout(undefined);
   };
 
   useEffect(() => {
@@ -46,7 +55,7 @@ export default function PosterView({ socket }: Props) {
 
   useEffect(() => {
     if (posters && !posterTimeout) {
-      nextPoster(-1);
+      handleNextPoster(-1);
     }
   }, [posters, posterTimeout]);
 
@@ -61,10 +70,12 @@ export default function PosterView({ socket }: Props) {
         <PosterCarousel posters={posters || []} currentPoster={posterIndex < 0 ? 0 : posterIndex} />
         <ProgressBar
           title={selectedPoster?.label}
-          seconds={selectedPoster?.timeout}
+          seconds={posterTimeout !== undefined ? selectedPoster?.timeout : undefined}
           posterIndex={posterIndex}
           minimal={selectedPoster?.footer === FooterSize.Minimal}
           hide={selectedPoster?.footer === FooterSize.Hidden}
+          nextPoster={nextPoster}
+          pausePoster={pausePoster}
         />
       </div>
     </div>

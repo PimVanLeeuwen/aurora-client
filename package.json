@@ -23,7 +23,8 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "eslint src",
-    "lint:fix": "eslint src --fix"
+    "lint:fix": "eslint src --fix",
+    "gen-client": "nswag openapi2tsclient /input:../narrowcasting-core/build/swagger.json /output:src/api/Client.ts"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",

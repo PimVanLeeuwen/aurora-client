@@ -7,9 +7,13 @@ interface Props {
   posterIndex?: number;
   minimal?: boolean;
   hide?: boolean;
+  nextPoster?: () => void;
+  pausePoster?: () => void;
 }
 
-export default function ProgressBar({ title, seconds, posterIndex, minimal, hide }: Props) {
+export default function ProgressBar({
+  title, seconds, posterIndex, minimal, hide, nextPoster, pausePoster,
+}: Props) {
   return (
     <div
       className="absolute w-full bottom-0 z-50 text-white flex flex-col text-5xl"
@@ -33,9 +37,14 @@ export default function ProgressBar({ title, seconds, posterIndex, minimal, hide
             </svg>
           </div>
         </div>
-        <div className="flex-grow text-center text-shadow">{!minimal && title}</div>
+        <div
+          className="flex-grow text-center text-shadow"
+          onClick={pausePoster}
+        >
+          {!minimal && title}
+        </div>
         <div className="text-right" style={{ width: 200 }}>
-          <div>
+          <div onClick={nextPoster}>
             <Clock/>
           </div>
         </div>
@@ -47,4 +56,6 @@ export default function ProgressBar({ title, seconds, posterIndex, minimal, hide
 ProgressBar.defaultProps = ({
   minimal: false,
   hide: false,
+  nextPoster: undefined,
+  pausePoster: undefined,
 });
