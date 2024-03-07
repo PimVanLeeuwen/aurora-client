@@ -1,11 +1,14 @@
 @mixin dots($count) {
   $text-shadow: ();
   @for $i from 0 through $count {
-    $text-shadow: $text-shadow,
-    (-.5+(random()) * 3) + em
-    (-.5+(random()) * 3) + em
-    2px
-    hsla(random() * 360, 100%, 50%,.9);
+    $text-shadow:
+      $text-shadow,
+      (-0.5+ (random()) * 3) +
+        em
+        (-0.5+ (random()) * 3) +
+        em
+        2px
+        hsla(random() * 360, 100%, 50%, 0.9);
   }
   text-shadow: $text-shadow;
 }
@@ -16,13 +19,15 @@
   background: #123;
 }
 
-.stained-glass, .stained-glass {
+.stained-glass,
+.stained-glass {
   display: block;
   font-size: 52px;
   color: transparent;
 }
 
-.stained-glass::before, .stained-glass::after {
+.stained-glass::before,
+.stained-glass::after {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -32,7 +37,6 @@
   mix-blend-mode: screen;
   animation: 44s -27s move infinite ease-in-out alternate;
 }
-
 
 .stained-glass::before {
   @include dots(40);
@@ -57,7 +61,6 @@
   animation-duration: 41s;
   animation-delay: -19s;
 }
-
 
 @keyframes move {
   from {

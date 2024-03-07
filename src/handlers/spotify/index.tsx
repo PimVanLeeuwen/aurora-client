@@ -7,13 +7,13 @@ interface Props {
   socket: Socket;
 }
 
-interface TrackPropertiesEvent {
-  bpm: number;
-  danceability: number;
-  energy: number;
-  loudness: number;
-  valence: number;
-}
+//interface TrackPropertiesEvent {
+//  bpm: number;
+//  danceability: number;
+//  energy: number;
+//  loudness: number;
+//  valence: number;
+//}
 
 interface TrackChangeEvent {
   title: string;
@@ -32,32 +32,30 @@ export type FeedEvent = {
 } & (Horn | Song | Beat);
 
 type Horn = {
-  type: 'horn',
+  type: 'horn';
   data: {
-    counter: number,
-  },
+    counter: number;
+  };
 };
 
 export type SongData = {
-  artist: string,
-  title: string,
+  artist: string;
+  title: string;
 };
 
 type Song = {
-  type: 'song',
-  data: SongData | SongData[],
+  type: 'song';
+  data: SongData | SongData[];
 };
 
 type Beat = {
-  type: 'beat',
+  type: 'beat';
 };
 
 export default function SpotifyView({ socket }: Props) {
-
   const [albumCover, setAlbumCover] = useState<string>('https://placekitten.com/g/200/200');
   const [artist, setArtists] = useState<string>('Roy Kakkenberg, Gijs de Man & Samuel Oosterholt');
   const [song, setSong] = useState<string>('Wie dit leest, trekt een bak!');
-
 
   // this.socket.emit('beat', event);
   // this.socket.emit('change_track', event);
@@ -73,15 +71,14 @@ export default function SpotifyView({ socket }: Props) {
     });
 
     socket.on('change_track', (trackChange: TrackChangeEvent[]) => {
-      console.log(trackChange);
+      console.warn(trackChange);
       setArtists(trackChange[0].artists.toString());
       setSong(trackChange[0].title);
       setAlbumCover(trackChange[0].cover);
     });
 
     socket.on('horn', (trackChange: any) => {
-      console.log(trackChange);
-
+      console.warn(trackChange);
     });
 
     // socket.on('flush', (...args: any) => {
@@ -89,19 +86,18 @@ export default function SpotifyView({ socket }: Props) {
     // });
 
     // socket.removeAllListeners();
-
   }, []);
 
   return (
     <>
       <div className="h-screen flex items-center justify-center z-10">
-        <img className="h-1/2 mr-6" src={albumCover}/>
+        <img className="h-1/2 mr-6" src={albumCover} />
         <div className="w-fit max-w-4xl flex flex-col justify-center">
           <p className="text-black text-6xl p-4 font-bold">{artist}</p>
           <p className="text-white text-6xl p-4 font-semibold">{song}</p>
         </div>
       </div>
-      <Background/>
+      <Background />
     </>
   );
 }

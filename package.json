@@ -22,9 +22,12 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
-    "gen-client": "nswag openapi2tsclient /input:../narrowcasting-core/build/swagger.json /output:src/api/Client.ts"
+    "lint": "eslint ./src --ext .js,.jsx,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore --max-warnings=1",
+    "lint-fix": "eslint ./src --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore ",
+    "format": "prettier --ignore-path .gitignore --check ./src/",
+    "format-fix": "prettier --ignore-path .gitignore --write ./src/",
+    "gen-client": "nswag openapi2tsclient /input:../narrowcasting-core/build/swagger.json /output:src/api/Client.ts",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
@@ -36,11 +39,14 @@
     "autoprefixer": "^10.4.16",
     "eslint": "^8.53.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.0.11",
     "postcss": "^8.4.31",
+    "prettier": "^3.2.5",
     "sass": "^1.69.5",
     "tailwindcss": "^3.3.5"
   }

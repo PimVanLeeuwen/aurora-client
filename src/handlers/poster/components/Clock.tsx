@@ -23,7 +23,7 @@ export default function Clock() {
 
   return (
     <div className="inline-flex flex-row flex-nowrap w-auto text-shadow">
-      <div >{hours?.toString().padStart(2, '0') ?? '--'}</div>
+      <div>{hours?.toString().padStart(2, '0') ?? '--'}</div>
       <div className="w-3 text-center">{tick ? ':' : ''}</div>
       <div>{minutes?.toString().padStart(2, '0') ?? '--'}</div>
     </div>

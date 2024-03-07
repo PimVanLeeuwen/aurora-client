@@ -29,7 +29,7 @@ export default function ProgressBarSlider({ seconds, posterIndex }: Props) {
         backgroundColor: '#c40000',
         transform: hiding ? 'translateX(-100%)' : 'translateX(0)',
         transitionDuration: hiding ? '500ms' : `${Math.max(0.75, seconds) * 1000 - 750}ms`,
-        transitionTimingFunction: 'cubic-bezier(.2,0,.8,1)',
+        transitionTimingFunction: 'cubic-bezier(.2,0,.8,1)'
       }}
     />
   );

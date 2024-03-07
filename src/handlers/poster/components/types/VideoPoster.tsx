@@ -12,11 +12,7 @@ export default function VideoPoster({ source }: Props) {
   }
 
   return (
-    <video
-      className="w-full h-full"
-      muted
-      loop
-    >
+    <video className="w-full h-full" muted loop>
       <source src={sourceUrl} type="video/mp4" />
     </video>
   );

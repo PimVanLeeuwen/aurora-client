@@ -11,11 +11,11 @@ interface Props {
   socket: Socket;
 }
 
-interface TrackChangeEvent {
-  title: string;
-  artists: string[];
-  cover?: string;
-}
+//interface TrackChangeEvent {
+//  title: string;
+//  artists: string[];
+//  cover?: string;
+//}
 
 interface MixTape {
   coverUrl: string;
@@ -29,29 +29,29 @@ export type FeedEvent = {
 } & (Horn | Song | Beat);
 
 type Horn = {
-  type: 'horn',
+  type: 'horn';
   data: {
-    counter: number,
-  },
+    counter: number;
+  };
 };
 
 export type SongData = {
-  artist: string,
-  title: string,
+  artist: string;
+  title: string;
 };
 
 type Song = {
-  type: 'song',
-  data: SongData | SongData[],
+  type: 'song';
+  data: SongData | SongData[];
 };
 
 type Beat = {
-  type: 'beat',
+  type: 'beat';
 };
 
 type HornEvent = {
-  strobeTime: number,
-  counter: number
+  strobeTime: number;
+  counter: number;
 };
 
 enum Colors {
@@ -71,34 +71,34 @@ enum Colors {
   'gold' = '#d9923f',
   'rosered' = '#c91651',
   'cyan' = '#07fff7',
-  'lightblue' = '#98e7ff',
+  'lightblue' = '#98e7ff'
 }
 
 export interface CurrentColors {
-  start: Colors
-  end: Colors
+  start: Colors;
+  end: Colors;
 }
 
 enum Status {
   'STOPPED' = 'Stopped',
   'READY' = 'Get ready!',
-  'PLAYING' = 'Playing',
+  'PLAYING' = 'Playing'
 }
 
 export default function CenturionView({ socket }: Props) {
-
-  const [artist, setArtists] = useState<string | null>('Roy Kakkenberg, Gijs de Man & Samuel Oosterholt');
+  const [artist, setArtists] = useState<string | null>(
+    'Roy Kakkenberg, Gijs de Man & Samuel Oosterholt'
+  );
   const [song, setSong] = useState<string | null>('Wie dit leest, trekt een bak!');
 
   const [mixtape, setMixtape] = useState<MixTape | null>(null);
   const [status, setStatus] = useState<Status>(Status.STOPPED);
 
-
   const [hornCount, setHornCount] = useState<number>(-1);
   const [strobe, setStrobe] = useState<boolean>(false);
   const [colors, setColors] = useState<CurrentColors>({
     start: Colors.lightpink,
-    end: Colors.orange,
+    end: Colors.orange
   });
 
   React.useEffect(() => {
@@ -147,7 +147,7 @@ export default function CenturionView({ socket }: Props) {
       const newColors = newColorsEvent[0];
       setColors({
         start: Colors[newColors[0]],
-        end: Colors[newColors[1]],
+        end: Colors[newColors[1]]
       });
     });
 
@@ -161,56 +161,49 @@ export default function CenturionView({ socket }: Props) {
   };
 
   const makeTextDrunk = (note: any) => {
-    return [...note].map(letter => {
+    return [...note].map((letter) => {
       // Range [-#shots, #shots]
       let randomInt = getRandomInt();
       return (
-        <span className={clsx(styles.drunk, 'z-20')} style={{
-          ['--random-rotation' as any]: `${randomInt / 3}deg`,
-          ['--random-time' as any]: `${hornCount === 0 ? '500s' : `${1 / hornCount * 500}s`}`,
-          'display': 'inline-block',
-        }}>{letter === ' ' ? '\u00A0' : letter}</span>
+        <span
+          className={clsx(styles.drunk, 'z-20')}
+          style={{
+            ['--random-rotation' as any]: `${randomInt / 3}deg`,
+            ['--random-time' as any]: `${hornCount === 0 ? '500s' : `${(1 / hornCount) * 500}s`}`,
+            display: 'inline-block'
+          }}
+        >
+          {letter === ' ' ? '\u00A0' : letter}
+        </span>
       );
     });
   };
 
   const renderHornCount = () => {
-    return (
-      <p className='text-white text-[550px] -m-20'>
-        {makeTextDrunk(hornCount.toString())}
-      </p>
-    );
+    return <p className="text-white text-[550px] -m-20">{makeTextDrunk(hornCount.toString())}</p>;
   };
 
   return (
     <>
-      {hornCount === -1 && mixtape &&
-          <Information
-              title={mixtape.name}
-              albumCover={mixtape.coverUrl}
-              description={status}
-          />
-      }
+      {hornCount === -1 && mixtape && (
+        <Information title={mixtape.name} albumCover={mixtape.coverUrl} description={status} />
+      )}
 
-      {status === Status.PLAYING &&
-          <div className="h-screen flex items-center justify-center">
-            <div className={clsx('w-fit flex flex-col justify-center text-center', styles.text)}>
-              {hornCount >= 0 && renderHornCount()}
-                <p className='text-white text-7xl font-bold mb-10'>
-                  {makeTextDrunk(artist.toUpperCase())}
-                </p>
-                <p className='text-white text-7xl'>
-                  {makeTextDrunk(song.toUpperCase())}
-                </p>
-            </div>
+      {status === Status.PLAYING && (
+        <div className="h-screen flex items-center justify-center">
+          <div className={clsx('w-fit flex flex-col justify-center text-center', styles.text)}>
+            {hornCount >= 0 && renderHornCount()}
+            <p className="text-white text-7xl font-bold mb-10">
+              {makeTextDrunk(artist.toUpperCase())}
+            </p>
+            <p className="text-white text-7xl">{makeTextDrunk(song.toUpperCase())}</p>
           </div>
-      }
+        </div>
+      )}
 
-      {strobe && <Strobe hornCount={hornCount}/>}
+      {strobe && <Strobe hornCount={hornCount} />}
 
-      <Background
-        colors={colors}
-      />
+      <Background colors={colors} />
     </>
   );
 }

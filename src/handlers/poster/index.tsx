@@ -10,7 +10,7 @@ interface Props {
   socket: Socket;
 }
 
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO should socket be used somewhere?
 export default function PosterView({ socket }: Props) {
   const [posters, setPosters] = useState<Poster[]>();
   const [posterIndex, setPosterIndex] = useState(-1);
@@ -21,7 +21,7 @@ export default function PosterView({ socket }: Props) {
     setLoading(true);
     const client = new Client();
     const newPosters = await client.getPosters();
-    setPosters((newPosters as Poster[]).filter((p) => true));
+    setPosters((newPosters as Poster[]).filter(() => true));
     setLoading(false);
   };
 
@@ -61,7 +61,8 @@ export default function PosterView({ socket }: Props) {
     }
   }, [posters, loading]);
 
-  const selectedPoster = posters && posters.length > 0 && posterIndex >= 0 ? posters[posterIndex] : undefined;
+  const selectedPoster =
+    posters && posters.length > 0 && posterIndex >= 0 ? posters[posterIndex] : undefined;
 
   return (
     <div

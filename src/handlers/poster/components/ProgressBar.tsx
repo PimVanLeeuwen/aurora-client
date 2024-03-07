@@ -12,18 +12,26 @@ interface Props {
 }
 
 export default function ProgressBar({
-  title, seconds, posterIndex, minimal, hide, nextPoster, pausePoster,
+  title,
+  seconds,
+  posterIndex,
+  minimal,
+  hide,
+  nextPoster,
+  pausePoster
 }: Props) {
   return (
     <div
       className="absolute w-full bottom-0 z-50 text-white flex flex-col text-5xl"
-      style={{ backgroundColor: (!minimal && !hide) ? 'rgba(0, 0, 0, 0.5)' : '', height: 80 }}
+      style={{ backgroundColor: !minimal && !hide ? 'rgba(0, 0, 0, 0.5)' : '', height: 80 }}
     >
       <div
         className="absolute w-full"
         style={{ height: 5, marginTop: -2, bottom: minimal || hide ? 0 : '' }}
       >
-        {seconds !== undefined && posterIndex >= 0 && (<ProgressBarSlider seconds={seconds} posterIndex={posterIndex} />)}
+        {seconds !== undefined && posterIndex >= 0 && (
+          <ProgressBarSlider seconds={seconds} posterIndex={posterIndex} />
+        )}
       </div>
       <div className={`flex-grow flex justify-center items-center px-6 ${hide ? 'hidden' : ''}`}>
         <div className="relative h-full py-3" style={{ width: 200 }}>
@@ -33,19 +41,22 @@ export default function ProgressBar({
               viewBox="0 0 50 100"
               height="50"
             >
-              <image x="0" y="0" height="100%" width="100%" xlinkHref={'public/gewis-base-black.svg'}/>
+              <image
+                x="0"
+                y="0"
+                height="100%"
+                width="100%"
+                xlinkHref={'public/gewis-base-black.svg'}
+              />
             </svg>
           </div>
         </div>
-        <div
-          className="flex-grow text-center text-shadow"
-          onClick={pausePoster}
-        >
+        <div className="flex-grow text-center text-shadow" onClick={pausePoster}>
           {!minimal && title}
         </div>
         <div className="text-right" style={{ width: 200 }}>
           <div onClick={nextPoster}>
-            <Clock/>
+            <Clock />
           </div>
         </div>
       </div>
@@ -53,9 +64,9 @@ export default function ProgressBar({
   );
 }
 
-ProgressBar.defaultProps = ({
+ProgressBar.defaultProps = {
   minimal: false,
   hide: false,
   nextPoster: undefined,
-  pausePoster: undefined,
-});
+  pausePoster: undefined
+};

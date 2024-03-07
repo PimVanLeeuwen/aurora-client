@@ -1,16 +1,16 @@
-@import "https://fonts.googleapis.com/css?family=Source+Code+Pro";
-@import "https://fonts.googleapis.com/css?family=Raleway:400,700";
-@import "https://fonts.googleapis.com/css?family=Lato";
+@import 'https://fonts.googleapis.com/css?family=Source+Code+Pro';
+@import 'https://fonts.googleapis.com/css?family=Raleway:400,700';
+@import 'https://fonts.googleapis.com/css?family=Lato';
 
 * {
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-  box-sizing: border-box;         /* Opera/IE 8+ */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
+  box-sizing: border-box; /* Opera/IE 8+ */
 }
 
 body {
   transition: background ease-in-out;
-  font-family: "Raleway", sans-serif;
+  font-family: 'Raleway', sans-serif;
   //font-size: 1.75em;
   font-weight: 700;
   margin: 0;
@@ -95,7 +95,7 @@ body {
   grid-column: 3;
   font-size: 2em;
   text-align: right;
-  font-family: "Lato", monospace;
+  font-family: 'Lato', monospace;
   font-weight: bold;
   padding: 0 30px 0 0;
   text-shadow: 0 0 10px black;

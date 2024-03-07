@@ -40,9 +40,14 @@ export default function BeatLogo({ eventEmitter, logo }: Props) {
   return (
     <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center overflow-hidden">
       <div className="w-1/3 h-full">
-        <svg ref={ref} width="100%" height="100%" style={{
-          filter: 'drop-shadow(3px 5px 2px rgb(0 0 0 /0.4)',
-        }}>
+        <svg
+          ref={ref}
+          width="100%"
+          height="100%"
+          style={{
+            filter: 'drop-shadow(3px 5px 2px rgb(0 0 0 /0.4)'
+          }}
+        >
           <image x="0" y="0" width="100%" height="100%" xlinkHref={`public/${logo}`} />
         </svg>
       </div>

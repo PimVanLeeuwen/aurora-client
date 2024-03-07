@@ -9,14 +9,14 @@ interface IAuthContext {
 
 const defaultContext: IAuthContext = {
   user: null,
-  loading: true,
+  loading: true
 };
 
 export const AuthContext = createContext(defaultContext);
 
 export default function AuthContextProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | null>();
-  const [loading, setLoading ] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [urlSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -40,14 +40,13 @@ export default function AuthContextProvider({ children }: PropsWithChildren) {
     }
   }, [user]);
 
-  const context = useMemo((): IAuthContext => ({
-    user,
-    loading,
-  }), [user, loading]);
-
-  return (
-    <AuthContext.Provider value={context}>
-      {children}
-    </AuthContext.Provider>
+  const context = useMemo(
+    (): IAuthContext => ({
+      user,
+      loading
+    }),
+    [user, loading]
   );
+
+  return <AuthContext.Provider value={context}>{children}</AuthContext.Provider>;
 }

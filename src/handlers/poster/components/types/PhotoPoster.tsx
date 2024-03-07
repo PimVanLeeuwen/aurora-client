@@ -8,20 +8,17 @@ interface Props {
 
 export default function PhotoPoster({ poster }: Props) {
   const [url, setUrl] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO where should this be used?
   const [label, setLabel] = useState('');
 
   useEffect(() => {
     const body = new GEWISPhotoAlbumParams();
     body.albumIds = poster.albums;
-    new Client().getPhoto(body)
-      .then((res) => {
-        console.log(res);
-        setUrl(res.url);
-        setLabel(res.label);
-      });
+    new Client().getPhoto(body).then((res) => {
+      setUrl(res.url);
+      setLabel(res.label);
+    });
   }, []);
 
-  return (
-    <ImagePoster source={url} />
-  );
+  return <ImagePoster source={url} />;
 }

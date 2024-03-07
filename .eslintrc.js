@@ -2,12 +2,12 @@ module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'import', 'jsx-a11y', 'react', 'react-hooks'],
-  extends: ['airbnb-typescript'],
+  extends: ['airbnb-typescript', 'prettier'],
   parserOptions: {
     project: './tsconfig.json'
   },
   rules: {
-    'linebreak-style': ['off' ],
+    'linebreak-style': ['off'],
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'arrow-body-style': ['off'],
     'react/destructuring-assignment': ['off'],
@@ -21,6 +21,6 @@ module.exports = {
     'react/prop-types': 'off',
     'unicode-bom': 'off',
     'react/static-property-placement': ['off'],
-    "react-hooks/rules-of-hooks": "error"
+    'react-hooks/rules-of-hooks': 'error'
   }
 };

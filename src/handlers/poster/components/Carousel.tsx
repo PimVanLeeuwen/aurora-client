@@ -8,7 +8,7 @@ import VideoPoster from './types/VideoPoster';
 import PhotoPoster from './types/PhotoPoster';
 
 interface Props {
-  posters: Poster[]
+  posters: Poster[];
   currentPoster: number;
 }
 

@@ -3,7 +3,6 @@ import { GiphyFetch } from '@giphy/js-fetch-api';
 import React, { useState } from 'react';
 
 export default function View() {
-
   const [gif, setGif] = useState(null);
 
   const getRandomInt = (max: number) => {
@@ -12,13 +11,9 @@ export default function View() {
 
   const renderGIF = () => {
     if (gif) {
-      return (
-        <Gif gif={gif} width={500} />
-      );
+      return <Gif gif={gif} width={500} />;
     }
-    return (
-      <h1> No GIF available </h1>
-    );
+    return <h1> No GIF available </h1>;
   };
 
   React.useEffect(() => {
@@ -36,11 +31,10 @@ export default function View() {
         <div className="text-center">
           <p className="text-base font-semibold text-red-600 sm:text-5xl">PANIEK</p>
           <h1 className="mt-4 text-3xl tracking-tight text-gray-900 sm:text-5xl">NO HANDLER SET</h1>
-          <p className="mt-6 text-base leading-7 text-gray-600">Go to the backoffice to set a handler for this
-            screen.</p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            {renderGIF()}
-          </div>
+          <p className="mt-6 text-base leading-7 text-gray-600">
+            Go to the backoffice to set a handler for this screen.
+          </p>
+          <div className="mt-10 flex items-center justify-center gap-x-6">{renderGIF()}</div>
         </div>
       </main>
     </>

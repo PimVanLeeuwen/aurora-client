@@ -1,4 +1,6 @@
-{/* https://codepen.io/mpirdimpirdis/pen/dWwGKa */}
+{
+  /* https://codepen.io/mpirdimpirdis/pen/dWwGKa */
+}
 export function lavalampJavascript(startColor: string, endColor: string) {
   return `
         var canvas;
@@ -260,12 +262,16 @@ export function lavalampJavascript(startColor: string, endColor: string) {
         `;
 }
 
-{/* https://codepen.io/mpirdimpirdis/pen/dWwGKa */}
+{
+  /* https://codepen.io/mpirdimpirdis/pen/dWwGKa */
+}
 export function lavalampVertex() {
   return 'attribute vec2 position;void main() {gl_Position = vec4(position, 0.0, 1.0);}';
 }
 
-{/* https://codepen.io/mpirdimpirdis/pen/dWwGKa */}
+{
+  /* https://codepen.io/mpirdimpirdis/pen/dWwGKa */
+}
 export function lavalampFragment() {
   return 'precision highp float;const int NUM_METABALLS = 15;uniform vec3 metaballs[15];uniform vec2 uResolution;uniform sampler2D uColorSampler;uniform sampler2D uNoiseSampler;uniform float uTime;void main(){  float x = gl_FragCoord.x;  float y = gl_FragCoord.y;  float v = 0.0;  float radius = 2.0;  float speed = 1.5;  for (int i = 0; i < NUM_METABALLS; i++) {  vec3 mb = metaballs[i];  float dx = mb.x - x;  float dy = mb.y - y;float r = mb.z;  v += r*r/(dx*dx + dy*dy);}vec4 color;if (v > 1.0) {  vec4 textureColor = texture2D(uColorSampler, vec2(gl_FragCoord.x / uResolution.x, gl_FragCoord.y / uResolution.y) );  vec4 noiseColor = (texture2D(uNoiseSampler, gl_FragCoord.xy / 100.0 )) / 1.;  float l = length(noiseColor);  if(l > 1.05){  vec4 mixedColor = textureColor + (noiseColor * 0.001);  color = mixedColor;}  else {color = textureColor * 0.85;  }}  else {discard;  }  gl_FragColor = vec4(color.rgb, 0.8);}';
 }
