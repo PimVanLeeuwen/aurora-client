@@ -1,19 +1,11 @@
 import { useState } from 'react';
-import Background from './components/Background';
 import React from 'react';
 import { Socket } from 'socket.io-client';
+import BlurredImage from '../stage-effects/components/backgrounds/BlurredImage';
 
 interface Props {
   socket: Socket;
 }
-
-//interface TrackPropertiesEvent {
-//  bpm: number;
-//  danceability: number;
-//  energy: number;
-//  loudness: number;
-//  valence: number;
-//}
 
 interface TrackChangeEvent {
   title: string;
@@ -21,83 +13,44 @@ interface TrackChangeEvent {
   cover?: string;
 }
 
-interface MixTape {
-  name: string;
-  songFile: string;
-  feed: FeedEvent[];
-}
-
-export type FeedEvent = {
-  timestamp: number;
-} & (Horn | Song | Beat);
-
-type Horn = {
-  type: 'horn';
-  data: {
-    counter: number;
-  };
-};
-
-export type SongData = {
-  artist: string;
-  title: string;
-};
-
-type Song = {
-  type: 'song';
-  data: SongData | SongData[];
-};
-
-type Beat = {
-  type: 'beat';
-};
-
 export default function SpotifyView({ socket }: Props) {
   const [albumCover, setAlbumCover] = useState<string>('https://placekitten.com/g/200/200');
   const [artist, setArtists] = useState<string>('Roy Kakkenberg, Gijs de Man & Samuel Oosterholt');
   const [song, setSong] = useState<string>('Wie dit leest, trekt een bak!');
 
-  // this.socket.emit('beat', event);
-  // this.socket.emit('change_track', event);
-  // this.socket.emit('horn', counter);
-  // this.socket.emit('loaded', tape);
-  // this.socket.emit('start');
-  // this.socket.emit('stop');
-
   React.useEffect(() => {
-    socket.on('loaded', (mixTape: MixTape) => {
-      setArtists(mixTape.name);
-      setSong(mixTape.name);
+    socket.on('change_track', (event: any[]) => {
+      const trackChangeEvent = event[0] as TrackChangeEvent[];
+      setArtists(trackChangeEvent[0].artists.join(', '));
+      setSong(trackChangeEvent[0].title);
+      setAlbumCover(trackChangeEvent[0].cover);
     });
 
-    socket.on('change_track', (trackChange: TrackChangeEvent[]) => {
-      console.warn(trackChange);
-      setArtists(trackChange[0].artists.toString());
-      setSong(trackChange[0].title);
-      setAlbumCover(trackChange[0].cover);
-    });
-
-    socket.on('horn', (trackChange: any) => {
-      console.warn(trackChange);
-    });
-
-    // socket.on('flush', (...args: any) => {
-    //   console.log(args);
-    // });
-
-    // socket.removeAllListeners();
+    return () => {
+      socket.removeAllListeners();
+    };
   }, []);
 
   return (
-    <>
-      <div className="h-screen flex items-center justify-center z-10">
+    <div className="relative">
+      <BlurredImage cover={albumCover} />
+      <div className="h-screen flex items-center justify-center relative">
         <img className="h-1/2 mr-6" src={albumCover} />
-        <div className="w-fit max-w-4xl flex flex-col justify-center">
-          <p className="text-black text-6xl p-4 font-bold">{artist}</p>
-          <p className="text-white text-6xl p-4 font-semibold">{song}</p>
+        <div className="w-fit max-w-4xl flex flex-col justify-center font-raleway">
+          <p
+            className="text-black text-6xl p-4 font-bold shadow-gray-200 drop-shadow-xl"
+            style={{ filter: 'drop-shadow(0 0 5px rgb(255 255 255 /0.7))' }}
+          >
+            {artist}
+          </p>
+          <p
+            className="text-white text-6xl p-4 font-semibold font-raleway"
+            style={{ filter: 'drop-shadow(0 0 5px rgb(0 0 0 /0.4))' }}
+          >
+            {song}
+          </p>
         </div>
       </div>
-      <Background />
-    </>
+    </div>
   );
 }
