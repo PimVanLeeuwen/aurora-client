@@ -51,7 +51,11 @@ export default function ProgressBar({
             </svg>
           </div>
         </div>
-        <div className="flex-grow text-center text-shadow" onClick={pausePoster}>
+        <div
+          className="flex-grow text-center text-shadow"
+          style={{ minHeight: '1rem' }}
+          onClick={pausePoster}
+        >
           {!minimal && title}
         </div>
         <div className="text-right" style={{ width: 200 }}>

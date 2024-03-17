@@ -6,6 +6,7 @@ import ImagePoster from './types/ImagePoster';
 import ExternalPoster from './types/ExternalPoster';
 import VideoPoster from './types/VideoPoster';
 import PhotoPoster from './types/PhotoPoster';
+import TrainPoster from './types/TrainPoster';
 
 interface Props {
   posters: Poster[];
@@ -30,6 +31,13 @@ export default function PosterCarousel({ posters, currentPoster }: Props) {
         return <VideoPoster source={(poster as MediaPoster).source} />;
       case 'photo':
         return <PhotoPoster poster={poster as ClientPhotoPoster} />;
+      case 'train':
+        return (
+          <TrainPoster
+            visible={index === currentPoster || index === previousPoster}
+            timeout={poster.timeout}
+          />
+        );
       default:
         return <div>{poster.name}</div>;
     }
