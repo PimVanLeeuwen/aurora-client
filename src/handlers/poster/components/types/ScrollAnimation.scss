@@ -6,3 +6,12 @@
     transform: translateY(calc(-100% + 100vh));
   }
 }
+
+@keyframes horizontal-marquee {
+  from {
+    transform: translateX(calc(25% + 100vw));
+  }
+  to {
+    transform: translateX(-125%);
+  }
+}

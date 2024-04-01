@@ -17,7 +17,7 @@ export enum Handlers {
   CENTURION = 'CenturionScreenHandler',
   POSTER = 'PosterScreenHandler',
   STAGE_EFFECTS = 'StageEffectsHandler',
-  TIME_TRAIL_RACE = 'TimeTrailRaceHandler'
+  TIME_TRAIL_RACE = 'TimeTrailRaceScreenHandler'
 }
 
 export default function HandlerSwitcher() {

@@ -29,7 +29,10 @@ export default function StopWatch({ startTime }: Props) {
   if (startTime === undefined) return null;
 
   return (
-    <div className="">
+    <div
+      className="h-full flex items-center justify-center"
+      style={{ fontSize: '16rem', fontFamily: 'Consolas,monaco,monospace' }}
+    >
       <h2>{timeString}</h2>
     </div>
   );
