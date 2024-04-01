@@ -10,12 +10,14 @@ import { Socket } from 'socket.io-client';
 import { AuthContext } from './contexts/AuthContext';
 import StageEffectsView from './handlers/stage-effects';
 import PosterView from './handlers/poster';
+import TimeTrailRaceView from './handlers/time-trail-race';
 
 export enum Handlers {
   SPOTIFY = 'CurrentlyPlayingTrackHandler',
   CENTURION = 'CenturionScreenHandler',
   POSTER = 'PosterScreenHandler',
-  STAGE_EFFECTS = 'StageEffectsHandler'
+  STAGE_EFFECTS = 'StageEffectsHandler',
+  TIME_TRAIL_RACE = 'TimeTrailRaceHandler'
 }
 
 export default function HandlerSwitcher() {
@@ -51,6 +53,8 @@ export default function HandlerSwitcher() {
       return <PosterView socket={screenSocket} />;
     case Handlers.STAGE_EFFECTS:
       return <StageEffectsView socket={screenSocket} />;
+    case Handlers.TIME_TRAIL_RACE:
+      return <TimeTrailRaceView socket={screenSocket} />;
     default:
       return <DefaultView />;
   }
