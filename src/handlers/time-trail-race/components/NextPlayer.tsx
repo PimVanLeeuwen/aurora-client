@@ -12,7 +12,7 @@ export default function NextPlayer({ name }: Props) {
       <div
         className="relative overflow-hidden w-fit text-5xl"
         style={{
-          animation: `horizontal-marquee 10s linear 0 infinite`
+          animation: `horizontal-marquee 10s linear infinite`
         }}
       >
         Next up: {name}

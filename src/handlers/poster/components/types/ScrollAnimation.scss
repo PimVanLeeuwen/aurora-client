@@ -3,7 +3,7 @@
     transform: translateY(0);
   }
   to {
-    transform: translateY(calc(-100% + 100vh));
+    transform: translateY(min(calc(-100% + 100vh), -100%));
   }
 }
 

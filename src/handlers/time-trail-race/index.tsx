@@ -119,7 +119,7 @@ export default function TimeTrailRaceView({ socket }: Props) {
         <h1 className="text-8xl">Spoelbakkenrace</h1>
         <h4 className="text-5xl italic">{sessionName}</h4>
       </div>
-      <div className="flex-1">{renderContent()}</div>
+      <div className="flex-1 overflow-hidden">{renderContent()}</div>
       {state === TimeTrailRaceState.PLAYER_REGISTERED && <NextPlayer name={player?.name} />}
     </div>
   );
