@@ -1,7 +1,8 @@
-import { CSSProperties, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Client, Messages, TrainResponse } from '../../../../api/Client';
 import './ScrollAnimation.scss';
 import './TrainPoster.scss';
+import VerticalScroll from '../../../../components/VerticalScroll';
 
 interface Props {
   visible: boolean;
@@ -22,16 +23,20 @@ export default function TrainPoster({ visible, timeout }: Props) {
   const renderMessages = (messages: Messages[]) => {
     return messages.map((m) => {
       if (m.message === 'Rijdt niet') {
-        return <div className="text-red-700">CANCELLED</div>;
+        return (
+          <div className="text-red-700" key={m.message}>
+            CANCELLED
+          </div>
+        );
       }
       if (m.message.startsWith('Rijdt niet')) {
         return (
-          <div>
+          <div key={m.message}>
             <span className="text-red-700">Cancelled</span>: {m.message}
           </div>
         );
       }
-      return <div>{m.message}</div>;
+      return <div key={m.message}>{m.message}</div>;
     });
   };
 
@@ -43,7 +48,7 @@ export default function TrainPoster({ visible, timeout }: Props) {
     const formatter = new Intl.ListFormat('en-gb', { style: 'long', type: 'conjunction' });
 
     return (
-      <tr>
+      <tr className={t.cancelled ? 'opacity-20' : ''} key={t.direction + '-' + t.plannedDateTime}>
         <td>
           <div className="flex flex-row gap-2 mr-8 whitespace-nowrap">
             <div>{parseTime(departure)}</div>
@@ -70,44 +75,33 @@ export default function TrainPoster({ visible, timeout }: Props) {
     );
   };
 
-  const animation: CSSProperties = {
-    animationName: 'vertical-scroll',
-    animationDelay: '3s',
-    animationIterationCount: 'infinite',
-    animationTimingFunction: 'linear',
-    animationDuration: `${Math.max(trains ? trains.length : 0, timeout - 2)}s`
-  };
-
   return (
     <div
-      className="w-full h-full py-10 px-20 text-6xl overflow-hidden"
+      className="w-full h-full text-6xl"
       style={{
         backgroundColor: '#FEC917',
-        color: '#003082',
-        animationName: visible ? 'vertical-scroll' : '',
-        animationDelay: '3s',
-        animationIterationCount: 'infinite',
-        animationTimingFunction: 'linear',
-        animationDuration: `${Math.max(trains ? trains.length : 0, timeout - 2)}s`
+        color: '#003082'
       }}
     >
-      <div style={visible ? animation : {}}>
-        <div
-          className="text-center w-full text-6xl flex justify-center items-center gap-8"
-          style={{ backgroundColor: '#003082', color: '#FEC917' }}
-        >
-          <img src="train.svg" className="align-bottom mb-2 h-32" />
-          <div>Departures from Eindhoven Centraal</div>
-          <img
-            src="train.svg"
-            className="align-bottom mb-2 h-32"
-            style={{ transform: 'scaleX(-1)' }}
-          />
+      <VerticalScroll visible={visible} timeout={timeout} items={trains ? trains.length : 0}>
+        <div className="py-10 px-20">
+          <div
+            className="text-center w-full text-6xl flex justify-center items-center gap-8"
+            style={{ backgroundColor: '#003082', color: '#FEC917' }}
+          >
+            <img src="train.svg" className="align-bottom mb-2 h-32" />
+            <div>Departures from Eindhoven Centraal</div>
+            <img
+              src="train.svg"
+              className="align-bottom mb-2 h-32"
+              style={{ transform: 'scaleX(-1)' }}
+            />
+          </div>
+          <table className="w-full poster-train-departures-table">
+            <tbody>{trains && trains.map((t) => renderDeparture(t))}</tbody>
+          </table>
         </div>
-        <table className="w-full poster-train-departures-table">
-          <tbody>{trains && trains.map((t) => renderDeparture(t))}</tbody>
-        </table>
-      </div>
+      </VerticalScroll>
     </div>
   );
 }
