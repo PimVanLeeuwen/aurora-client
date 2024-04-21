@@ -41,13 +41,7 @@ export default function ProgressBar({
               viewBox="0 0 50 100"
               height="50"
             >
-              <image
-                x="0"
-                y="0"
-                height="100%"
-                width="100%"
-                xlinkHref={'public/gewis-base-black.svg'}
-              />
+              <image x="0" y="0" height="100%" width="100%" xlinkHref={'/gewis-base-black.svg'} />
             </svg>
           </div>
         </div>

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Client, Messages, TrainResponse } from '../../../../api/Client';
-import './ScrollAnimation.scss';
+import { PosterScreenService, TrainResponse } from '../../../../api';
 import './TrainPoster.scss';
 import VerticalScroll from '../../../../components/VerticalScroll';
 
@@ -13,14 +12,14 @@ export default function TrainPoster({ visible, timeout }: Props) {
   const [trains, setTrains] = useState<TrainResponse[] | undefined>();
 
   useEffect(() => {
-    new Client().getTrains().then(setTrains);
+    PosterScreenService.getTrains().then(setTrains);
   }, []);
 
   const parseTime = (d: Date) => {
     return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
   };
 
-  const renderMessages = (messages: Messages[]) => {
+  const renderMessages = (messages: { message: string }[]) => {
     return messages.map((m) => {
       if (m.message === 'Rijdt niet') {
         return (

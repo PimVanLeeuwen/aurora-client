@@ -1,4 +1,8 @@
-import { Client, GEWISPhotoAlbumParams, PhotoPoster as IPhotoPoster } from '../../../../api/Client';
+import {
+  PhotoPoster as IPhotoPoster,
+  GEWISPhotoAlbumParams,
+  PosterScreenService
+} from '../../../../api';
 import { useEffect, useState } from 'react';
 import ImagePoster from './ImagePoster';
 
@@ -12,9 +16,10 @@ export default function PhotoPoster({ poster }: Props) {
   const [label, setLabel] = useState('');
 
   useEffect(() => {
-    const body = new GEWISPhotoAlbumParams();
-    body.albumIds = poster.albums;
-    new Client().getPhoto(body).then((res) => {
+    const body: GEWISPhotoAlbumParams = {
+      albumIds: poster.albums
+    };
+    PosterScreenService.getPhoto(body).then((res) => {
       setUrl(res.url);
       setLabel(res.label);
     });

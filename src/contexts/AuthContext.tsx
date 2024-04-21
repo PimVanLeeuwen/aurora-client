@@ -1,6 +1,6 @@
-import { ApiKeyParameters, Client, User } from '../api/Client';
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ApiKeyParameters, AuthenticationService, User, UserService } from '../api';
 
 interface IAuthContext {
   user: User | null;
@@ -23,10 +23,10 @@ export default function AuthContextProvider({ children }: PropsWithChildren) {
   const authenticate = async () => {
     if (urlSearchParams.has('key')) {
       const key = urlSearchParams.get('key');
-      const body = new ApiKeyParameters({ key });
-      setUser(await new Client().authKey(body));
+      const body: ApiKeyParameters = { key };
+      setUser(await AuthenticationService.authKey(body));
     } else {
-      setUser(await new Client().getInformation());
+      setUser(await UserService.getInformation());
     }
   };
 

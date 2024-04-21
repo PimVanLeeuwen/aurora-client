@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import {
-  Client,
+  ModesService,
   PlayerParams,
   RaceFinishedEvent,
   RacePlayerReadyEvent,
@@ -10,7 +10,7 @@ import {
   RaceStartedEvent,
   ScoreboardItem,
   TimeTrailRaceState
-} from '../../api/Client';
+} from '../../api';
 import StopWatch from './components/StopWatch';
 import NextPlayer from './components/NextPlayer';
 import Scoreboard from './components/Scoreboard';
@@ -27,7 +27,7 @@ export default function TimeTrailRaceView({ socket }: Props) {
   const [scoreboard, setScoreboard] = useState<ScoreboardItem[]>([]);
 
   useEffect(() => {
-    new Client().getRaceState().then(({ state: s, sessionName: n }) => {
+    ModesService.getRaceState().then(({ state: s, sessionName: n }) => {
       setState(s);
       setSessionName(n);
     });
@@ -96,22 +96,22 @@ export default function TimeTrailRaceView({ socket }: Props) {
 
   const renderContent = () => {
     switch (state) {
-      case TimeTrailRaceState.PLAYER_READY:
+      case 'PLAYER_READY':
         return (
           <div className="h-full flex justify-center items-center" style={{ fontSize: '16rem' }}>
             READY?!
           </div>
         );
-      case TimeTrailRaceState.STARTED:
+      case 'STARTED':
         return <StopWatch startTime={startTime} />;
-      case TimeTrailRaceState.INITIALIZED:
-      case TimeTrailRaceState.SCOREBOARD:
+      case 'FINISHED':
+        return null;
+      case 'INITIALIZED':
+      case 'SCOREBOARD':
       default:
         return <Scoreboard scoreboard={scoreboard} player={player} />;
     }
   };
-
-  console.log(player);
 
   return (
     <div className="h-screen pt-20 pb-10 flex flex-col items-center bg-black text-white gap-20">
@@ -120,7 +120,7 @@ export default function TimeTrailRaceView({ socket }: Props) {
         <h4 className="text-5xl italic">{sessionName}</h4>
       </div>
       <div className="flex-1 overflow-hidden">{renderContent()}</div>
-      {state === TimeTrailRaceState.PLAYER_REGISTERED && <NextPlayer name={player?.name} />}
+      {state === 'PLAYER_REGISTERED' && <NextPlayer name={player?.name} />}
     </div>
   );
 }

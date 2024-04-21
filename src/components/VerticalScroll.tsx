@@ -28,8 +28,9 @@ export default function VerticalScroll({ children, visible, timeout, items }: Pr
         transform: `translateY(-${absoluteHeightDifference}px)`
       }
     ];
+    const duration = relativeHeightDifference * 12000;
     const options: KeyframeAnimationOptions = {
-      duration: Math.max(relativeHeightDifference * 12000, timeout),
+      duration: timeout ? Math.max(duration, timeout) : duration,
       delay: 3000
     };
 

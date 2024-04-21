@@ -1,5 +1,4 @@
-import { Poster } from '../entities/Poster';
-import { MediaPoster, PhotoPoster as ClientPhotoPoster } from '../../../api/Client';
+import { MediaPoster, PhotoPoster as ClientPhotoPoster, Poster } from '../../../api';
 import LogoPoster from './types/LogoPoster';
 import { useMemo } from 'react';
 import ImagePoster from './types/ImagePoster';
@@ -7,6 +6,7 @@ import ExternalPoster from './types/ExternalPoster';
 import VideoPoster from './types/VideoPoster';
 import PhotoPoster from './types/PhotoPoster';
 import TrainPoster from './types/TrainPoster';
+import BorrelWallOfShamePoster from './types/BorrelWallOfShame';
 
 interface Props {
   posters: Poster[];
@@ -31,6 +31,10 @@ export default function PosterCarousel({ posters, currentPoster }: Props) {
         return <VideoPoster source={(poster as MediaPoster).source} />;
       case 'photo':
         return <PhotoPoster poster={poster as ClientPhotoPoster} />;
+      case 'borrel-wall-of-shame':
+        return (
+          <BorrelWallOfShamePoster visible={index === currentPoster || index === previousPoster} />
+        );
       case 'train':
         return (
           <TrainPoster

@@ -1,4 +1,4 @@
-import { PlayerParams, ScoreboardItem } from '../../../api/Client';
+import { PlayerParams, ScoreboardItem } from '../../../api';
 import { toStopwatchString } from '../helpers/time';
 import '../../poster/components/types/ScrollAnimation.scss';
 import { CSSProperties } from 'react';

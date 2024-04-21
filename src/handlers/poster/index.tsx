@@ -2,8 +2,7 @@ import { Socket } from 'socket.io-client';
 import './index.scss';
 import ProgressBar from './components/ProgressBar';
 import { useEffect, useState } from 'react';
-import { Client, FooterSize } from '../../api/Client';
-import { Poster } from './entities/Poster';
+import { Poster, PosterScreenService } from '../../api';
 import PosterCarousel from './components/Carousel';
 
 interface Props {
@@ -19,8 +18,7 @@ export default function PosterView({ socket }: Props) {
 
   const refreshPosters = async () => {
     setLoading(true);
-    const client = new Client();
-    const newPosters = await client.getPosters();
+    const newPosters = await PosterScreenService.getPosters();
     setPosters((newPosters as Poster[]).filter(() => true));
     setLoading(false);
   };
@@ -75,8 +73,8 @@ export default function PosterView({ socket }: Props) {
           title={selectedPoster?.label}
           seconds={posterTimeout !== undefined ? selectedPoster?.timeout : undefined}
           posterIndex={posterIndex}
-          minimal={selectedPoster?.footer === FooterSize.Minimal}
-          hide={selectedPoster?.footer === FooterSize.Hidden}
+          minimal={selectedPoster?.footer === 'minimal'}
+          hide={selectedPoster?.footer === 'hidden'}
           nextPoster={nextPoster}
           pausePoster={pausePoster}
         />
