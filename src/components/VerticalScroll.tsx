@@ -39,7 +39,7 @@ export default function VerticalScroll({ children, visible, timeout, items }: Pr
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden">
-      <div ref={childRef} className="w-fit h-fit">
+      <div ref={childRef} className="w-full h-fit">
         {children}
       </div>
     </div>
