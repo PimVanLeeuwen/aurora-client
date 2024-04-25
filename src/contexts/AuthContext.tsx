@@ -24,7 +24,11 @@ export default function AuthContextProvider({ children }: PropsWithChildren) {
     if (urlSearchParams.has('key')) {
       const key = urlSearchParams.get('key');
       const body: ApiKeyParameters = { key };
-      setUser(await AuthenticationService.authKey(body));
+      setUser(
+        await AuthenticationService.authKey({
+          requestBody: body
+        })
+      );
     } else {
       setUser(await UserService.getInformation());
     }

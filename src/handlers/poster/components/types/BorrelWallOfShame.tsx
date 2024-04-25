@@ -13,12 +13,12 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
     PosterScreenService.getSudoSosWallOfShame().then(setDebtors);
   }, []);
 
-  const bacShadow: CSSProperties = {
-    textShadow: '2px 2px 8px green, -2px -2px 8px green, 2px -2px 8px green, -2px 2px 8px green'
-  };
-  const redShadow: CSSProperties = {
-    textShadow: '2px 2px 8px red, -2px -2px 8px red, 2px -2px 8px red, -2px 2px 8px red'
-  };
+  //const bacShadow: CSSProperties = {
+  //textShadow: '2px 2px 8px green, -2px -2px 8px green, 2px -2px 8px green, -2px 2px 8px green'
+  //};
+  //const redShadow: CSSProperties = {
+  //textShadow: '2px 2px 8px red, -2px -2px 8px red, 2px -2px 8px red, -2px 2px 8px red'
+  //};
 
   return (
     <div
@@ -59,16 +59,16 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
                     break;
                 }
 
-                const name = !!debtor.nickName
-                  ? `${debtor.firstName} "${debtor.nickName}" ${debtor.lastName}`
-                  : `${debtor.firstName} ${debtor.lastName}`;
+                const name = !!debtor.user.nickname
+                  ? `${debtor.user.firstName} "${debtor.user.nickname}" ${debtor.user.lastName}`
+                  : `${debtor.user.firstName} ${debtor.user.lastName}`;
 
                 let style: CSSProperties | undefined;
-                if (debtor.isBac) {
-                  style = bacShadow;
-                } else if (debtor.isLongstanding) {
-                  style = redShadow;
-                }
+                //if (debtor.isBac) {
+                //  style = bacShadow;
+                //} else if (debtor.isLongstanding) {
+                //  style = redShadow;
+                //}
 
                 return (
                   <tr key={debtor.userId} className={fontSizeClass} style={style}>
