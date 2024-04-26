@@ -13,12 +13,12 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
     PosterScreenService.getSudoSosWallOfShame().then(setDebtors);
   }, []);
 
-  //const bacShadow: CSSProperties = {
-  //textShadow: '2px 2px 8px green, -2px -2px 8px green, 2px -2px 8px green, -2px 2px 8px green'
-  //};
-  //const redShadow: CSSProperties = {
-  //textShadow: '2px 2px 8px red, -2px -2px 8px red, 2px -2px 8px red, -2px 2px 8px red'
-  //};
+  const bacShadow: CSSProperties = {
+    textShadow: '2px 2px 8px green, -2px -2px 8px green, 2px -2px 8px green, -2px 2px 8px green'
+  };
+  const redShadow: CSSProperties = {
+    textShadow: '2px 2px 8px red, -2px -2px 8px red, 2px -2px 8px red, -2px 2px 8px red'
+  };
 
   return (
     <div
@@ -35,7 +35,7 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
             <tbody>
               <tr>
                 <td colSpan={3} className="tvpc-schandpaal-title pb-10">
-                  <h1 className="text-9xl text-center">SudoSOS Wall of Shame</h1>
+                  <h1 className="text-9xl text-center">Wall of Shame</h1>
                 </td>
               </tr>
               <tr className="tvpc-schandpaal-table-header">
@@ -59,25 +59,25 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
                     break;
                 }
 
-                const name = !!debtor.user.nickname
-                  ? `${debtor.user.firstName} "${debtor.user.nickname}" ${debtor.user.lastName}`
-                  : `${debtor.user.firstName} ${debtor.user.lastName}`;
+                const name = !!debtor.nickName
+                  ? `${debtor.firstName} "${debtor.nickName}" ${debtor.lastName}`
+                  : `${debtor.firstName} ${debtor.lastName}`;
 
                 let style: CSSProperties | undefined;
-                //if (debtor.isBac) {
-                //  style = bacShadow;
-                //} else if (debtor.isLongstanding) {
-                //  style = redShadow;
-                //}
+                if (debtor.isBac) {
+                  style = bacShadow;
+                } else if (debtor.isLongstanding) {
+                  style = redShadow;
+                }
 
                 return (
                   <tr key={debtor.userId} className={fontSizeClass} style={style}>
                     <td className="text-left">{name}</td>
-                    <td className="text-right">
+                    <td className="text-right whitespace-nowrap">
                       € {(debtor.balance.amount / 100).toFixed(debtor.balance.precision)}
                     </td>
                     {debtor.fine ? (
-                      <td className="text-right">
+                      <td className="text-right whitespace-nowrap">
                         € {(debtor.fine.amount / 100).toFixed(debtor.fine.precision)}
                       </td>
                     ) : (

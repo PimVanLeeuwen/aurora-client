@@ -13,3 +13,9 @@
 .font-raleway {
   font-family: 'Raleway', sans-serif;
 }
+
+@font-face {
+  font-family: CrayonCrumble;
+  src: url("/dk-crayon-crumble-ddll.ttf");
+}
+

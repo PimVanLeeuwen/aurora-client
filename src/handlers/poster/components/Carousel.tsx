@@ -8,6 +8,7 @@ import PhotoPoster from './types/PhotoPoster';
 import TrainPoster from './types/TrainPoster';
 import BorrelWallOfShamePoster from './types/BorrelWallOfShame';
 import BorrelPriceListPoster from './types/BorrelPriceListPoster';
+import BorrelLogoPoster from './types/BorrelLogoPoster';
 
 interface Props {
   posters: Poster[];
@@ -32,6 +33,8 @@ export default function PosterCarousel({ posters, currentPoster }: Props) {
         return <VideoPoster source={(poster as MediaPoster).source} />;
       case 'photo':
         return <PhotoPoster poster={poster as ClientPhotoPoster} />;
+      case 'borrel-logo':
+        return <BorrelLogoPoster />;
       case 'borrel-wall-of-shame':
         return (
           <BorrelWallOfShamePoster visible={index === currentPoster || index === previousPoster} />

@@ -79,10 +79,8 @@ export default function BorrelPriceListPoster({ visible }: Props) {
 
   return (
     <div
-      className="h-full w-full px-20 py-16 text-5xl text-white overflow-hidden"
+      className="h-full w-full px-20 py-16 text-5xl text-white overflow-hidden bg-bac bg-cover"
       style={{
-        background: 'url("/bac-background.png") no-repeat center center fixed',
-        backgroundSize: 'cover',
         textShadow: 'black 0 0 0.5rem'
       }}
     >
