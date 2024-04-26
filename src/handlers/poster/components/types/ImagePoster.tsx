@@ -1,15 +1,17 @@
+import { useMemo } from 'react';
+
 interface Props {
   source: string | string[];
 }
 
 export default function ImagePoster({ source }: Props) {
-  let sourceUrl: string;
-  if (Array.isArray(source)) {
-    const index = Math.floor(Math.random() * source.length);
-    sourceUrl = source[index];
-  } else {
-    sourceUrl = source;
-  }
+  let sourceUrl = useMemo(() => {
+    if (Array.isArray(source)) {
+      const index = Math.floor(Math.random() * source.length);
+      return source[index];
+    }
+    return source;
+  }, []);
 
   return (
     <div className="w-full h-full bg-black relative">
