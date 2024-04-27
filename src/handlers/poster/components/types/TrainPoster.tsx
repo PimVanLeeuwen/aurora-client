@@ -64,7 +64,7 @@ export default function TrainPoster({ visible, timeout }: Props) {
                   <img className="inline-block" src={`${t.operator}.svg`} alt={`${t.operator}`} />{' '}
                   {t.trainType}
                 </span>{' '}
-                via {formatter.format(t.routeStations)}
+                {t.routeStations.length > 0 && `via ${formatter.format(t.routeStations)}`}
               </div>
               {renderMessages(t.messages)}
             </div>
