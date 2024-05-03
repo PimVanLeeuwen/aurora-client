@@ -19,9 +19,7 @@ export default function PhotoPoster({ poster }: Props) {
     const body: GEWISPhotoAlbumParams = {
       albumIds: poster.albums
     };
-    PosterScreenService.getPhoto({
-      requestBody: body
-    }).then((res) => {
+    PosterScreenService.getPhoto(body).then((res) => {
       setUrl(res.url);
       setLabel(res.label);
     });
