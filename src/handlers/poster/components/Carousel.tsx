@@ -30,7 +30,7 @@ export default function PosterCarousel({ posters, currentPoster }: Props) {
       case 'img':
         return <ImagePoster source={(poster as MediaPoster).source} />;
       case 'extern':
-        return <ExternalPoster url={(poster as MediaPoster).source[0]} />;
+        return <ExternalPoster url={(poster as MediaPoster).source[0]} visible={visible} />;
       case 'video':
         return <VideoPoster source={(poster as MediaPoster).source} visible={visible} />;
       case 'photo':

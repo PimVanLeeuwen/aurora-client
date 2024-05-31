@@ -22,7 +22,7 @@ export default function VideoPoster({ source, visible }: Props) {
   }, [visible]);
 
   return (
-    <video className="w-full h-full" muted loop ref={ref}>
+    <video className="w-full h-full" muted loop ref={ref} controls={false}>
       <source src={sourceUrl} type="video/mp4" />
     </video>
   );
