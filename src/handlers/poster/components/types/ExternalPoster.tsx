@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import ImagePoster from './ImagePoster';
 
 interface Props {
@@ -7,42 +7,24 @@ interface Props {
 }
 
 export default function ExternalPoster({ url, visible }: Props) {
-  const [working, setWorking] = useState(null);
   const ref = useRef<HTMLIFrameElement>();
 
   useEffect(() => {
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          setWorking(true);
-        } else {
-          setWorking(false);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        setWorking(false);
-      });
-  }, []);
-
-  useEffect(() => {
     if (!ref || !ref.current) return;
-    ref.current.contentWindow.location.reload();
+    ref.current.src = '';
+    ref.current.src = url;
   }, [visible]);
 
-  if (working == null) return null;
-
-  if (working === false) {
-    return <ImagePoster source="/avico-stuk.png" />;
-  }
-
   return (
-    <iframe
-      className="border-none w-full h-full overflow-hidden"
-      src={url}
-      scrolling="no"
-      seamless
-      ref={ref}
-    />
+    <div className="w-full h-full relative">
+      <ImagePoster source="/avico-stuk.png" />
+      <iframe
+        className="border-none w-full h-full overflow-hidden absolute top-0 z-30"
+        src={url}
+        scrolling="no"
+        seamless
+        ref={ref}
+      />
+    </div>
   );
 }
