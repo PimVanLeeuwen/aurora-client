@@ -11,7 +11,7 @@ export default function ImagePoster({ source }: Props) {
       return source[index];
     }
     return source;
-  }, []);
+  }, [source]);
 
   return (
     <div className="w-full h-full bg-black relative">
