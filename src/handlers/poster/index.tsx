@@ -15,6 +15,7 @@ export default function PosterView({ socket }: Props) {
   const [posterIndex, setPosterIndex] = useState(-1);
   const [posterTimeout, setPosterTimeout] = useState<number | undefined>();
   const [loading, setLoading] = useState(true);
+  const [title, setTitle] = useState('');
 
   const refreshPosters = async () => {
     setLoading(true);
@@ -68,9 +69,13 @@ export default function PosterView({ socket }: Props) {
       style={{ backgroundImage: 'url("poster-background.png")' }}
     >
       <div className="overflow-hidden w-full h-full">
-        <PosterCarousel posters={posters || []} currentPoster={posterIndex < 0 ? 0 : posterIndex} />
+        <PosterCarousel
+          posters={posters || []}
+          currentPoster={posterIndex < 0 ? 0 : posterIndex}
+          setTitle={setTitle}
+        />
         <ProgressBar
-          title={selectedPoster?.label}
+          title={title}
           seconds={posterTimeout !== undefined ? selectedPoster?.timeout : undefined}
           posterIndex={posterIndex}
           minimal={selectedPoster?.footer === 'minimal'}

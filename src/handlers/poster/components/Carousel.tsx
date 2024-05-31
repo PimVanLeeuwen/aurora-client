@@ -1,6 +1,6 @@
 import { MediaPoster, PhotoPoster as ClientPhotoPoster, Poster } from '../../../api';
 import LogoPoster from './types/LogoPoster';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import ImagePoster from './types/ImagePoster';
 import ExternalPoster from './types/ExternalPoster';
 import VideoPoster from './types/VideoPoster';
@@ -13,9 +13,10 @@ import BorrelLogoPoster from './types/BorrelLogoPoster';
 interface Props {
   posters: Poster[];
   currentPoster: number;
+  setTitle: (title: string) => void;
 }
 
-export default function PosterCarousel({ posters, currentPoster }: Props) {
+export default function PosterCarousel({ posters, currentPoster, setTitle }: Props) {
   const previousPoster = useMemo(() => (currentPoster - 1) % posters.length, [currentPoster]);
   const nextPoster = useMemo(() => (currentPoster + 1) % posters.length, [currentPoster]);
 
@@ -34,7 +35,9 @@ export default function PosterCarousel({ posters, currentPoster }: Props) {
       case 'video':
         return <VideoPoster source={(poster as MediaPoster).source} visible={visible} />;
       case 'photo':
-        return <PhotoPoster poster={poster as ClientPhotoPoster} />;
+        return (
+          <PhotoPoster poster={poster as ClientPhotoPoster} visible={visible} setTitle={setTitle} />
+        );
       case 'borrel-logo':
         return <BorrelLogoPoster />;
       case 'borrel-wall-of-shame':
@@ -47,6 +50,13 @@ export default function PosterCarousel({ posters, currentPoster }: Props) {
         return <div>{poster.name}</div>;
     }
   };
+
+  useEffect(() => {
+    const poster = posters[currentPoster];
+    if (poster && poster.type !== 'photo') {
+      setTitle(poster.label);
+    }
+  }, [posters, currentPoster]);
 
   return (
     <div className="w-full h-full top-0 left-0">

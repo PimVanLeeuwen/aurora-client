@@ -8,12 +8,17 @@ import ImagePoster from './ImagePoster';
 
 interface Props {
   poster: IPhotoPoster;
+  visible: boolean;
+  setTitle: (title: string) => void;
 }
 
-export default function PhotoPoster({ poster }: Props) {
+export default function PhotoPoster({ poster, visible, setTitle }: Props) {
   const [url, setUrl] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO where should this be used?
   const [label, setLabel] = useState('');
+
+  useEffect(() => {
+    if (visible) setTitle(label);
+  }, [visible]);
 
   useEffect(() => {
     const body: GEWISPhotoAlbumParams = {
