@@ -1,8 +1,11 @@
+import { useEffect, useRef } from 'react';
+
 interface Props {
   source: string | string[];
+  visible: boolean;
 }
 
-export default function VideoPoster({ source }: Props) {
+export default function VideoPoster({ source, visible }: Props) {
   let sourceUrl: string;
   if (Array.isArray(source)) {
     const index = Math.floor(Math.random() * source.length);
@@ -11,8 +14,15 @@ export default function VideoPoster({ source }: Props) {
     sourceUrl = source;
   }
 
+  const ref = useRef<HTMLVideoElement>();
+
+  useEffect(() => {
+    if (!visible || !ref || !ref.current) return;
+    ref.current.play().catch(console.error);
+  }, [visible]);
+
   return (
-    <video className="w-full h-full" muted loop>
+    <video className="w-full h-full" muted loop ref={ref}>
       <source src={sourceUrl} type="video/mp4" />
     </video>
   );

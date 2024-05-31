@@ -22,6 +22,8 @@ export default function PosterCarousel({ posters, currentPoster }: Props) {
   const renderPoster = (poster: Poster, index: number) => {
     if (index !== previousPoster && index !== currentPoster && index !== nextPoster) return null;
 
+    const visible = index === currentPoster || index === previousPoster;
+
     switch (poster.type as string) {
       case 'logo':
         return <LogoPoster />;
@@ -30,26 +32,17 @@ export default function PosterCarousel({ posters, currentPoster }: Props) {
       case 'extern':
         return <ExternalPoster url={(poster as MediaPoster).source[0]} />;
       case 'video':
-        return <VideoPoster source={(poster as MediaPoster).source} />;
+        return <VideoPoster source={(poster as MediaPoster).source} visible={visible} />;
       case 'photo':
         return <PhotoPoster poster={poster as ClientPhotoPoster} />;
       case 'borrel-logo':
         return <BorrelLogoPoster />;
       case 'borrel-wall-of-shame':
-        return (
-          <BorrelWallOfShamePoster visible={index === currentPoster || index === previousPoster} />
-        );
+        return <BorrelWallOfShamePoster visible={visible} />;
       case 'borrel-price-list':
-        return (
-          <BorrelPriceListPoster visible={index === currentPoster || index === previousPoster} />
-        );
+        return <BorrelPriceListPoster visible={visible} />;
       case 'train':
-        return (
-          <TrainPoster
-            visible={index === currentPoster || index === previousPoster}
-            timeout={poster.timeout}
-          />
-        );
+        return <TrainPoster visible={visible} timeout={poster.timeout} />;
       default:
         return <div>{poster.name}</div>;
     }
