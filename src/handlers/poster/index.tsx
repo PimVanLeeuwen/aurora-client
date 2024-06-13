@@ -56,7 +56,8 @@ export default function PosterView({ socket }: Props) {
 
   useEffect(() => {
     if (posters && !posterTimeout && !loading) {
-      handleNextPoster(-1);
+      const randomIndex = Math.floor(Math.random() * posters.length);
+      handleNextPoster(randomIndex - 1);
     }
   }, [posters, loading]);
 
