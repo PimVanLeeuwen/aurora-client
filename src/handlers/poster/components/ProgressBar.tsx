@@ -46,7 +46,7 @@ export default function ProgressBar({
           </div>
         </div>
         <div
-          className="flex-grow text-center text-shadow"
+          className="flex-grow text-center text-shadow whitespace-nowrap overflow-hidden text-ellipsis"
           style={{ minHeight: '1rem' }}
           onClick={pausePoster}
         >

@@ -27,27 +27,44 @@ export default function PosterCarousel({ posters, currentPoster, setTitle }: Pro
 
     switch (poster.type as string) {
       case 'logo':
-        return <LogoPoster />;
+        return <LogoPoster key={poster.name} />;
       case 'img':
-        return <ImagePoster source={(poster as MediaPoster).source} />;
+        return <ImagePoster key={poster.name} source={(poster as MediaPoster).source} />;
       case 'extern':
-        return <ExternalPoster url={(poster as MediaPoster).source[0]} visible={visible} />;
+        return (
+          <ExternalPoster
+            key={poster.name}
+            url={(poster as MediaPoster).source[0]}
+            visible={visible}
+          />
+        );
       case 'video':
-        return <VideoPoster source={(poster as MediaPoster).source} visible={visible} />;
+        return (
+          <VideoPoster
+            key={poster.name}
+            source={(poster as MediaPoster).source}
+            visible={visible}
+          />
+        );
       case 'photo':
         return (
-          <PhotoPoster poster={poster as ClientPhotoPoster} visible={visible} setTitle={setTitle} />
+          <PhotoPoster
+            key={poster.name}
+            poster={poster as ClientPhotoPoster}
+            visible={visible}
+            setTitle={setTitle}
+          />
         );
       case 'borrel-logo':
-        return <BorrelLogoPoster />;
+        return <BorrelLogoPoster key={poster.name} />;
       case 'borrel-wall-of-shame':
-        return <BorrelWallOfShamePoster visible={visible} />;
+        return <BorrelWallOfShamePoster key={poster.name} visible={visible} />;
       case 'borrel-price-list':
-        return <BorrelPriceListPoster visible={visible} />;
+        return <BorrelPriceListPoster key={poster.name} visible={visible} />;
       case 'train':
-        return <TrainPoster visible={visible} timeout={poster.timeout} />;
+        return <TrainPoster key={poster.name} visible={visible} timeout={poster.timeout} />;
       default:
-        return <div>{poster.name}</div>;
+        return <div key={poster.name}>{poster.name}</div>;
     }
   };
 
