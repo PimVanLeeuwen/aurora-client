@@ -7,6 +7,7 @@ interface Props {
   posterIndex?: number;
   minimal?: boolean;
   hide?: boolean;
+  borrelMode?: boolean;
   nextPoster?: () => void;
   pausePoster?: () => void;
 }
@@ -17,6 +18,7 @@ export default function ProgressBar({
   posterIndex,
   minimal,
   hide,
+  borrelMode,
   nextPoster,
   pausePoster
 }: Props) {
@@ -35,7 +37,7 @@ export default function ProgressBar({
       </div>
       <div className={`flex-grow flex justify-center items-center px-6 ${hide ? 'hidden' : ''}`}>
         <div className="relative h-full py-3" style={{ width: 200 }}>
-          <div className="h-full">
+          <div className="h-full flex flex-row gap-6 items-center">
             <svg
               style={{ filter: 'invert(100%) drop-shadow(3px 5px 2px rgb(0 0 0 /0.4))' }}
               viewBox="0 0 50 100"
@@ -43,6 +45,17 @@ export default function ProgressBar({
             >
               <image x="0" y="0" height="100%" width="100%" xlinkHref={'/gewis-base-black.svg'} />
             </svg>
+            {borrelMode && (
+              <svg
+                style={{
+                  filter: 'brightness(0) invert(1) drop-shadow(3px 5px 2px rgb(0 0 0 /0.4))'
+                }}
+                viewBox="0 0 100 100"
+                height="40"
+              >
+                <image x="0" y="0" height="100%" width="100%" xlinkHref={'/sudosos.svg'} />
+              </svg>
+            )}
           </div>
         </div>
         <div
@@ -65,6 +78,7 @@ export default function ProgressBar({
 ProgressBar.defaultProps = {
   minimal: false,
   hide: false,
+  borrelMode: false,
   nextPoster: undefined,
   pausePoster: undefined
 };

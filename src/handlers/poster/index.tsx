@@ -12,6 +12,7 @@ interface Props {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO should socket be used somewhere?
 export default function PosterView({ socket }: Props) {
   const [posters, setPosters] = useState<Poster[]>();
+  const [borrelMode, setBorrelMode] = useState(false);
   const [posterIndex, setPosterIndex] = useState(-1);
   const [posterTimeout, setPosterTimeout] = useState<number | undefined>();
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,8 @@ export default function PosterView({ socket }: Props) {
   const refreshPosters = async () => {
     setLoading(true);
     const newPosters = await PosterScreenService.getPosters();
-    setPosters(newPosters as Poster[]);
+    setPosters(newPosters.posters as Poster[]);
+    setBorrelMode(newPosters.borrelMode);
     setLoading(false);
   };
 
@@ -29,7 +31,6 @@ export default function PosterView({ socket }: Props) {
     if (posterTimeout) clearTimeout(posterTimeout);
 
     if (posterIndex === 0) {
-      console.log('refresh posters');
       refreshPosters().then(() => {});
     }
 
@@ -87,6 +88,7 @@ export default function PosterView({ socket }: Props) {
           posterIndex={posterIndex}
           minimal={selectedPoster?.footer === 'minimal'}
           hide={selectedPoster?.footer === 'hidden'}
+          borrelMode={borrelMode}
           nextPoster={nextPoster}
           pausePoster={pausePoster}
         />
