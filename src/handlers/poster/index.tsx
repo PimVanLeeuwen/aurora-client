@@ -2,7 +2,7 @@ import { Socket } from 'socket.io-client';
 import './index.scss';
 import ProgressBar from './components/ProgressBar';
 import { useEffect, useState } from 'react';
-import { Poster, PosterScreenService } from '../../api';
+import { HandlersService, Poster } from '../../api';
 import PosterCarousel from './components/Carousel';
 
 interface Props {
@@ -20,7 +20,7 @@ export default function PosterView({ socket }: Props) {
 
   const refreshPosters = async () => {
     setLoading(true);
-    const newPosters = await PosterScreenService.getPosters();
+    const newPosters = await HandlersService.getPosters();
     setPosters(newPosters.posters as Poster[]);
     setBorrelMode(newPosters.borrelMode);
     setLoading(false);

@@ -1,7 +1,7 @@
 import {
   PhotoPoster as IPhotoPoster,
   GEWISPhotoAlbumParams,
-  PosterScreenService
+  HandlersService
 } from '../../../../api';
 import { useEffect, useState } from 'react';
 import ImagePoster from './ImagePoster';
@@ -24,7 +24,7 @@ export default function PhotoPoster({ poster, visible, setTitle }: Props) {
     const body: GEWISPhotoAlbumParams = {
       albumIds: poster.albums
     };
-    PosterScreenService.getPhoto(body).then((res) => {
+    HandlersService.getPhoto(body).then((res) => {
       setUrl(res.url);
       setLabel(res.label);
     });

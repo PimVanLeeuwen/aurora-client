@@ -1,5 +1,5 @@
 import { CSSProperties, useEffect, useState } from 'react';
-import { PosterScreenService, SudoSOSDebtorResponse } from '../../../../api';
+import { HandlersService, SudoSOSDebtorResponse } from '../../../../api';
 import VerticalScroll from '../../../../components/VerticalScroll';
 
 interface Props {
@@ -10,7 +10,7 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
   const [debtors, setDebtors] = useState<SudoSOSDebtorResponse[]>([]);
 
   useEffect(() => {
-    PosterScreenService.getSudoSosWallOfShame().then(setDebtors);
+    HandlersService.getSudoSosWallOfShame().then(setDebtors);
   }, []);
 
   const bacShadow: CSSProperties = {
