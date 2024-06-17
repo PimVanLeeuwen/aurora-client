@@ -20,26 +20,32 @@ export default function PosterView({ socket }: Props) {
   const refreshPosters = async () => {
     setLoading(true);
     const newPosters = await PosterScreenService.getPosters();
-    setPosters((newPosters as Poster[]).filter(() => true));
+    setPosters(newPosters as Poster[]);
     setLoading(false);
   };
 
-  const handleNextPoster = (currentIndex: number) => {
+  useEffect(() => {
+    if (!posters || posters.length === 0) return;
     if (posterTimeout) clearTimeout(posterTimeout);
 
-    const newIndex = (currentIndex + 1) % posters.length;
-    if (currentIndex === 0 && posterTimeout !== undefined) {
+    if (posterIndex === 0) {
+      console.log('refresh posters');
       refreshPosters().then(() => {});
     }
-    setPosterIndex(newIndex);
 
-    const nextP = posters[newIndex];
-
-    const timeout = setTimeout(() => handleNextPoster(newIndex), nextP.timeout * 1000);
+    const nextPoster = posters[posterIndex];
+    const timeout = setTimeout(
+      () => setPosterIndex((i) => (i + 1) % posters.length),
+      nextPoster.timeout * 1000
+    );
     setPosterTimeout(timeout);
-  };
 
-  const nextPoster = () => handleNextPoster(posterIndex);
+    return () => clearTimeout(timeout);
+  }, [posterIndex]);
+
+  const nextPoster = () => {
+    setPosterIndex((i) => (i + 1) % posters.length);
+  };
 
   const pausePoster = () => {
     if (posterTimeout) clearTimeout(posterTimeout);
@@ -57,7 +63,7 @@ export default function PosterView({ socket }: Props) {
   useEffect(() => {
     if (posters && !posterTimeout && !loading) {
       const randomIndex = Math.floor(Math.random() * posters.length);
-      handleNextPoster(randomIndex - 1);
+      setPosterIndex(randomIndex);
     }
   }, [posters, loading]);
 
