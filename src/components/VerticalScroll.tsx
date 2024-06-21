@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useRef } from 'react';
+import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
 
 interface Props extends PropsWithChildren {
   visible: boolean;
@@ -7,12 +7,13 @@ interface Props extends PropsWithChildren {
 }
 
 export default function VerticalScroll({ children, visible, timeout, items }: Props) {
+  const [timeoutRef, setTimeoutRef] = useState<number | undefined>();
+  const [iteration, setIteration] = useState(0);
+
   const containerRef = useRef<HTMLDivElement>();
   const childRef = useRef<HTMLDivElement>();
 
-  useEffect(() => {
-    if (!containerRef.current || !childRef.current || !visible) return;
-
+  const animate = () => {
     const containerHeight = containerRef.current.clientHeight;
     const childHeight = childRef.current.clientHeight;
     const absoluteHeightDifference = childHeight - containerHeight;
@@ -28,14 +29,36 @@ export default function VerticalScroll({ children, visible, timeout, items }: Pr
         transform: `translateY(-${absoluteHeightDifference}px)`
       }
     ];
-    const duration = relativeHeightDifference * 12000;
+    const supposedDuration = relativeHeightDifference * 12000;
+    const duration = timeout ? Math.max(supposedDuration, timeout) : supposedDuration;
+    const delay = 3000;
+
     const options: KeyframeAnimationOptions = {
-      duration: timeout ? Math.max(duration, timeout) : duration,
-      delay: 3000
+      duration,
+      delay
     };
 
     childRef.current.animate(keyframes, options);
-  }, [containerRef, childRef, visible, items]);
+
+    return duration + delay;
+  };
+
+  // Start an animation with a timeout to increase the iteration counter
+  const loopAnimate = () => {
+    if (timeoutRef) clearTimeout(timeoutRef);
+    const duration = animate();
+    setTimeoutRef(setTimeout(() => setIteration((v) => v + 1), duration));
+  };
+
+  useEffect(() => {
+    if (!containerRef.current || !childRef.current || !visible) return;
+
+    loopAnimate();
+
+    return () => {
+      if (timeoutRef) clearTimeout(timeoutRef);
+    };
+  }, [containerRef, childRef, visible, items, iteration]);
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden">
