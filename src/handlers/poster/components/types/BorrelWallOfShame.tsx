@@ -35,25 +35,25 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
             <tbody>
               <tr>
                 <td colSpan={3} className="tvpc-schandpaal-title pb-10">
-                  <h1 className="text-9xl text-center">Wall of Shame</h1>
+                  <h1 className="text-9xl text-center">SudoSOS Wall of Shame</h1>
                 </td>
               </tr>
               <tr className="tvpc-schandpaal-table-header">
                 <th className="text-left"></th>
-                <th className="text-right">Debt</th>
+                <th className="text-right pe-8">Debt</th>
                 <th className="fine">Fine</th>
               </tr>
               {debtors.map((debtor, i) => {
                 let fontSizeClass: string;
                 switch (i) {
                   case 0:
-                    fontSizeClass = 'text-8xl';
-                    break;
-                  case 1:
                     fontSizeClass = 'text-7xl';
                     break;
-                  case 2:
+                  case 1:
                     fontSizeClass = 'text-6xl';
+                    break;
+                  case 2:
+                    fontSizeClass = 'text-5xl';
                     break;
                   default:
                     break;
@@ -73,7 +73,7 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
                 return (
                   <tr key={debtor.userId} className={fontSizeClass} style={style}>
                     <td className="text-left">{name}</td>
-                    <td className="text-right whitespace-nowrap">
+                    <td className="text-right whitespace-nowrap pe-8">
                       € {(debtor.balance.amount / 100).toFixed(debtor.balance.precision)}
                     </td>
                     {debtor.fine ? (

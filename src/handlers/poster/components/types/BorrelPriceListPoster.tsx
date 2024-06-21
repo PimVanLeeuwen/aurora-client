@@ -67,7 +67,7 @@ export default function BorrelPriceListPoster({ visible }: Props) {
           {categoryProducts.map((p) => (
             <tr>
               <td className="text-left">{p.name}</td>
-              <td className="text-right">
+              <td className="text-right whitespace-nowrap">
                 € {(p.priceInclVat.amount / 100).toFixed(p.priceInclVat.precision)}
               </td>
             </tr>
