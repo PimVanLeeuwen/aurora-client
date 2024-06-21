@@ -86,7 +86,11 @@ export default function BorrelPriceListPoster({ visible }: Props) {
     >
       <div className="mb-10 flex gap-10 items-center">
         <h1 className="text-8xl">Price list</h1>
-        <p className="italic text-2xl font-light">* Payments only via SudoSOS (sudosos.gewis.nl)</p>
+        <p className="italic text-2xl font-light">
+          * Payments only via SudoSOS (sudosos.gewis.nl)
+          <br />
+          ** Assortment may vary; ask at the bar for current availability
+        </p>
       </div>
       <VerticalScroll visible={visible}>
         <div className="grid grid-cols-2 gap-32 w-full font-lato">
