@@ -1,6 +1,7 @@
 import { CSSProperties, useEffect, useState } from 'react';
 import { HandlersService, SudoSOSDebtorResponse } from '../../../../api';
 import VerticalScroll from '../../../../components/VerticalScroll';
+import { bacShadow, redShadow } from '../../../../style/shadows';
 
 interface Props {
   visible: boolean;
@@ -12,13 +13,6 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
   useEffect(() => {
     HandlersService.getSudoSosWallOfShame().then(setDebtors);
   }, []);
-
-  const bacShadow: CSSProperties = {
-    textShadow: '2px 2px 8px green, -2px -2px 8px green, 2px -2px 8px green, -2px 2px 8px green'
-  };
-  const redShadow: CSSProperties = {
-    textShadow: '2px 2px 8px red, -2px -2px 8px red, 2px -2px 8px red, -2px 2px 8px red'
-  };
 
   return (
     <div

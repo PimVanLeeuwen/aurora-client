@@ -2,6 +2,8 @@ import { PlayerParams, ScoreboardItem } from '../../../api';
 import { toStopwatchString } from '../helpers/time';
 import '../../poster/components/types/ScrollAnimation.scss';
 import { CSSProperties } from 'react';
+import VerticalScroll from '../../../components/VerticalScroll';
+import { bacShadow, redShadow } from '../../../style/shadows';
 
 interface Props {
   scoreboard: ScoreboardItem[];
@@ -9,14 +11,6 @@ interface Props {
 }
 
 export default function Scoreboard({ scoreboard, player }: Props) {
-  const animation: CSSProperties = {
-    animationName: 'vertical-scroll',
-    animationDelay: '3s',
-    animationIterationCount: 'infinite',
-    animationTimingFunction: 'linear',
-    animationDuration: `${Math.max((scoreboard.length - 8) * 3, 0)}s`
-  };
-
   const getTimeDifference = (i: number) => {
     if (i === 0) return null;
     const current = scoreboard[i].timeMs;
@@ -25,13 +19,19 @@ export default function Scoreboard({ scoreboard, player }: Props) {
     return '+' + toStopwatchString(difference, false);
   };
 
+  const getScoreStyle = (score: ScoreboardItem): CSSProperties => {
+    if (score.uuid === player?.uuid) return redShadow;
+    if (score.bac) return bacShadow;
+    return undefined;
+  };
+
   return (
     <div className="h-full" style={{ marginBottom: '-5rem' }}>
-      <div className="text-3xl h-full" style={animation}>
-        <table className="border-separate" style={{ borderSpacing: '3rem 1rem' }}>
+      <VerticalScroll visible scrollEmptySpace>
+        <table className="border-separate text-4xl" style={{ borderSpacing: '3rem 1rem' }}>
           <tbody>
             {scoreboard.map((score, i) => (
-              <tr key={score.uuid} className={player.uuid === score.uuid ? 'bg-gray-600' : ''}>
+              <tr key={score.uuid} style={getScoreStyle(score)}>
                 <td className="">{i + 1})</td>
                 <td className="">{score.name}</td>
                 <td className="" style={{ fontFamily: 'Consolas,monaco,monospace' }}>
@@ -44,7 +44,7 @@ export default function Scoreboard({ scoreboard, player }: Props) {
             ))}
           </tbody>
         </table>
-      </div>
+      </VerticalScroll>
     </div>
   );
 }

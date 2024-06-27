@@ -4,9 +4,16 @@ interface Props extends PropsWithChildren {
   visible: boolean;
   timeout?: number;
   items?: number;
+  scrollEmptySpace?: boolean;
 }
 
-export default function VerticalScroll({ children, visible, timeout, items }: Props) {
+export default function VerticalScroll({
+  children,
+  visible,
+  timeout,
+  items,
+  scrollEmptySpace
+}: Props) {
   const [timeoutRef, setTimeoutRef] = useState<number | undefined>();
   const [iteration, setIteration] = useState(0);
 
@@ -64,6 +71,10 @@ export default function VerticalScroll({ children, visible, timeout, items }: Pr
     <div ref={containerRef} className="w-full h-full overflow-hidden">
       <div ref={childRef} className="w-full h-fit">
         {children}
+        {scrollEmptySpace &&
+          containerRef.current?.clientHeight < childRef.current?.clientHeight && (
+            <div style={{ height: containerRef.current.clientHeight / 3 }} />
+          )}
       </div>
     </div>
   );

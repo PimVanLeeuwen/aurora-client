@@ -27,9 +27,10 @@ export default function TimeTrailRaceView({ socket }: Props) {
   const [scoreboard, setScoreboard] = useState<ScoreboardItem[]>([]);
 
   useEffect(() => {
-    ModesService.getRaceState().then(({ state: s, sessionName: n }) => {
+    ModesService.getRaceState().then(({ state: s, sessionName: n, scoreboard: sb }) => {
       setState(s);
       setSessionName(n);
+      setScoreboard(sb);
     });
 
     socket.on('race-initialized', ([{ state: s, sessionName: n }]) => {
@@ -120,7 +121,13 @@ export default function TimeTrailRaceView({ socket }: Props) {
         <h4 className="text-5xl italic">{sessionName}</h4>
       </div>
       <div className="flex-1 overflow-hidden">{renderContent()}</div>
-      {state === 'PLAYER_REGISTERED' && <NextPlayer name={player?.name} />}
+      {state === 'PLAYER_REGISTERED' && (
+        <div className="relative overflow-hidden w-full h-12">
+          <NextPlayer name={player?.name} bac={player?.bac} delay={0} time={10000} />
+          <NextPlayer name={player?.name} bac={player?.bac} delay={-3333} time={10000} />
+          <NextPlayer name={player?.name} bac={player?.bac} delay={-6667} time={10000} />
+        </div>
+      )}
     </div>
   );
 }
