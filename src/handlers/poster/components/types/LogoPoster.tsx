@@ -1,7 +1,7 @@
 export default function LogoPoster() {
   return (
     <div
-      className="absolute top-0 left-0 w-full h-full flex justify-center items-center overflow-hidden bg-center bg-cover bg-no-repeat"
+      className="absolute top-0 left-0 w-full h-full flex justify-center items-center overflow-hidden bg-gewis bg-center bg-cover bg-no-repeat"
       style={{ backgroundImage: 'url("poster-background.png")' }}
     >
       <div

@@ -9,6 +9,7 @@ import TrainPoster from './types/TrainPoster';
 import BorrelWallOfShamePoster from './types/BorrelWallOfShame';
 import BorrelPriceListPoster from './types/BorrelPriceListPoster';
 import BorrelLogoPoster from './types/BorrelLogoPoster';
+import OlympicsPoster from './types/OlympicsPoster';
 
 interface Props {
   posters: Poster[];
@@ -63,6 +64,8 @@ export default function PosterCarousel({ posters, currentPoster, setTitle }: Pro
         return <BorrelPriceListPoster key={poster.name} visible={visible} />;
       case 'train':
         return <TrainPoster key={poster.name} visible={visible} timeout={poster.timeout} />;
+      case 'olympics':
+        return <OlympicsPoster key={poster.name} />;
       default:
         return <div key={poster.name}>{poster.name}</div>;
     }
