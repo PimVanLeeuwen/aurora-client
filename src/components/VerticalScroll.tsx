@@ -5,6 +5,7 @@ interface Props extends PropsWithChildren {
   timeout?: number;
   items?: number;
   scrollEmptySpace?: boolean;
+  delay?: number;
 }
 
 export default function VerticalScroll({
@@ -38,7 +39,7 @@ export default function VerticalScroll({
     ];
     const supposedDuration = relativeHeightDifference * 12000;
     const duration = timeout ? Math.max(supposedDuration, timeout) : supposedDuration;
-    const delay = 3000;
+    const delay = 4000;
 
     const options: KeyframeAnimationOptions = {
       duration,

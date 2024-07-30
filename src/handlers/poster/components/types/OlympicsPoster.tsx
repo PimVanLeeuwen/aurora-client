@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { CountryMedalResponse, HandlersService, MedalTableRecord } from '../../../../api';
 import VerticalScroll from '../../../../components/VerticalScroll';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMedal, faPlus, faRankingStar } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   visible: boolean;
@@ -50,12 +52,22 @@ export default function OlympicsPoster({ visible }: Props) {
                 <table className="w-full">
                   <thead>
                     <tr>
-                      <td />
+                      <td>
+                        <FontAwesomeIcon icon={faRankingStar} />
+                      </td>
                       <td>Country</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>Total</td>
+                      <td style={{ color: 'gold' }}>
+                        <FontAwesomeIcon icon={faMedal} />
+                      </td>
+                      <td style={{ color: 'silver' }}>
+                        <FontAwesomeIcon icon={faMedal} />
+                      </td>
+                      <td style={{ color: 'bronze' }}>
+                        <FontAwesomeIcon icon={faMedal} />
+                      </td>
+                      <td>
+                        <FontAwesomeIcon icon={faPlus} />
+                      </td>
                     </tr>
                   </thead>
                   <tbody>
@@ -89,9 +101,18 @@ export default function OlympicsPoster({ visible }: Props) {
               Dutch medals
             </div>
             <div className="text-center flex flex-row gap-6 justify-center items-center mb-8">
-              <div className="flex-1">Silver: {dutchMedals?.silver ?? 0}</div>
-              <div className="flex-1 text-5xl">Gold: {dutchMedals?.gold ?? 0}</div>
-              <div className="flex-1">Bronze: {dutchMedals?.bronze ?? 0}</div>
+              <div className="flex-1 flex flex-row gap-2 justify-center items-center">
+                <FontAwesomeIcon style={{ color: 'silver' }} icon={faMedal} />
+                <span>{dutchMedals?.silver ?? 0}</span>
+              </div>
+              <div className="flex-1 text-5xl flex flex-row gap-2 justify-center items-center">
+                <FontAwesomeIcon style={{ color: 'gold' }} icon={faMedal} />
+                {dutchMedals?.gold ?? 0}
+              </div>
+              <div className="flex-1 flex flex-row gap-2 justify-center items-center">
+                <FontAwesomeIcon style={{ color: 'bronze' }} icon={faMedal} />
+                {dutchMedals?.bronze ?? 0}
+              </div>
             </div>
             <div style={{ maxHeight: 570 }}>
               <VerticalScroll
