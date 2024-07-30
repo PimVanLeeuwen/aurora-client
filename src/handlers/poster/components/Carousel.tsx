@@ -65,7 +65,7 @@ export default function PosterCarousel({ posters, currentPoster, setTitle }: Pro
       case 'train':
         return <TrainPoster key={poster.name} visible={visible} timeout={poster.timeout} />;
       case 'olympics':
-        return <OlympicsPoster key={poster.name} />;
+        return <OlympicsPoster key={poster.name} visible={visible} />;
       default:
         return <div key={poster.name}>{poster.name}</div>;
     }
