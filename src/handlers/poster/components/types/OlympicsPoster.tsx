@@ -8,6 +8,17 @@ interface Props {
   visible: boolean;
 }
 
+function getMedalColor(medal: 'gold' | 'silver' | 'bronze'): string | undefined {
+  switch (medal) {
+    case 'gold':
+      return 'gold';
+    case 'silver':
+      return 'silver';
+    case 'bronze':
+      return '#cd7f32';
+  }
+}
+
 export default function OlympicsPoster({ visible }: Props) {
   const [medalTable, setMedalTable] = useState<MedalTableRecord[]>([]);
   const [dutchMedals, setDutchMedals] = useState<CountryMedalResponse | null>(null);
@@ -31,12 +42,12 @@ export default function OlympicsPoster({ visible }: Props) {
       <div className="absolute w-full h-full bg-black opacity-10" />
       <div className="absolute w-full h-full flex flex-col items-center p-10 pb-28 gap-8">
         <div
-          className="font-olympics-2024 text-8xl font-medium"
+          className="font-olympics-2024 text-8xl font-medium text-white"
           style={{ fontFamily: 'Olympics2024', textShadow: '0 0 32px darkorange' }}
         >
           Summer Olympics Paris 2024
         </div>
-        <div className="flex flex-row gap-12 w-full flex-1">
+        <div className="flex flex-row gap-12 w-full flex-1" style={{ textShadow: '0 0 5px black' }}>
           <div
             className="bg-black text-white bg-opacity-60 rounded-xl flex-1 h-full p-8 flex flex-col"
             style={{ maxHeight: 800 }}
@@ -56,13 +67,13 @@ export default function OlympicsPoster({ visible }: Props) {
                         <FontAwesomeIcon icon={faRankingStar} />
                       </td>
                       <td>Country</td>
-                      <td style={{ color: 'gold' }}>
+                      <td style={{ color: getMedalColor('gold') }}>
                         <FontAwesomeIcon icon={faMedal} />
                       </td>
-                      <td style={{ color: 'silver' }}>
+                      <td style={{ color: getMedalColor('silver') }}>
                         <FontAwesomeIcon icon={faMedal} />
                       </td>
-                      <td style={{ color: 'bronze' }}>
+                      <td style={{ color: getMedalColor('bronze') }}>
                         <FontAwesomeIcon icon={faMedal} />
                       </td>
                       <td>
@@ -75,7 +86,10 @@ export default function OlympicsPoster({ visible }: Props) {
                       <tr>
                         <td className="p-2">{score.rank}</td>
                         <td className="p-2 flex flex-row gap-2 items-center">
-                          <img src={score.flagUrl} style={{ height: '2rem' }} />
+                          <img
+                            src={score.flagUrl}
+                            style={{ height: '2rem', boxShadow: '0 0 5px #333333' }}
+                          />
                           {score.countryName}
                         </td>
                         <td className="p-2">{score.gold}</td>
@@ -97,20 +111,23 @@ export default function OlympicsPoster({ visible }: Props) {
               className="text-center text-6xl font-medium pb-5 flex flex-row gap-6 items-center justify-center"
               style={{ fontFamily: 'Olympics2024' }}
             >
-              <img src={dutchMedals?.flagUrl ?? ''} style={{ height: '4rem' }} />
+              <img
+                src={dutchMedals?.flagUrl ?? ''}
+                style={{ height: '4rem', boxShadow: '0 0 5px #333333' }}
+              />
               Dutch medals
             </div>
             <div className="text-center flex flex-row gap-6 justify-center items-center mb-8">
               <div className="flex-1 flex flex-row gap-2 justify-center items-center">
-                <FontAwesomeIcon style={{ color: 'silver' }} icon={faMedal} />
+                <FontAwesomeIcon style={{ color: getMedalColor('silver') }} icon={faMedal} />
                 <span>{dutchMedals?.silver ?? 0}</span>
               </div>
               <div className="flex-1 text-5xl flex flex-row gap-2 justify-center items-center">
-                <FontAwesomeIcon style={{ color: 'gold' }} icon={faMedal} />
+                <FontAwesomeIcon style={{ color: getMedalColor('gold') }} icon={faMedal} />
                 {dutchMedals?.gold ?? 0}
               </div>
               <div className="flex-1 flex flex-row gap-2 justify-center items-center">
-                <FontAwesomeIcon style={{ color: 'bronze' }} icon={faMedal} />
+                <FontAwesomeIcon style={{ color: getMedalColor('bronze') }} icon={faMedal} />
                 {dutchMedals?.bronze ?? 0}
               </div>
             </div>
@@ -124,12 +141,17 @@ export default function OlympicsPoster({ visible }: Props) {
                   <tbody>
                     {dutchMedals?.medals.map((medal) => (
                       <tr>
-                        <td className="pb-4 pr-4">{medal.medal}</td>
+                        <td className="pb-4 pr-4 text-6xl">
+                          <FontAwesomeIcon
+                            style={{ color: getMedalColor(medal.medal) }}
+                            icon={faMedal}
+                          />
+                        </td>
                         <td className="pb-4">
                           <p className="text-5xl">
                             {medal.sportName} - {medal.eventName}
                           </p>
-                          <p>{medal.participantName}</p>
+                          <p className="italic">{medal.participantName}</p>
                         </td>
                       </tr>
                     ))}
