@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const COUNTDOWN_TIME = 10000;
+const COUNTDOWN_TIME = 60000;
 
 export default function ReloadCountdown() {
   const [start] = useState(new Date());
@@ -20,7 +20,10 @@ export default function ReloadCountdown() {
   useEffect(() => {
     const reloadTimeout = setTimeout(reloadPage, COUNTDOWN_TIME);
     const renderInterval = setInterval(updateSecondsLeft, 100);
-    return () => clearTimeout(reloadTimeout);
+    return () => {
+      clearTimeout(reloadTimeout);
+      clearInterval(renderInterval);
+    };
   }, []);
 
   return (
