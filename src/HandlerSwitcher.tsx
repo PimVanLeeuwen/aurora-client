@@ -5,7 +5,7 @@ import './index.css';
 
 import { default as CenturionView } from './handlers/centurion';
 import { default as SpotifyView } from './handlers/spotify';
-import { default as DefaultView } from './handlers/default';
+import { default as DefaultView, LoadingView, ReloadCountdown } from './handlers/default';
 import { Socket } from 'socket.io-client';
 import { AuthContext } from './contexts/AuthContext';
 import StageEffectsView from './handlers/stage-effects';
@@ -33,15 +33,28 @@ export default function HandlerSwitcher() {
   }, [user]);
 
   if (loading) {
-    return <h1>Initializing the screen...</h1>;
+    return (
+      <LoadingView>
+        <h1 className="text-8xl">Initializing the screen...</h1>
+      </LoadingView>
+    );
   }
 
   if (!user) {
-    return <h1>Unauthenticated</h1>;
+    return (
+      <LoadingView>
+        <h1 className="text-8xl">Unauthenticated</h1>
+        <ReloadCountdown />
+      </LoadingView>
+    );
   }
 
   if (!screenSocket) {
-    return <h1>Connecting to websocket...</h1>;
+    return (
+      <LoadingView>
+        <h1 className="text-8xl">Connecting to websocket...</h1>
+      </LoadingView>
+    );
   }
 
   switch (currentHandler) {

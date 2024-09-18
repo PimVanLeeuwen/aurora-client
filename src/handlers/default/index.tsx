@@ -1,3 +1,6 @@
+export { default as LoadingView } from './LoadingView';
+export { default as ReloadCountdown } from './ReloadCountdown';
+
 import { Gif } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import React, { useState } from 'react';
