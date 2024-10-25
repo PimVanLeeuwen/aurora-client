@@ -203,7 +203,7 @@ export default function CenturionView({ socket }: Props) {
 
       {strobe && <Strobe hornCount={hornCount} />}
 
-      <Background colors={colors} />
+      <Background colors={colors} progression={hornCount < 0 ? 0 : hornCount} />
     </>
   );
 }

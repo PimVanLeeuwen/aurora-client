@@ -1,7 +1,7 @@
 {
   /* https://codepen.io/mpirdimpirdis/pen/dWwGKa */
 }
-export function lavalampJavascript(startColor: string, endColor: string) {
+export function lavalampJavascript(startColor: string, endColor: string, progression: number) {
   return `
         var canvas;
         var gl;
@@ -71,12 +71,12 @@ export function lavalampJavascript(startColor: string, endColor: string) {
           displayWidth  = Math.floor(gl.canvas.clientWidth  / realToCSSPixels);
           displayHeight = Math.floor(gl.canvas.clientHeight / realToCSSPixels);
   
-          var minSpeed = 0.2;
-          var maxSpeed = 2.5;
-          var minMultiplierArcX = -.25;
-          var maxMultiplierArcX = .75;
-          var minMultiplierArcY = -.25;
-          var maxMultiplierArcY = .25;
+          var minSpeed = 0.2 * (1 + ${progression} / 10);
+          var maxSpeed = 2.5 * (1 + ${progression} / 10);
+          var minMultiplierArcX = -.25 * (1 + ${progression} / 10);
+          var maxMultiplierArcX = .75 * (1 + ${progression} / 10);
+          var minMultiplierArcY = -.25 * (1 + ${progression} / 10);
+          var maxMultiplierArcY = .25 * (1 + ${progression} / 10);
           var scale = 1.0;
   
           var metaballsGroup1 = {
