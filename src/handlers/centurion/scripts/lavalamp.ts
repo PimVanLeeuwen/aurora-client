@@ -15,6 +15,8 @@ export function lavalampJavascript(startColor: string, endColor: string) {
             {path: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-183/', src: 'noise3.png', name: 'noise3', type: 'texture'}
         ];
         var assets = {};
+        
+        var animationFrameId;
 
         window.onload = preloadAssets();
         function preloadAssets() {
@@ -46,6 +48,10 @@ export function lavalampJavascript(startColor: string, endColor: string) {
         }
 
         function initialize(){
+          if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+          }
+        
           canvas = document.getElementById('lavalamp-canvas');
           canvas.width = window.innerWidth;
           canvas.height = window.innerHeight;
@@ -257,8 +263,14 @@ export function lavalampJavascript(startColor: string, endColor: string) {
           createdMetaballs.forEach(function(metaball){
             metaball.updateSimulation();
           });
-          requestAnimationFrame(step);
+          animationFrameId = requestAnimationFrame(step);
         };
+        
+        var destroy = function () {
+          if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+          }
+        }
         `;
 }
 
