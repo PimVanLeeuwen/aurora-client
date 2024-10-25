@@ -183,6 +183,23 @@ export default function CenturionView({ socket }: Props) {
     return <p className="text-white text-[550px] -m-20">{makeTextDrunk(hornCount.toString())}</p>;
   };
 
+  const renderBackground = () => {
+    if (hornCount >= 0 && mixtape)
+      return <Background colors={colors} progression={hornCount < 0 ? 0 : hornCount} />;
+
+    return (
+      <div className="h-screen w-full top-0 left-0 absolute -z-20 bg-black overflow-hidden">
+        <div
+          className="h-full w-full bg-center bg-cover bg-no-repeat -z-30"
+          style={{
+            filter: 'blur(2px)',
+            backgroundImage: 'url("scooter.jpeg")'
+          }}
+        ></div>
+      </div>
+    );
+  };
+
   return (
     <>
       {hornCount === -1 && mixtape && (
@@ -203,7 +220,7 @@ export default function CenturionView({ socket }: Props) {
 
       {strobe && <Strobe hornCount={hornCount} />}
 
-      <Background colors={colors} progression={hornCount < 0 ? 0 : hornCount} />
+      {renderBackground()}
     </>
   );
 }
