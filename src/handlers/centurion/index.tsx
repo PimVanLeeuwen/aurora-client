@@ -6,6 +6,7 @@ import styles from './centurion.module.css';
 import Strobe from './components/Strobe';
 import { clsx } from 'clsx';
 import Information from './components/Information';
+import { ModesService } from '../../api';
 
 interface Props {
   socket: Socket;
@@ -91,7 +92,7 @@ export default function CenturionView({ socket }: Props) {
   );
   const [song, setSong] = useState<string | null>('Wie dit leest, trekt een bak!');
 
-  const [mixtape, setMixtape] = useState<MixTape | null>(null);
+  const [mixtape, setMixtape] = useState<Pick<MixTape, 'name' | 'coverUrl'> | null>(null);
   const [status, setStatus] = useState<Status>(Status.STOPPED);
 
   const [hornCount, setHornCount] = useState<number>(-1);
@@ -102,6 +103,29 @@ export default function CenturionView({ socket }: Props) {
   });
 
   React.useEffect(() => {
+    ModesService.getCenturionState().then((res) => {
+      if (res.tape) {
+        setMixtape(res.tape);
+        setStatus(Status.READY);
+      }
+      if (res.lastHorn) setHornCount(res.lastHorn.data.counter);
+      if (res.lastSong && Array.isArray(res.lastSong.data)) {
+        setSong(res.lastSong.data[0].title);
+        setArtists(res.lastSong.data[0].artist);
+      }
+      if (res.lastSong && !Array.isArray(res.lastSong.data)) {
+        setSong(res.lastSong.data.title);
+        setArtists(res.lastSong.data.artist);
+      }
+      if (res.colors) {
+        setColors({
+          start: Colors[res.colors[0]],
+          end: Colors[res.colors[1]]
+        });
+      }
+      if (res.playing) setStatus(Status.PLAYING);
+    });
+
     socket.on('loaded', (mixTapes: MixTape[]) => {
       const mixTape = mixTapes[0];
       setMixtape(mixTape);
