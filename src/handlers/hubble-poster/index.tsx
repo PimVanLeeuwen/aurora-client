@@ -89,7 +89,7 @@ export default function HubblePosterView({ socket }: Props) {
           pausePoster={pausePoster}
         />
         <HubbleOrderView
-          orders = {[0,69]}
+          orders = {['001', '002']}
         />
       </div>
     </div>
