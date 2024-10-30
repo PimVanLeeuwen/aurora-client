@@ -2,7 +2,7 @@ import { useState } from 'react';
 import React from 'react';
 import { Socket } from 'socket.io-client';
 import BlurredImage from '../stage-effects/components/backgrounds/BlurredImage';
-import { SpotifyService } from '../../api';
+import { getSpotifyCurrentlyPlaying } from '../../api';
 
 interface Props {
   socket: Socket;
@@ -26,7 +26,9 @@ export default function SpotifyView({ socket }: Props) {
   };
 
   React.useEffect(() => {
-    SpotifyService.getSpotifyCurrentlyPlaying().then(handleTrackChange);
+    getSpotifyCurrentlyPlaying().then((res) => {
+      handleTrackChange(res.data);
+    });
 
     socket.on('change_track', (event: any[]) => {
       const trackChangeEvents = event[0] as TrackChangeEvent[];

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { HandlersService, ProductCategoryResponse, ProductResponse } from '../../../../api';
+import { getSudoSosPriceList, ProductCategoryResponse, ProductResponse } from '../../../../api';
 import VerticalScroll from '../../../../components/VerticalScroll';
 
 interface Props {
@@ -13,12 +13,12 @@ export default function BorrelPriceListPoster({ visible }: Props) {
   );
 
   useEffect(() => {
-    HandlersService.getSudoSosPriceList().then((res) => {
+    getSudoSosPriceList().then((res) => {
       // Mapping from category ID to products
       const productMap = new Map<number, ProductResponse[]>();
       const categoryMap = new Map<number, ProductCategoryResponse>();
 
-      res.forEach((p) => {
+      res.data.forEach((p) => {
         if (productMap.has(p.category.id)) {
           productMap.get(p.category.id)!.push(p);
         } else {

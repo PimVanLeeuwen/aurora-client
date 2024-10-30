@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { HandlersService, TrainResponse } from '../../../../api';
+import { getTrains, TrainResponse } from '../../../../api';
 import './TrainPoster.scss';
 import VerticalScroll from '../../../../components/VerticalScroll';
 
@@ -12,7 +12,9 @@ export default function TrainPoster({ visible, timeout }: Props) {
   const [trains, setTrains] = useState<TrainResponse[] | undefined>();
 
   useEffect(() => {
-    HandlersService.getTrains().then(setTrains);
+    getTrains().then((res) => {
+      setTrains(res.data);
+    });
   }, []);
 
   const parseTime = (d: Date) => {

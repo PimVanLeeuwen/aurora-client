@@ -6,7 +6,7 @@ import styles from './centurion.module.css';
 import Strobe from './components/Strobe';
 import { clsx } from 'clsx';
 import Information from './components/Information';
-import { ModesService } from '../../api';
+import { getCenturionState } from '../../api';
 
 interface Props {
   socket: Socket;
@@ -103,27 +103,27 @@ export default function CenturionView({ socket }: Props) {
   });
 
   React.useEffect(() => {
-    ModesService.getCenturionState().then((res) => {
-      if (res.tape) {
-        setMixtape(res.tape);
+    getCenturionState().then((res) => {
+      if (res.data.tape) {
+        setMixtape(res.data.tape);
         setStatus(Status.READY);
       }
-      if (res.lastHorn) setHornCount(res.lastHorn.data.counter);
-      if (res.lastSong && Array.isArray(res.lastSong.data)) {
-        setSong(res.lastSong.data[0].title);
-        setArtists(res.lastSong.data[0].artist);
+      if (res.data.lastHorn) setHornCount(res.data.lastHorn.data.counter);
+      if (res.data.lastSong && Array.isArray(res.data.lastSong.data)) {
+        setSong(res.data.lastSong.data[0].title);
+        setArtists(res.data.lastSong.data[0].artist);
       }
-      if (res.lastSong && !Array.isArray(res.lastSong.data)) {
-        setSong(res.lastSong.data.title);
-        setArtists(res.lastSong.data.artist);
+      if (res.data.lastSong && !Array.isArray(res.data.lastSong.data)) {
+        setSong(res.data.lastSong.data.title);
+        setArtists(res.data.lastSong.data.artist);
       }
-      if (res.colors) {
+      if (res.data.colors) {
         setColors({
-          start: Colors[res.colors[0]],
-          end: Colors[res.colors[1]]
+          start: Colors[res.data.colors[0]],
+          end: Colors[res.data.colors[1]]
         });
       }
-      if (res.playing) setStatus(Status.PLAYING);
+      if (res.data.playing) setStatus(Status.PLAYING);
     });
 
     socket.on('loaded', (mixTapes: MixTape[]) => {
