@@ -9,8 +9,9 @@ import { default as DefaultView, LoadingView, ReloadCountdown } from './handlers
 import { Socket } from 'socket.io-client';
 import { AuthContext } from './contexts/AuthContext';
 import StageEffectsView from './handlers/stage-effects';
-import PosterView from './handlers/poster';
+import GewisPosterView from './handlers/gewis-poster';
 import TimeTrailRaceView from './handlers/time-trail-race';
+import HubblePosterView from './handlers/hubble-poster';
 
 export enum Handlers {
   SPOTIFY = 'CurrentlyPlayingTrackHandler',
@@ -63,7 +64,7 @@ export default function HandlerSwitcher() {
     case Handlers.SPOTIFY:
       return <SpotifyView socket={screenSocket} />;
     case Handlers.POSTER:
-      return <PosterView socket={screenSocket} />;
+      return <HubblePosterView socket={screenSocket} />;
     case Handlers.STAGE_EFFECTS:
       return <StageEffectsView socket={screenSocket} />;
     case Handlers.TIME_TRAIL_RACE:

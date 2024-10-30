@@ -1,28 +1,26 @@
 import { Socket } from 'socket.io-client';
 import './index.scss';
-import ProgressBar from './components/ProgressBar';
+import HubbleProgressBar from './components/HubbleProgressBar';
+import HubbleOrderView from './components/HubbleOrderView';
 import { useEffect, useState } from 'react';
 import { HandlersService, Poster } from '../../api';
-import PosterCarousel from './components/Carousel';
+import PosterCarousel from '../base-poster/Carousel';
 
 interface Props {
   socket: Socket;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO should socket be used somewhere?
-export default function PosterView({ socket }: Props) {
+export default function HubblePosterView({ socket }: Props) {
   const [posters, setPosters] = useState<Poster[]>();
-  const [borrelMode, setBorrelMode] = useState(false);
   const [posterIndex, setPosterIndex] = useState(-1);
   const [posterTimeout, setPosterTimeout] = useState<number | undefined>();
   const [loading, setLoading] = useState(true);
-  const [title, setTitle] = useState('');
 
   const refreshPosters = async () => {
     setLoading(true);
     const newPosters = await HandlersService.getPosters();
     setPosters(newPosters.posters as Poster[]);
-    setBorrelMode(newPosters.borrelMode);
     setLoading(false);
   };
 
@@ -74,23 +72,24 @@ export default function PosterView({ socket }: Props) {
   return (
     <div
       className="h-screen w-screen bg-center bg-cover bg-no-repeat"
-      style={{ backgroundImage: 'url("poster-background.png")' }}
+      style={{ backgroundImage: 'url("hubble-poster-background.png")' }}
     >
       <div className="overflow-hidden w-full h-full">
         <PosterCarousel
           posters={posters || []}
           currentPoster={posterIndex < 0 ? 0 : posterIndex}
-          setTitle={setTitle}
         />
-        <ProgressBar
-          title={title}
+        <HubbleProgressBar
           seconds={posterTimeout !== undefined ? selectedPoster?.timeout : undefined}
           posterIndex={posterIndex}
-          minimal={selectedPoster?.footer === 'minimal'}
-          hide={selectedPoster?.footer === 'hidden'}
-          borrelMode={borrelMode}
+          // color={posters[posterIndex].color}
+          hideClock={false}
+          color={"#ffffff"}
           nextPoster={nextPoster}
           pausePoster={pausePoster}
+        />
+        <HubbleOrderView
+          orders = {[0,69]}
         />
       </div>
     </div>

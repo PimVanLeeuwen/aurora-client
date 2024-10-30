@@ -1,4 +1,4 @@
-import '../../poster/components/types/ScrollAnimation.scss';
+import '../../gewis-poster/components/types/ScrollAnimation.scss';
 import { bacShadow } from '../../../style/shadows';
 
 interface Props {
