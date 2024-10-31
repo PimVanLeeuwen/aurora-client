@@ -1,9 +1,9 @@
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ApiKeyParameters, AuthenticationService, User, UserService } from '../api';
+import { ApiKeyParameters, authKey, AuthUser, getInformation } from '../api';
 
 interface IAuthContext {
-  user: User | null;
+  user: AuthUser | null;
   loading: boolean;
 }
 
@@ -15,7 +15,7 @@ const defaultContext: IAuthContext = {
 export const AuthContext = createContext(defaultContext);
 
 export default function AuthContextProvider({ children }: PropsWithChildren) {
-  const [user, setUser] = useState<User | null>();
+  const [user, setUser] = useState<AuthUser | null>();
   const [loading, setLoading] = useState(true);
   const [urlSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -24,9 +24,11 @@ export default function AuthContextProvider({ children }: PropsWithChildren) {
     if (urlSearchParams.has('key')) {
       const key = urlSearchParams.get('key');
       const body: ApiKeyParameters = { key };
-      setUser(await AuthenticationService.authKey(body));
+      const auth = await authKey({ body });
+      setUser(auth.data);
     } else {
-      setUser(await UserService.getInformation());
+      const info = await getInformation();
+      setUser(info.data);
     }
   };
 

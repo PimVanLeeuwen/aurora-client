@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { CountryMedalResponse, HandlersService, MedalTableRecord } from '../../../../api';
+import {
+  CountryMedalResponse,
+  getDutchOlympicMedals,
+  getOlympicsMedalTable,
+  MedalTableRecord
+} from '../../../../api';
 import VerticalScroll from '../../../../components/VerticalScroll';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMedal, faPlus, faRankingStar } from '@fortawesome/free-solid-svg-icons';
@@ -24,11 +29,11 @@ export default function OlympicsPoster({ visible }: Props) {
   const [dutchMedals, setDutchMedals] = useState<CountryMedalResponse | null>(null);
 
   useEffect(() => {
-    HandlersService.getOlympicsMedalTable().then((res) => {
-      setMedalTable(res);
+    getOlympicsMedalTable().then((res) => {
+      setMedalTable(res.data);
     });
-    HandlersService.getDutchOlympicMedals().then((res) => {
-      setDutchMedals(res);
+    getDutchOlympicMedals().then((res) => {
+      setDutchMedals(res.data);
     });
   }, []);
 

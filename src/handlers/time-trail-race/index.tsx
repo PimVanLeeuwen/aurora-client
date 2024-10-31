@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import {
-  ModesService,
+  getRaceState,
   PlayerParams,
   RaceFinishedEvent,
   RacePlayerReadyEvent,
@@ -27,7 +27,8 @@ export default function TimeTrailRaceView({ socket }: Props) {
   const [scoreboard, setScoreboard] = useState<ScoreboardItem[]>([]);
 
   useEffect(() => {
-    ModesService.getRaceState().then(({ state: s, sessionName: n, scoreboard: sb }) => {
+    getRaceState().then((res) => {
+      const { state: s, sessionName: n, scoreboard: sb } = res.data;
       setState(s);
       setSessionName(n);
       setScoreboard(sb);

@@ -1,5 +1,5 @@
 import { CSSProperties, useEffect, useState } from 'react';
-import { HandlersService, SudoSOSDebtorResponse } from '../../../../api';
+import { getSudoSosWallOfShame, SudoSOSDebtorResponse } from '../../../../api';
 import VerticalScroll from '../../../../components/VerticalScroll';
 import { bacShadow, redShadow } from '../../../../style/shadows';
 
@@ -11,7 +11,9 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
   const [debtors, setDebtors] = useState<SudoSOSDebtorResponse[]>([]);
 
   useEffect(() => {
-    HandlersService.getSudoSosWallOfShame().then(setDebtors);
+    getSudoSosWallOfShame().then((res) => {
+      setDebtors(res.data);
+    });
   }, []);
 
   return (
