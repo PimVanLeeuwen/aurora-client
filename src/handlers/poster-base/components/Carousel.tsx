@@ -1,5 +1,5 @@
-import { ReactNode, useEffect, useMemo } from 'react';
-import { MediaPoster, Poster, PosterType_PHOTO } from '../../../api';
+import { ReactNode, useMemo } from 'react';
+import { MediaPoster, Poster } from '../../../api';
 import LogoPoster from '../../poster-gewis/components/types/LogoPoster';
 import ImagePoster from '../../poster-gewis/components/types/ImagePoster';
 import ExternalPoster from '../../poster-gewis/components/types/ExternalPoster';
@@ -8,8 +8,8 @@ import VideoPoster from '../../poster-gewis/components/types/VideoPoster';
 interface Props {
   posters: Poster[];
   currentPoster: number;
-  setTitle: (title: string) => void;
-  localPosterRenderer?: (poster: Poster, visible: boolean, setTitle: (title: string) => void) => ReactNode;
+  setTitle?: (title: string) => void;
+  localPosterRenderer?: (poster: Poster, visible: boolean, setTitle?: (title: string) => void) => ReactNode;
 }
 
 export default function PosterCarousel({ posters, currentPoster, setTitle, localPosterRenderer }: Props) {
@@ -31,6 +31,9 @@ export default function PosterCarousel({ posters, currentPoster, setTitle, local
       case 'video':
         return <VideoPoster key={poster.name} source={(poster as MediaPoster).source} visible={visible} />;
       default:
+        if (localPosterRenderer == undefined) {
+          return <div>{poster.type}</div>;
+        }
         return localPosterRenderer(poster, visible, setTitle);
     }
   };
