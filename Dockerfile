@@ -1,5 +1,6 @@
 # Build in a different image to keep the target image clean
-FROM node:22-alpine as build
+FROM node:22-alpine AS build
+RUN apk add git
 WORKDIR /usr/src/app
 
 # Copy client files
@@ -13,11 +14,11 @@ RUN yarn tsoa
 RUN yarn gen-client-client
 
 WORKDIR /usr/src/app/aurora-client
-RUN npm ci
-RUN npm run build
+RUN yarn
+RUN yarn build
 
 # The target image that will be run
-FROM nginx:alpine as target
+FROM nginx:alpine AS target
 WORKDIR /usr/src/app
 COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 COPY ./public /usr/src/app/public
