@@ -6,7 +6,7 @@ interface Props extends PropsWithChildren {
 
 interface State {
   error?: Error;
-  stack?: string;
+  stack?: string | null;
 }
 
 export default class ErrorBoundary extends React.Component<Props, State> {

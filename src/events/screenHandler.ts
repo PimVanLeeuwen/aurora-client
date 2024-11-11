@@ -1,7 +1,9 @@
 import { Socket, io } from 'socket.io-client';
+import { Dispatch, SetStateAction } from 'react';
+import { DefaultEventsMap } from 'socket.io';
 
 export default function registerScreenHandler(
-  setScreenSocket: (value: ((prevState: Socket) => Socket) | Socket) => void,
+  setScreenSocket: Dispatch<SetStateAction<Socket<DefaultEventsMap, DefaultEventsMap> | null>>,
 ) {
   const screenSocket = io('/screen', {
     path: '/socket.io/',

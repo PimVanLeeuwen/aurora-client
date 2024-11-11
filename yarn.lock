@@ -1495,7 +1495,7 @@
     eslint-plugin-import "^2.31.0"
     eslint-plugin-jsx-a11y "^6.10.2"
     eslint-plugin-react "^7.37.2"
-    eslint-plugin-react-hooks "5.1.0-rc-7c8e5e7a-20241101"
+    eslint-plugin-react-hooks "^5.0.0"
     eslint-plugin-vue "^9.29.0"
     prettier "^3.3.3"
     typescript "^5.6.3"
@@ -2802,6 +2802,13 @@
   version "18.3.1"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.3.1.tgz#1e4654c08a9cdcfb6594c780ac59b55aad42fe07"
   integrity sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-helmet@^6.1.11":
+  version "6.1.11"
+  resolved "https://registry.yarnpkg.com/@types/react-helmet/-/react-helmet-6.1.11.tgz#8cafcafff38f75361f451563ba7b406b0c5d3907"
+  integrity sha512-0QcdGLddTERotCXo3VFlUSWO3ztraw8nZ6e3zJSgG7apwV5xt+pJUS8ewPBqT4NYB1optGLprNQzFleIY84u/g==
   dependencies:
     "@types/react" "*"
 

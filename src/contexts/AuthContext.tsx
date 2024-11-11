@@ -15,7 +15,7 @@ const defaultContext: IAuthContext = {
 export const AuthContext = createContext(defaultContext);
 
 export default function AuthContextProvider({ children }: PropsWithChildren) {
-  const [user, setUser] = useState<AuthUser | null>();
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [urlSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -23,12 +23,13 @@ export default function AuthContextProvider({ children }: PropsWithChildren) {
   const authenticate = useCallback(async () => {
     if (urlSearchParams.has('key')) {
       const key = urlSearchParams.get('key');
-      const body: ApiKeyParameters = { key };
+      const body: ApiKeyParameters = { key: key ?? '' };
       const auth = await authKey({ body });
-      setUser(auth.data);
+      // TODO what to do if user cannot be authenticated
+      setUser(auth.data!);
     } else {
       const info = await getInformation();
-      setUser(info.data);
+      setUser(info.data!);
     }
   }, [urlSearchParams]);
 

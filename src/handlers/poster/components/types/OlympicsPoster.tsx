@@ -23,12 +23,13 @@ export default function OlympicsPoster({ visible }: Props) {
   const [medalTable, setMedalTable] = useState<MedalTableRecord[]>([]);
   const [dutchMedals, setDutchMedals] = useState<CountryMedalResponse | null>(null);
 
+  // TODO what if data is not fetched?
   useEffect(() => {
     getOlympicsMedalTable().then((res) => {
-      setMedalTable(res.data);
+      setMedalTable(res.data!);
     });
     getDutchOlympicMedals().then((res) => {
-      setDutchMedals(res.data);
+      setDutchMedals(res.data!);
     });
   }, []);
 

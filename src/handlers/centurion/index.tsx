@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Socket } from 'socket.io-client';
 import { clsx } from 'clsx';
-import { getCenturionState, CenturionStateResponse } from '../../api';
+import { getCenturionState, CenturionStateResponse, RgbColor, TrackChangeEvent } from '../../api';
 import Background from './components/Background';
 import styles from './centurion.module.css';
 import Strobe from './components/Strobe';
@@ -10,12 +10,6 @@ import Information from './components/Information';
 interface Props {
   socket: Socket;
 }
-
-//interface TrackChangeEvent {
-//  title: string;
-//  artists: string[];
-//  cover?: string;
-//}
 
 type MixTape = CenturionStateResponse['tape'];
 
@@ -81,13 +75,13 @@ enum Status {
 }
 
 export default function CenturionView({ socket }: Props) {
-  const [artist, setArtists] = useState<string | null>('Roy Kakkenberg, Gijs de Man & Samuel Oosterholt');
-  const [song, setSong] = useState<string | null>('Wie dit leest, trekt een bak!');
+  const [artist, setArtists] = useState<string | null>(null);
+  const [song, setSong] = useState<string | null>(null);
 
   const [mixtape, setMixtape] = useState<MixTape | null>(null);
   const [status, setStatus] = useState<Status>(Status.STOPPED);
 
-  const [hornCount, setHornCount] = useState<number>(-1);
+  const [hornCount, setHornCount] = useState<number | undefined>();
   const [strobe, setStrobe] = useState<boolean>(false);
   const [colors, setColors] = useState<CurrentColors>({
     start: Colors.lightpink,
@@ -95,6 +89,7 @@ export default function CenturionView({ socket }: Props) {
   });
 
   React.useEffect(() => {
+    // TODO what to do if centurion state cannot be fetched?
     getCenturionState().then((res) => {
       if (!res || !res.data) return;
       if (res.data.tape) {
@@ -142,10 +137,9 @@ export default function CenturionView({ socket }: Props) {
       setHornCount(-1);
     });
 
-    socket.on('change_track', (event: unknown[]) => {
-      const trackChangeEvent = event[0];
-      setArtists(trackChangeEvent[0].artists.join(', '));
-      setSong(trackChangeEvent[0].title);
+    socket.on('change_track', (event: TrackChangeEvent[]) => {
+      setArtists(event[0].artists.join(', '));
+      setSong(event[0].title);
       setStatus(Status.PLAYING);
     });
 
@@ -160,11 +154,10 @@ export default function CenturionView({ socket }: Props) {
       setHornCount(counter);
     });
 
-    socket.on('change_colors', (newColorsEvent: string[][]) => {
-      const newColors = newColorsEvent[0];
+    socket.on('change_colors', (newColorsEvent: RgbColor[]) => {
       setColors({
-        start: Colors[newColors[0]],
-        end: Colors[newColors[1]],
+        start: Colors[newColorsEvent[0]],
+        end: Colors[newColorsEvent[1]],
       });
     });
 
@@ -174,6 +167,7 @@ export default function CenturionView({ socket }: Props) {
   }, [socket]);
 
   const getRandomInt = () => {
+    if (hornCount === undefined) return 0;
     return Math.floor(Math.random() * 2 * hornCount) - hornCount;
   };
 
@@ -191,7 +185,7 @@ export default function CenturionView({ socket }: Props) {
                 className={clsx(styles.drunk, 'z-20')}
                 style={{
                   ['--random-rotation' as string]: `${randomInt / 3}deg`,
-                  ['--random-time' as string]: `${hornCount === 0 ? '500s' : `${(1 / hornCount) * 500}s`}`,
+                  ['--random-time' as string]: `${hornCount === 0 || hornCount === undefined ? '500s' : `${(1 / hornCount) * 500}s`}`,
                   display: 'inline-block',
                 }}
               >
@@ -205,11 +199,12 @@ export default function CenturionView({ socket }: Props) {
   };
 
   const renderHornCount = () => {
+    if (hornCount === undefined) return null;
     return <div className="text-white text-[550px] -m-20">{makeTextDrunk(hornCount.toString())}</div>;
   };
 
   const renderBackground = () => {
-    if (hornCount >= 0 && mixtape) return <Background colors={colors} progression={hornCount < 0 ? 0 : hornCount} />;
+    if (hornCount && mixtape) return <Background colors={colors} progression={!hornCount ? 0 : hornCount} />;
 
     return (
       <div className="h-screen w-full top-0 left-0 absolute -z-20 bg-black overflow-hidden">
@@ -226,14 +221,14 @@ export default function CenturionView({ socket }: Props) {
 
   return (
     <>
-      {hornCount === -1 && mixtape && (
+      {!hornCount && mixtape && (
         <Information title={mixtape.name} artist={mixtape.artist} albumCover={mixtape.coverUrl} description={status} />
       )}
 
       {status === Status.PLAYING && (
         <div className="h-screen flex items-center justify-center overflow-hidden">
           <div className={clsx('w-fit flex flex-col justify-center text-center', styles.text)}>
-            {hornCount >= 0 && renderHornCount()}
+            {hornCount && renderHornCount()}
             <div className="flex flex-wrap justify-center text-white text-7xl font-bold mb-10 px-12">
               {makeTextDrunk(artist?.toUpperCase())}
             </div>
@@ -244,7 +239,7 @@ export default function CenturionView({ socket }: Props) {
         </div>
       )}
 
-      {strobe && <Strobe hornCount={hornCount} />}
+      {strobe && <Strobe hornCount={hornCount ?? 0} />}
 
       {renderBackground()}
     </>

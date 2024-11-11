@@ -1,7 +1,7 @@
 import { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props extends PropsWithChildren {
-  visible: boolean;
+  visible?: boolean;
   timeout?: number;
   items?: number;
   scrollEmptySpace?: boolean;
@@ -13,12 +13,12 @@ export default function VerticalScroll({ children, visible, timeout, items, scro
   const [timeoutRef, setTimeoutRef] = useState<ReturnType<typeof setTimeout> | undefined>();
   const [iteration, setIteration] = useState(0);
 
-  const containerRef = useRef<HTMLDivElement>();
-  const childRef = useRef<HTMLDivElement>();
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const childRef = useRef<HTMLDivElement | null>(null);
 
   const animate = useCallback(() => {
-    const containerHeight = containerRef.current.clientHeight;
-    const childHeight = childRef.current.clientHeight;
+    const containerHeight = containerRef.current!.clientHeight;
+    const childHeight = childRef.current!.clientHeight;
     const absoluteHeightDifference = childHeight - containerHeight;
     const relativeHeightDifference = absoluteHeightDifference / containerHeight;
 
@@ -41,7 +41,7 @@ export default function VerticalScroll({ children, visible, timeout, items, scro
       delay,
     };
 
-    childRef.current.animate(keyframes, options);
+    childRef.current!.animate(keyframes, options);
 
     return duration + delay;
   }, [timeout]);
@@ -67,8 +67,8 @@ export default function VerticalScroll({ children, visible, timeout, items, scro
     <div ref={containerRef} className="w-full h-full overflow-hidden">
       <div ref={childRef} className="w-full h-fit">
         {children}
-        {scrollEmptySpace && containerRef.current?.clientHeight < childRef.current?.clientHeight && (
-          <div style={{ height: containerRef.current.clientHeight / 3 }} />
+        {scrollEmptySpace && containerRef.current!.clientHeight < childRef.current!.clientHeight && (
+          <div style={{ height: containerRef.current!.clientHeight / 3 }} />
         )}
       </div>
     </div>

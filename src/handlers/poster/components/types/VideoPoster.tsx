@@ -14,7 +14,7 @@ export default function VideoPoster({ source, visible }: Props) {
     sourceUrl = source;
   }
 
-  const ref = useRef<HTMLVideoElement>();
+  const ref = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     if (!visible || !ref || !ref.current) return;
