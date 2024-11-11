@@ -225,11 +225,11 @@ export default function CenturionView({ socket }: Props) {
       )}
 
       {status === Status.PLAYING && (
-        <div className="h-screen flex items-center justify-center">
+        <div className="h-screen flex items-center justify-center overflow-hidden">
           <div className={clsx('w-fit flex flex-col justify-center text-center', styles.text)}>
             {hornCount >= 0 && renderHornCount()}
-            <p className="text-white text-7xl font-bold mb-10">{makeTextDrunk(artist?.toUpperCase())}</p>
-            <p className="text-white text-7xl">{makeTextDrunk(song?.toUpperCase())}</p>
+            <p className="text-white text-7xl font-bold mb-10 px-12">{makeTextDrunk(artist?.toUpperCase())}</p>
+            <p className="text-white text-7xl px-12">{makeTextDrunk(song?.toUpperCase())}</p>
           </div>
         </div>
       )}
