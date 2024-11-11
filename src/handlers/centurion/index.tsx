@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Socket } from 'socket.io-client';
 import { clsx } from 'clsx';
-import { getCenturionState } from '../../api';
+import { getCenturionState, CenturionStateResponse } from '../../api';
 import Background from './components/Background';
 import styles from './centurion.module.css';
 import Strobe from './components/Strobe';
@@ -17,12 +17,7 @@ interface Props {
 //  cover?: string;
 //}
 
-interface MixTape {
-  coverUrl: string;
-  name: string;
-  songFile: string;
-  feed: FeedEvent[];
-}
+type MixTape = CenturionStateResponse['tape'];
 
 export type FeedEvent = {
   timestamp: number;
@@ -56,7 +51,7 @@ type HornEvent = {
 
 enum Colors {
   'white' = '#cccccc',
-  'blindingWhite' = '#ffffff',
+  'blindingwhite' = '#ffffff',
   'uv' = '#7e48a2',
   'lightpink' = '#ecc9f6',
   'pink' = '#dd75ec',
@@ -89,7 +84,7 @@ export default function CenturionView({ socket }: Props) {
   const [artist, setArtists] = useState<string | null>('Roy Kakkenberg, Gijs de Man & Samuel Oosterholt');
   const [song, setSong] = useState<string | null>('Wie dit leest, trekt een bak!');
 
-  const [mixtape, setMixtape] = useState<Pick<MixTape, 'name' | 'coverUrl'> | null>(null);
+  const [mixtape, setMixtape] = useState<MixTape | null>(null);
   const [status, setStatus] = useState<Status>(Status.STOPPED);
 
   const [hornCount, setHornCount] = useState<number>(-1);
@@ -101,6 +96,7 @@ export default function CenturionView({ socket }: Props) {
 
   React.useEffect(() => {
     getCenturionState().then((res) => {
+      if (!res || !res.data) return;
       if (res.data.tape) {
         setMixtape(res.data.tape);
         setStatus(Status.READY);
@@ -125,7 +121,7 @@ export default function CenturionView({ socket }: Props) {
 
     socket.on('loaded', (mixTapes: MixTape[]) => {
       const mixTape = mixTapes[0];
-      setMixtape(mixTape);
+      setMixtape(mixTape ?? null);
       setStatus(Status.READY);
       setHornCount(-1);
     });
@@ -181,7 +177,8 @@ export default function CenturionView({ socket }: Props) {
     return Math.floor(Math.random() * 2 * hornCount) - hornCount;
   };
 
-  const makeTextDrunk = (note: string) => {
+  const makeTextDrunk = (note?: string) => {
+    if (!note) return null;
     return [...note].map((letter, index) => {
       // Range [-#shots, #shots]
       const randomInt = getRandomInt();
@@ -213,7 +210,7 @@ export default function CenturionView({ socket }: Props) {
         <div
           className="h-full w-full bg-center bg-cover bg-no-repeat -z-30"
           style={{
-            filter: 'blur(2px)',
+            filter: 'blur(0)',
             backgroundImage: 'url("/centurion/scooter.jpeg")',
           }}
         ></div>
@@ -224,15 +221,15 @@ export default function CenturionView({ socket }: Props) {
   return (
     <>
       {hornCount === -1 && mixtape && (
-        <Information title={mixtape.name} albumCover={mixtape.coverUrl} description={status} />
+        <Information title={mixtape.name} artist={mixtape.artist} albumCover={mixtape.coverUrl} description={status} />
       )}
 
       {status === Status.PLAYING && (
         <div className="h-screen flex items-center justify-center">
           <div className={clsx('w-fit flex flex-col justify-center text-center', styles.text)}>
             {hornCount >= 0 && renderHornCount()}
-            <p className="text-white text-7xl font-bold mb-10">{makeTextDrunk(artist.toUpperCase())}</p>
-            <p className="text-white text-7xl">{makeTextDrunk(song.toUpperCase())}</p>
+            <p className="text-white text-7xl font-bold mb-10">{makeTextDrunk(artist?.toUpperCase())}</p>
+            <p className="text-white text-7xl">{makeTextDrunk(song?.toUpperCase())}</p>
           </div>
         </div>
       )}
