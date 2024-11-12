@@ -27,7 +27,7 @@ export default function Scoreboard({ scoreboard, player }: Props) {
 
   return (
     <div className="h-full" style={{ marginBottom: '-5rem' }}>
-      <VerticalScroll scrollEmptySpace visible>
+      <VerticalScroll scrollEmptySpace visible={true}>
         <table className="border-separate text-4xl" style={{ borderSpacing: '3rem 1rem' }}>
           <tbody>
             {scoreboard.map((score, i) => (

@@ -48,7 +48,7 @@ export default function PosterView() {
     setPosterTimeout(timeout);
 
     return () => clearTimeout(timeout);
-  }, [posterIndex, posterTimeout, posters]);
+  }, [posterIndex]);
 
   useEffect(() => {
     refreshPosters();
@@ -56,7 +56,7 @@ export default function PosterView() {
     return () => {
       if (posterTimeout) clearTimeout(posterTimeout);
     };
-  }, [posterTimeout]);
+  }, []);
 
   useEffect(() => {
     if (posters && !posterTimeout && !loading) {

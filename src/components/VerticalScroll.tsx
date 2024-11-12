@@ -44,7 +44,7 @@ export default function VerticalScroll({ children, visible, timeout, items, scro
     childRef.current!.animate(keyframes, options);
 
     return duration + delay;
-  }, [timeout]);
+  }, [timeout, containerRef]);
 
   // Start an animation with a timeout to increase the iteration counter
   const loopAnimate = useCallback(() => {
@@ -54,22 +54,25 @@ export default function VerticalScroll({ children, visible, timeout, items, scro
   }, [animate, timeoutRef]);
 
   useEffect(() => {
-    if (!containerRef.current || !childRef.current || !visible) return;
+    if (!containerRef || !childRef || !visible) return;
 
     loopAnimate();
 
     return () => {
       if (timeoutRef) clearTimeout(timeoutRef);
     };
-  }, [containerRef, childRef, visible, items, iteration, animate, loopAnimate, timeoutRef]);
+  }, [containerRef, childRef, visible, items, iteration]);
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden">
       <div ref={childRef} className="w-full h-fit">
         {children}
-        {scrollEmptySpace && containerRef.current!.clientHeight < childRef.current!.clientHeight && (
-          <div style={{ height: containerRef.current!.clientHeight / 3 }} />
-        )}
+        {scrollEmptySpace &&
+          containerRef.current &&
+          childRef.current &&
+          containerRef.current!.clientHeight < childRef.current!.clientHeight && (
+            <div style={{ height: containerRef.current!.clientHeight / 3 }} />
+          )}
       </div>
     </div>
   );

@@ -137,9 +137,10 @@ export default function CenturionView({ socket }: Props) {
       setHornCount(-1);
     });
 
-    socket.on('change_track', (event: TrackChangeEvent[]) => {
-      setArtists(event[0].artists.join(', '));
-      setSong(event[0].title);
+    socket.on('change_track', (event: TrackChangeEvent[][]) => {
+      const track = event[0][0];
+      setArtists(track.artists.join(', '));
+      setSong(track.title);
       setStatus(Status.PLAYING);
     });
 
@@ -154,10 +155,11 @@ export default function CenturionView({ socket }: Props) {
       setHornCount(counter);
     });
 
-    socket.on('change_colors', (newColorsEvent: RgbColor[]) => {
+    socket.on('change_colors', (newColorsEvent: RgbColor[][]) => {
+      const colors = newColorsEvent[0];
       setColors({
-        start: Colors[newColorsEvent[0]],
-        end: Colors[newColorsEvent[1]],
+        start: Colors[colors[0]],
+        end: Colors[colors[1]],
       });
     });
 

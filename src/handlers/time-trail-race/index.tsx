@@ -113,6 +113,8 @@ export default function TimeTrailRaceView({ socket }: Props) {
       case TimeTrailRaceState.INITIALIZED:
       case TimeTrailRaceState.SCOREBOARD:
       default:
+        if (!scoreboard) return null;
+        if (scoreboard.length === 0) return null;
         return <Scoreboard scoreboard={scoreboard} player={player} />;
     }
   };
