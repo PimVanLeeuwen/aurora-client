@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Socket } from 'socket.io-client';
 import BlurredImage from '../stage-effects/components/backgrounds/BlurredImage';
 import { getSpotifyCurrentlyPlaying, TrackChangeEvent } from '../../api';
@@ -18,11 +18,11 @@ export default function SpotifyView({ socket }: Props) {
     setAlbumCover(trackChangeEvent[0].cover);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     // TODO what to display when no data is fetched?
-    getSpotifyCurrentlyPlaying().then((res) => {
-      handleTrackChange(res.data!);
-    });
+    getSpotifyCurrentlyPlaying()
+      .then((res) => handleTrackChange(res.data!))
+      .catch((e) => console.error(e));
 
     socket.on('change_track', (event: unknown[]) => {
       const trackChangeEvents = event[0] as TrackChangeEvent[];

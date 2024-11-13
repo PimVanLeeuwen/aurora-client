@@ -13,9 +13,9 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
 
   // TODO what if data is not fetched?
   useEffect(() => {
-    getSudoSosWallOfShame().then((res) => {
-      setDebtors(res.data!);
-    });
+    getSudoSosWallOfShame()
+      .then((res) => setDebtors(res.data!))
+      .catch((e) => console.error(e));
   }, []);
 
   return (

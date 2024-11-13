@@ -1475,9 +1475,9 @@
   dependencies:
     prop-types "^15.8.1"
 
-"@gewis/eslint-config@github:GEWIS/eslint-config#v1.2.0":
+"@gewis/eslint-config@github:GEWIS/eslint-config#v2.0.0":
   version "0.0.0"
-  resolved "https://codeload.github.com/GEWIS/eslint-config/tar.gz/6c7064c26f650da9a1776309b02ee5623b893647"
+  resolved "https://codeload.github.com/GEWIS/eslint-config/tar.gz/fe15410e4cc13b14c0097e3f285c5186678b5d5b"
   dependencies:
     "@eslint/compat" "^1.2.2"
     "@eslint/js" "^9.12.0"
@@ -1495,7 +1495,7 @@
     eslint-plugin-import "^2.31.0"
     eslint-plugin-jsx-a11y "^6.10.2"
     eslint-plugin-react "^7.37.2"
-    eslint-plugin-react-hooks "^5.0.0"
+    eslint-plugin-react-hooks "5.1.0-rc-7c8e5e7a-20241101"
     eslint-plugin-vue "^9.29.0"
     prettier "^3.3.3"
     typescript "^5.6.3"

@@ -9,10 +9,9 @@ export default function registerRootHandler(setCurrentHandler: Dispatch<SetState
 
   rootSocket.on('connect', () => {
     console.warn('SocketIO: connected to /');
-    //const engine = rootSocket.io.engine;
   });
 
-  rootSocket.on('handler_set', (handler) => {
+  rootSocket.on('handler_set', (handler: Handlers) => {
     console.warn(`Current handler: ${handler}`);
     setCurrentHandler(handler);
   });

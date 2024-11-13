@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import {
   getRaceState,
   PlayerParams,
+  RaceBaseEvent,
   RaceFinishedEvent,
   RacePlayerReadyEvent,
   RacePlayerRegisteredEvent,
@@ -24,6 +25,10 @@ interface Props {
   socket: Socket;
 }
 
+type RaceInitializedEvent = RaceBaseEvent & {
+  state: TimeTrailRaceState.INITIALIZED;
+};
+
 export default function TimeTrailRaceView({ socket }: Props) {
   const [state, setState] = useState<
     | TimeTrailRaceState
@@ -40,15 +45,17 @@ export default function TimeTrailRaceView({ socket }: Props) {
   const [scoreboard, setScoreboard] = useState<ScoreboardItem[]>([]);
 
   useEffect(() => {
-    getRaceState().then((res) => {
-      // TODO what data to display when fetching data went wrong?
-      const { state: s, sessionName: n, scoreboard: sb } = res.data!;
-      setState(s);
-      setSessionName(n);
-      setScoreboard(sb);
-    });
+    getRaceState()
+      .then((res) => {
+        // TODO what data to display when fetching data went wrong?
+        const { state: s, sessionName: n, scoreboard: sb } = res.data!;
+        setState(s);
+        setSessionName(n);
+        setScoreboard(sb);
+      })
+      .catch((e) => console.error(e));
 
-    socket.on('race-initialized', ([{ state: s, sessionName: n }]) => {
+    socket.on('race-initialized', ([{ state: s, sessionName: n }]: RaceInitializedEvent[]) => {
       setState(s);
       setSessionName(n);
       setScoreboard([]);
@@ -127,7 +134,7 @@ export default function TimeTrailRaceView({ socket }: Props) {
       </div>
       <div className="flex-1 overflow-hidden">{renderContent()}</div>
       {/* TODO what to show instead of player? */}
-      {state === 'PLAYER_REGISTERED' && player !== undefined && (
+      {state === TimeTrailRaceState.PLAYER_REGISTERED && player !== undefined && (
         <div className="relative overflow-hidden w-full h-12">
           <NextPlayer name={player?.name} bac={player?.bac} delay={0} time={10000} />
           <NextPlayer name={player?.name} bac={player?.bac} delay={-3333} time={10000} />

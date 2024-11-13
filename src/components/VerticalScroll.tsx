@@ -61,6 +61,7 @@ export default function VerticalScroll({ children, visible, timeout, items, scro
     return () => {
       if (timeoutRef) clearTimeout(timeoutRef);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- TODO; should these be exhaustive?
   }, [containerRef, childRef, visible, items, iteration]);
 
   return (
@@ -70,8 +71,8 @@ export default function VerticalScroll({ children, visible, timeout, items, scro
         {scrollEmptySpace &&
           containerRef.current &&
           childRef.current &&
-          containerRef.current!.clientHeight < childRef.current!.clientHeight && (
-            <div style={{ height: containerRef.current!.clientHeight / 3 }} />
+          containerRef.current.clientHeight < childRef.current.clientHeight && (
+            <div style={{ height: containerRef.current.clientHeight / 3 }} />
           )}
       </div>
     </div>

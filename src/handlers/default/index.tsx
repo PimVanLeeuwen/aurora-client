@@ -1,6 +1,6 @@
 import { Gif } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IGif from '@giphy/js-types/dist/gif';
 
 export { default as LoadingView } from './LoadingView';
@@ -20,14 +20,16 @@ export default function View() {
     return <h1> No GIF available </h1>;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function fetchGif() {
       const gf = new GiphyFetch('vvf1zwtPmyFS2SXmd6jRijP4tfdGLsmZ');
       return gf.random({ tag: 'no connection', offset: getRandomInt(4999), rating: 'pg-13' });
     }
 
     // TODO what if fetch fails?
-    fetchGif().then(({ data }) => setGif(data));
+    fetchGif()
+      .then(({ data }) => setGif(data))
+      .catch((e) => console.error(e));
   }, []);
 
   return (

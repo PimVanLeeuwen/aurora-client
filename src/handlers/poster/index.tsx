@@ -1,6 +1,6 @@
 import './index.scss';
 import { useEffect, useState } from 'react';
-import { getPosters, Poster } from '../../api';
+import { FooterSize, getPosters, Poster } from '../../api';
 import ProgressBar from './components/ProgressBar';
 import PosterCarousel from './components/Carousel';
 
@@ -17,7 +17,7 @@ export default function PosterView() {
     setLoading(true);
     // TODO what to do if poster cannot be fetched?
     const newPosters = await getPosters();
-    setPosters(newPosters.data!.posters as Poster[]);
+    setPosters(newPosters.data!.posters);
     setBorrelMode(newPosters.data!.borrelMode);
     setLoading(false);
   };
@@ -40,7 +40,7 @@ export default function PosterView() {
     if (posterTimeout) clearTimeout(posterTimeout);
 
     if (posterIndex === 0) {
-      refreshPosters().then(() => {});
+      refreshPosters().catch((e) => console.error(e));
     }
 
     const nextPoster = posters[posterIndex];
@@ -48,15 +48,16 @@ export default function PosterView() {
     setPosterTimeout(timeout);
 
     return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- TODO; should these be exhaustive?
   }, [posterIndex]);
 
   useEffect(() => {
-    refreshPosters();
+    refreshPosters().catch((e) => console.error(e));
 
     return () => {
       if (posterTimeout) clearTimeout(posterTimeout);
     };
-  }, []);
+  });
 
   useEffect(() => {
     if (posters && !posterTimeout && !loading) {
@@ -78,8 +79,8 @@ export default function PosterView() {
           title={title}
           seconds={posterTimeout !== undefined ? selectedPoster?.timeout : undefined}
           posterIndex={posterIndex}
-          minimal={selectedPoster?.footer === 'minimal'}
-          hide={selectedPoster?.footer === 'hidden'}
+          minimal={selectedPoster?.footer === FooterSize.MINIMAL}
+          hide={selectedPoster?.footer === FooterSize.HIDDEN}
           borrelMode={borrelMode}
           nextPoster={nextPoster}
           pausePoster={pausePoster}

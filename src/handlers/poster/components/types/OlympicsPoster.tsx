@@ -25,12 +25,12 @@ export default function OlympicsPoster({ visible }: Props) {
 
   // TODO what if data is not fetched?
   useEffect(() => {
-    getOlympicsMedalTable().then((res) => {
-      setMedalTable(res.data!);
-    });
-    getDutchOlympicMedals().then((res) => {
-      setDutchMedals(res.data!);
-    });
+    getOlympicsMedalTable()
+      .then((res) => setMedalTable(res.data!))
+      .catch((e) => console.error(e));
+    getDutchOlympicMedals()
+      .then((res) => setDutchMedals(res.data!))
+      .catch((e) => console.error(e));
   }, []);
 
   return (

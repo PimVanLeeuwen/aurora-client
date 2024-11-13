@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Socket } from 'socket.io-client';
 import { clsx } from 'clsx';
 import { getCenturionState, CenturionStateResponse, RgbColor, TrackChangeEvent } from '../../api';
@@ -12,31 +12,6 @@ interface Props {
 }
 
 type MixTape = CenturionStateResponse['tape'];
-
-export type FeedEvent = {
-  timestamp: number;
-} & (Horn | Song | Beat);
-
-type Horn = {
-  type: 'horn';
-  data: {
-    counter: number;
-  };
-};
-
-export type SongData = {
-  artist: string;
-  title: string;
-};
-
-type Song = {
-  type: 'song';
-  data: SongData | SongData[];
-};
-
-type Beat = {
-  type: 'beat';
-};
 
 type HornEvent = {
   strobeTime: number;
@@ -88,31 +63,33 @@ export default function CenturionView({ socket }: Props) {
     end: Colors.orange,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     // TODO what to do if centurion state cannot be fetched?
-    getCenturionState().then((res) => {
-      if (!res || !res.data) return;
-      if (res.data.tape) {
-        setMixtape(res.data.tape);
-        setStatus(Status.READY);
-      }
-      if (res.data.lastHorn) setHornCount(res.data.lastHorn.data.counter);
-      if (res.data.lastSong && Array.isArray(res.data.lastSong.data)) {
-        setSong(res.data.lastSong.data[0].title);
-        setArtists(res.data.lastSong.data[0].artist);
-      }
-      if (res.data.lastSong && !Array.isArray(res.data.lastSong.data)) {
-        setSong(res.data.lastSong.data.title);
-        setArtists(res.data.lastSong.data.artist);
-      }
-      if (res.data.colors) {
-        setColors({
-          start: Colors[res.data.colors[0]],
-          end: Colors[res.data.colors[1]],
-        });
-      }
-      if (res.data.playing) setStatus(Status.PLAYING);
-    });
+    getCenturionState()
+      .then((res) => {
+        if (!res || !res.data) return;
+        if (res.data.tape) {
+          setMixtape(res.data.tape);
+          setStatus(Status.READY);
+        }
+        if (res.data.lastHorn) setHornCount(res.data.lastHorn.data.counter);
+        if (res.data.lastSong && Array.isArray(res.data.lastSong.data)) {
+          setSong(res.data.lastSong.data[0].title);
+          setArtists(res.data.lastSong.data[0].artist);
+        }
+        if (res.data.lastSong && !Array.isArray(res.data.lastSong.data)) {
+          setSong(res.data.lastSong.data.title);
+          setArtists(res.data.lastSong.data.artist);
+        }
+        if (res.data.colors) {
+          setColors({
+            start: Colors[res.data.colors[0]],
+            end: Colors[res.data.colors[1]],
+          });
+        }
+        if (res.data.playing) setStatus(Status.PLAYING);
+      })
+      .catch((e) => console.error(e));
 
     socket.on('loaded', (mixTapes: MixTape[]) => {
       const mixTape = mixTapes[0];

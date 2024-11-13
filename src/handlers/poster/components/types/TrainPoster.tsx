@@ -12,9 +12,9 @@ export default function TrainPoster({ visible, timeout }: Props) {
   const [trains, setTrains] = useState<TrainResponse[] | undefined>();
 
   useEffect(() => {
-    getTrains().then((res) => {
-      setTrains(res.data);
-    });
+    getTrains()
+      .then((res) => setTrains(res.data))
+      .catch((e) => console.error(e));
   });
 
   const parseTime = (d: Date) => {

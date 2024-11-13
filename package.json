@@ -35,7 +35,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@gewis/eslint-config": "github:GEWIS/eslint-config#v1.2.0",
+    "@gewis/eslint-config": "github:GEWIS/eslint-config#v2.0.0",
     "@types/node": "^22.8.7",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",

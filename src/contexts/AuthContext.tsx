@@ -34,7 +34,9 @@ export default function AuthContextProvider({ children }: PropsWithChildren) {
   }, [urlSearchParams]);
 
   useEffect(() => {
-    authenticate().finally(() => setLoading(false));
+    authenticate()
+      .catch((e) => console.error(e))
+      .finally(() => setLoading(false));
   }, [authenticate]);
 
   useEffect(() => {
