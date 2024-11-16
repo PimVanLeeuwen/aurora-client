@@ -1,12 +1,13 @@
 import { Gif } from '@giphy/react-components';
 import { GiphyFetch } from '@giphy/js-fetch-api';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
+import IGif from '@giphy/js-types/dist/gif';
 
 export { default as LoadingView } from './LoadingView';
 export { default as ReloadCountdown } from './ReloadCountdown';
 
 export default function View() {
-  const [gif, setGif] = useState(null);
+  const [gif, setGif] = useState<IGif | null>(null);
 
   const getRandomInt = (max: number) => {
     return Math.floor(Math.random() * max);
@@ -19,13 +20,16 @@ export default function View() {
     return <h1> No GIF available </h1>;
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function fetchGif() {
       const gf = new GiphyFetch('vvf1zwtPmyFS2SXmd6jRijP4tfdGLsmZ');
       return gf.random({ tag: 'no connection', offset: getRandomInt(4999), rating: 'pg-13' });
     }
 
-    fetchGif().then(({ data }) => setGif(data));
+    // TODO what if fetch fails?
+    fetchGif()
+      .then(({ data }) => setGif(data))
+      .catch((e) => console.error(e));
   }, []);
 
   return (

@@ -11,25 +11,28 @@ export default function BorrelPriceListPoster({ visible }: Props) {
   const [productCategories, setProductCategories] = useState<Map<number, ProductCategoryResponse>>(new Map());
 
   useEffect(() => {
-    getSudoSosPriceList().then((res) => {
-      // Mapping from category ID to products
-      const productMap = new Map<number, ProductResponse[]>();
-      const categoryMap = new Map<number, ProductCategoryResponse>();
+    // TODO what to do if data is not fetched?
+    getSudoSosPriceList()
+      .then((res) => {
+        // Mapping from category ID to products
+        const productMap = new Map<number, ProductResponse[]>();
+        const categoryMap = new Map<number, ProductCategoryResponse>();
 
-      res.data.forEach((p) => {
-        if (productMap.has(p.category.id)) {
-          productMap.get(p.category.id)!.push(p);
-        } else {
-          productMap.set(p.category.id, [p]);
-        }
-        if (!categoryMap.has(p.category.id)) {
-          categoryMap.set(p.category.id, p.category);
-        }
-      });
+        res.data!.forEach((p) => {
+          if (productMap.has(p.category.id)) {
+            productMap.get(p.category.id)!.push(p);
+          } else {
+            productMap.set(p.category.id, [p]);
+          }
+          if (!categoryMap.has(p.category.id)) {
+            categoryMap.set(p.category.id, p.category);
+          }
+        });
 
-      setProducts(productMap);
-      setProductCategories(categoryMap);
-    });
+        setProducts(productMap);
+        setProductCategories(categoryMap);
+      })
+      .catch((e) => console.error(e));
   }, []);
 
   const leftColumn = useMemo(() => {
@@ -40,8 +43,10 @@ export default function BorrelPriceListPoster({ visible }: Props) {
   }, [productCategories]);
 
   const getProductTable = (categoryId: number) => {
+    if (!products.has(categoryId)) return null;
+
     const category = productCategories.get(categoryId)!;
-    const categoryProducts = products.get(categoryId).sort((a, b) => {
+    const categoryProducts = products.get(categoryId)!.sort((a, b) => {
       if (a.preferred && b.preferred) {
         if (a.name < b.name) return -1;
         if (a.name > b.name) return 1;

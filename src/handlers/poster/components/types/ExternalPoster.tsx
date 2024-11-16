@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function ExternalPoster({ url, visible }: Props) {
-  const ref = useRef<HTMLIFrameElement>();
+  const ref = useRef<HTMLIFrameElement | null>(null);
 
   useEffect(() => {
     if (!ref || !ref.current) return;

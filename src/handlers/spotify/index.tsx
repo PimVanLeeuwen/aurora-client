@@ -1,22 +1,16 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Socket } from 'socket.io-client';
 import BlurredImage from '../stage-effects/components/backgrounds/BlurredImage';
-import { getSpotifyCurrentlyPlaying } from '../../api';
+import { getSpotifyCurrentlyPlaying, TrackChangeEvent } from '../../api';
 
 interface Props {
   socket: Socket;
 }
 
-interface TrackChangeEvent {
-  title: string;
-  artists: string[];
-  cover?: string;
-}
-
 export default function SpotifyView({ socket }: Props) {
-  const [albumCover, setAlbumCover] = useState<string>('https://placekitten.com/g/200/200');
-  const [artist, setArtists] = useState<string>('Roy Kakkenberg, Gijs de Man & Samuel Oosterholt');
-  const [song, setSong] = useState<string>('Wie dit leest, trekt een bak!');
+  const [albumCover, setAlbumCover] = useState<string | undefined>();
+  const [artist, setArtists] = useState<string | undefined>();
+  const [song, setSong] = useState<string | undefined>();
 
   const handleTrackChange = (trackChangeEvent: TrackChangeEvent[]) => {
     setArtists(trackChangeEvent[0].artists.join(', '));
@@ -24,10 +18,11 @@ export default function SpotifyView({ socket }: Props) {
     setAlbumCover(trackChangeEvent[0].cover);
   };
 
-  React.useEffect(() => {
-    getSpotifyCurrentlyPlaying().then((res) => {
-      handleTrackChange(res.data);
-    });
+  useEffect(() => {
+    // TODO what to display when no data is fetched?
+    getSpotifyCurrentlyPlaying()
+      .then((res) => handleTrackChange(res.data!))
+      .catch((e) => console.error(e));
 
     socket.on('change_track', (event: unknown[]) => {
       const trackChangeEvents = event[0] as TrackChangeEvent[];
@@ -41,7 +36,7 @@ export default function SpotifyView({ socket }: Props) {
 
   return (
     <div className="relative">
-      <BlurredImage cover={albumCover} />
+      {albumCover !== undefined && <BlurredImage cover={albumCover} />}
       <div className="h-screen flex items-center justify-center relative">
         <img alt="albumCover" className="h-1/2 mr-6" src={albumCover} />
         <div className="w-fit max-w-4xl flex flex-col justify-center font-raleway">

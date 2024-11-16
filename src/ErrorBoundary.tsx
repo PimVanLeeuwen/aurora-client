@@ -1,21 +1,21 @@
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren, ErrorInfo, Component, ReactNode } from 'react';
 
 interface Props extends PropsWithChildren {
-  fallback?: React.ReactNode;
+  fallback?: ReactNode;
 }
 
 interface State {
   error?: Error;
-  stack?: string;
+  stack?: string | null;
 }
 
-export default class ErrorBoundary extends React.Component<Props, State> {
+export default class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {};
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({ error, stack: errorInfo.componentStack });
     console.error(error, errorInfo.componentStack);
   }

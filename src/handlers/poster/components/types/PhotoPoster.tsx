@@ -20,10 +20,13 @@ export default function PhotoPoster({ poster, visible, setTitle }: Props) {
     const body: GEWISPhotoAlbumParams = {
       albumIds: poster.albums,
     };
-    getPhoto({ body }).then((res) => {
-      setUrl(res.data.url);
-      setLabel(res.data.label);
-    });
+    // TODO what do display if photo is not fetched?
+    getPhoto({ body })
+      .then((res) => {
+        setUrl(res.data!.url);
+        setLabel(res.data!.label);
+      })
+      .catch((e) => console.error(e));
   }, [poster.albums]);
 
   return <ImagePoster source={url} />;

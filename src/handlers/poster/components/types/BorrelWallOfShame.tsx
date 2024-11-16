@@ -9,11 +9,13 @@ interface Props {
 
 export default function BorrelWallOfShamePoster({ visible }: Props) {
   const [debtors, setDebtors] = useState<SudoSOSDebtorResponse[]>([]);
+  const [fontSizeClass, setFontSizeClass] = useState<string | undefined>();
 
+  // TODO what if data is not fetched?
   useEffect(() => {
-    getSudoSosWallOfShame().then((res) => {
-      setDebtors(res.data);
-    });
+    getSudoSosWallOfShame()
+      .then((res) => setDebtors(res.data!))
+      .catch((e) => console.error(e));
   }, []);
 
   return (
@@ -40,16 +42,15 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
                 <th className="fine">Fine</th>
               </tr>
               {debtors.map((debtor, i) => {
-                let fontSizeClass: string;
                 switch (i) {
                   case 0:
-                    fontSizeClass = 'text-7xl';
+                    setFontSizeClass('text-7xl');
                     break;
                   case 1:
-                    fontSizeClass = 'text-6xl';
+                    setFontSizeClass('text-6xl');
                     break;
                   case 2:
-                    fontSizeClass = 'text-5xl';
+                    setFontSizeClass('text-5xl');
                     break;
                   default:
                     break;

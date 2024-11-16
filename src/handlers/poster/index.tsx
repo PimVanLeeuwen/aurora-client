@@ -1,57 +1,63 @@
 import './index.scss';
 import { useEffect, useState } from 'react';
-import { getPosters, Poster } from '../../api';
+import { FooterSize, getPosters, Poster } from '../../api';
 import ProgressBar from './components/ProgressBar';
 import PosterCarousel from './components/Carousel';
 
 export default function PosterView() {
   const [posters, setPosters] = useState<Poster[]>();
   const [borrelMode, setBorrelMode] = useState(false);
-  const [posterIndex, setPosterIndex] = useState(-1);
+  const [posterIndex, setPosterIndex] = useState<number>();
   // ReturnType used instead of number as one of the dependencies uses @types/node as dependency
-  const [posterTimeout, setPosterTimeout] = useState<ReturnType<typeof setTimeout> | undefined>();
+  const [posterTimeout, setPosterTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
 
   const refreshPosters = async () => {
     setLoading(true);
+    // TODO what to do if poster cannot be fetched?
     const newPosters = await getPosters();
-    setPosters(newPosters.data.posters as Poster[]);
-    setBorrelMode(newPosters.data.borrelMode);
+    setPosters(newPosters.data!.posters);
+    setBorrelMode(newPosters.data!.borrelMode);
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (!posters || posters.length === 0) return;
-    if (posterTimeout) clearTimeout(posterTimeout);
-
-    if (posterIndex === 0) {
-      refreshPosters().then(() => {});
-    }
-
-    const nextPoster = posters[posterIndex];
-    const timeout = setTimeout(() => setPosterIndex((i) => (i + 1) % posters.length), nextPoster.timeout * 1000);
-    setPosterTimeout(timeout);
-
-    return () => clearTimeout(timeout);
-  }, [posterIndex, posterTimeout, posters]);
-
   const nextPoster = () => {
-    setPosterIndex((i) => (i + 1) % posters.length);
+    if (!posters) {
+      setPosterIndex(undefined);
+    } else {
+      setPosterIndex((i) => (i! + 1) % posters.length);
+    }
   };
 
   const pausePoster = () => {
     if (posterTimeout) clearTimeout(posterTimeout);
-    setPosterTimeout(undefined);
+    setPosterTimeout(null);
   };
 
   useEffect(() => {
-    refreshPosters();
+    if (!posters || posters.length === 0 || !posterIndex) return;
+    if (posterTimeout) clearTimeout(posterTimeout);
+
+    if (posterIndex === 0) {
+      refreshPosters().catch((e) => console.error(e));
+    }
+
+    const nextPoster = posters[posterIndex];
+    const timeout = setTimeout(() => setPosterIndex((i) => (i! + 1) % posters.length), nextPoster.timeout * 1000);
+    setPosterTimeout(timeout);
+
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- TODO; should these be exhaustive?
+  }, [posterIndex]);
+
+  useEffect(() => {
+    refreshPosters().catch((e) => console.error(e));
 
     return () => {
       if (posterTimeout) clearTimeout(posterTimeout);
     };
-  }, [posterTimeout]);
+  });
 
   useEffect(() => {
     if (posters && !posterTimeout && !loading) {
@@ -60,7 +66,7 @@ export default function PosterView() {
     }
   }, [posters, loading, posterTimeout]);
 
-  const selectedPoster = posters && posters.length > 0 && posterIndex >= 0 ? posters[posterIndex] : undefined;
+  const selectedPoster = posters && posters.length > 0 && posterIndex ? posters[posterIndex] : null;
 
   return (
     <div
@@ -68,13 +74,13 @@ export default function PosterView() {
       style={{ backgroundImage: 'url("base/poster-background.png")' }}
     >
       <div className="overflow-hidden w-full h-full">
-        <PosterCarousel posters={posters || []} currentPoster={posterIndex < 0 ? 0 : posterIndex} setTitle={setTitle} />
+        <PosterCarousel posters={posters || []} currentPoster={!posterIndex ? 0 : posterIndex} setTitle={setTitle} />
         <ProgressBar
           title={title}
           seconds={posterTimeout !== undefined ? selectedPoster?.timeout : undefined}
           posterIndex={posterIndex}
-          minimal={selectedPoster?.footer === 'minimal'}
-          hide={selectedPoster?.footer === 'hidden'}
+          minimal={selectedPoster?.footer === FooterSize.MINIMAL}
+          hide={selectedPoster?.footer === FooterSize.HIDDEN}
           borrelMode={borrelMode}
           nextPoster={nextPoster}
           pausePoster={pausePoster}

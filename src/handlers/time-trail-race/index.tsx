@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import {
   getRaceState,
   PlayerParams,
+  RaceBaseEvent,
   RaceFinishedEvent,
   RacePlayerReadyEvent,
   RacePlayerRegisteredEvent,
@@ -10,6 +11,11 @@ import {
   RaceStartedEvent,
   ScoreboardItem,
   TimeTrailRaceState,
+  TimeTrailRaceState_FINISHED,
+  TimeTrailRaceState_PLAYER_READY,
+  TimeTrailRaceState_PLAYER_REGISTERED,
+  TimeTrailRaceState_SCOREBOARD,
+  TimeTrailRaceState_STARTED,
 } from '../../api';
 import StopWatch from './components/StopWatch';
 import NextPlayer from './components/NextPlayer';
@@ -19,23 +25,38 @@ interface Props {
   socket: Socket;
 }
 
+type RaceInitializedEvent = RaceBaseEvent & {
+  state: TimeTrailRaceState.INITIALIZED;
+};
+
 export default function TimeTrailRaceView({ socket }: Props) {
-  const [state, setState] = useState<TimeTrailRaceState>(undefined);
+  const [state, setState] = useState<
+    | TimeTrailRaceState
+    | TimeTrailRaceState_PLAYER_REGISTERED
+    | TimeTrailRaceState_PLAYER_READY
+    | TimeTrailRaceState_STARTED
+    | TimeTrailRaceState_FINISHED
+    | TimeTrailRaceState_SCOREBOARD
+    | undefined
+  >();
   const [sessionName, setSessionName] = useState<string>('');
   const [player, setPlayer] = useState<PlayerParams | undefined>();
   const [startTime, setStartTime] = useState<Date | undefined>();
   const [scoreboard, setScoreboard] = useState<ScoreboardItem[]>([]);
 
   useEffect(() => {
-    getRaceState().then((res) => {
-      const { state: s, sessionName: n, scoreboard: sb } = res.data;
-      setState(s);
-      setSessionName(n);
-      setScoreboard(sb);
-    });
+    getRaceState()
+      .then((res) => {
+        // TODO what data to display when fetching data went wrong?
+        const { state: s, sessionName: n, scoreboard: sb } = res.data!;
+        setState(s);
+        setSessionName(n);
+        setScoreboard(sb);
+      })
+      .catch((e) => console.error(e));
 
-    socket.on('race-initialized', ([{ state: s, sessionName: n }]) => {
-      setState(s as unknown as TimeTrailRaceState);
+    socket.on('race-initialized', ([{ state: s, sessionName: n }]: RaceInitializedEvent[]) => {
+      setState(s);
       setSessionName(n);
       setScoreboard([]);
       setPlayer(undefined);
@@ -44,7 +65,7 @@ export default function TimeTrailRaceView({ socket }: Props) {
     socket.on(
       'race-player-registered',
       ([{ state: s, player: p, sessionName: n, scoreboard: sb }]: RacePlayerRegisteredEvent[]) => {
-        setState(s as unknown as TimeTrailRaceState);
+        setState(s);
         setSessionName(n);
         setPlayer(p);
         setScoreboard(sb);
@@ -52,20 +73,20 @@ export default function TimeTrailRaceView({ socket }: Props) {
     );
 
     socket.on('race-player-ready', ([{ state: s, player: p, sessionName: n }]: RacePlayerReadyEvent[]) => {
-      setState(s as unknown as TimeTrailRaceState);
+      setState(s);
       setSessionName(n);
       setPlayer(p);
     });
 
     socket.on('race-started', ([{ state: s, sessionName: n, player: p, startTime: t }]: RaceStartedEvent[]) => {
-      setState(s as unknown as TimeTrailRaceState);
+      setState(s);
       setSessionName(n);
       setPlayer(p);
       setStartTime(new Date(t));
     });
 
     socket.on('race-finished', ([{ state: s, player: p, scoreboard: sb, sessionName: n }]: RaceFinishedEvent[]) => {
-      setState(s as unknown as TimeTrailRaceState);
+      setState(s);
       setSessionName(n);
       setPlayer(p);
       setScoreboard(sb);
@@ -73,7 +94,7 @@ export default function TimeTrailRaceView({ socket }: Props) {
     });
 
     socket.on('race-scoreboard', ([{ state: s, player: p, scoreboard: sb, sessionName: n }]: RaceScoreboardEvent[]) => {
-      setState(s as unknown as TimeTrailRaceState);
+      setState(s);
       setSessionName(n);
       setPlayer(p);
       setScoreboard(sb);
@@ -86,19 +107,21 @@ export default function TimeTrailRaceView({ socket }: Props) {
 
   const renderContent = () => {
     switch (state) {
-      case 'PLAYER_READY':
+      case TimeTrailRaceState.PLAYER_READY:
         return (
           <div className="h-full flex justify-center items-center" style={{ fontSize: '16rem' }}>
             READY?!
           </div>
         );
-      case 'STARTED':
+      case TimeTrailRaceState.STARTED:
         return <StopWatch startTime={startTime} />;
-      case 'FINISHED':
+      case TimeTrailRaceState.FINISHED:
         return null;
-      case 'INITIALIZED':
-      case 'SCOREBOARD':
+      case TimeTrailRaceState.INITIALIZED:
+      case TimeTrailRaceState.SCOREBOARD:
       default:
+        if (!scoreboard) return null;
+        if (scoreboard.length === 0) return null;
         return <Scoreboard scoreboard={scoreboard} player={player} />;
     }
   };
@@ -110,7 +133,8 @@ export default function TimeTrailRaceView({ socket }: Props) {
         <h4 className="text-5xl italic">{sessionName}</h4>
       </div>
       <div className="flex-1 overflow-hidden">{renderContent()}</div>
-      {state === 'PLAYER_REGISTERED' && (
+      {/* TODO what to show instead of player? */}
+      {state === TimeTrailRaceState.PLAYER_REGISTERED && player !== undefined && (
         <div className="relative overflow-hidden w-full h-12">
           <NextPlayer name={player?.name} bac={player?.bac} delay={0} time={10000} />
           <NextPlayer name={player?.name} bac={player?.bac} delay={-3333} time={10000} />

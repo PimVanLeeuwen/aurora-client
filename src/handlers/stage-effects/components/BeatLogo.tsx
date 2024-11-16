@@ -49,7 +49,7 @@ export default function BeatLogo({ eventEmitter, logo }: Props) {
             filter: 'drop-shadow(3px 5px 2px rgb(0 0 0 /0.4)',
           }}
         >
-          <image x="0" y="0" width="100%" height="100%" xlinkHref={`public/${logo}`} />
+          <image x="0" y="0" width="100%" height="100%" xlinkHref={`/public/${logo}`} />
         </svg>
       </div>
     </div>

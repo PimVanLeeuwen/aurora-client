@@ -22,12 +22,12 @@ export default function Scoreboard({ scoreboard, player }: Props) {
   const getScoreStyle = (score: ScoreboardItem): CSSProperties => {
     if (score.uuid === player?.uuid) return redShadow;
     if (score.bac) return bacShadow;
-    return undefined;
+    return {};
   };
 
   return (
     <div className="h-full" style={{ marginBottom: '-5rem' }}>
-      <VerticalScroll visible scrollEmptySpace>
+      <VerticalScroll scrollEmptySpace visible={true}>
         <table className="border-separate text-4xl" style={{ borderSpacing: '3rem 1rem' }}>
           <tbody>
             {scoreboard.map((score, i) => (

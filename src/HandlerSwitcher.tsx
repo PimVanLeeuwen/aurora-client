@@ -22,7 +22,7 @@ export enum Handlers {
 
 export default function HandlerSwitcher() {
   const [currentHandler, setCurrentHandler] = useState<Handlers | null>(null);
-  const [screenSocket, setScreenSocket] = useState<Socket>(null);
+  const [screenSocket, setScreenSocket] = useState<Socket | null>(null);
 
   const { user, loading } = useContext(AuthContext);
 

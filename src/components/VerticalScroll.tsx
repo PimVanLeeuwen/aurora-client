@@ -1,7 +1,7 @@
 import { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props extends PropsWithChildren {
-  visible: boolean;
+  visible?: boolean;
   timeout?: number;
   items?: number;
   scrollEmptySpace?: boolean;
@@ -13,12 +13,12 @@ export default function VerticalScroll({ children, visible, timeout, items, scro
   const [timeoutRef, setTimeoutRef] = useState<ReturnType<typeof setTimeout> | undefined>();
   const [iteration, setIteration] = useState(0);
 
-  const containerRef = useRef<HTMLDivElement>();
-  const childRef = useRef<HTMLDivElement>();
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const childRef = useRef<HTMLDivElement | null>(null);
 
   const animate = useCallback(() => {
-    const containerHeight = containerRef.current.clientHeight;
-    const childHeight = childRef.current.clientHeight;
+    const containerHeight = containerRef.current!.clientHeight;
+    const childHeight = childRef.current!.clientHeight;
     const absoluteHeightDifference = childHeight - containerHeight;
     const relativeHeightDifference = absoluteHeightDifference / containerHeight;
 
@@ -41,10 +41,10 @@ export default function VerticalScroll({ children, visible, timeout, items, scro
       delay,
     };
 
-    childRef.current.animate(keyframes, options);
+    childRef.current!.animate(keyframes, options);
 
     return duration + delay;
-  }, [timeout]);
+  }, [timeout, containerRef]);
 
   // Start an animation with a timeout to increase the iteration counter
   const loopAnimate = useCallback(() => {
@@ -54,22 +54,26 @@ export default function VerticalScroll({ children, visible, timeout, items, scro
   }, [animate, timeoutRef]);
 
   useEffect(() => {
-    if (!containerRef.current || !childRef.current || !visible) return;
+    if (!containerRef || !childRef || !visible) return;
 
     loopAnimate();
 
     return () => {
       if (timeoutRef) clearTimeout(timeoutRef);
     };
-  }, [containerRef, childRef, visible, items, iteration, animate, loopAnimate, timeoutRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- TODO; should these be exhaustive?
+  }, [containerRef, childRef, visible, items, iteration]);
 
   return (
     <div ref={containerRef} className="w-full h-full overflow-hidden">
       <div ref={childRef} className="w-full h-fit">
         {children}
-        {scrollEmptySpace && containerRef.current?.clientHeight < childRef.current?.clientHeight && (
-          <div style={{ height: containerRef.current.clientHeight / 3 }} />
-        )}
+        {scrollEmptySpace &&
+          containerRef.current &&
+          childRef.current &&
+          containerRef.current.clientHeight < childRef.current.clientHeight && (
+            <div style={{ height: containerRef.current.clientHeight / 3 }} />
+          )}
       </div>
     </div>
   );
