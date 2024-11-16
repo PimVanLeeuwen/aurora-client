@@ -19,7 +19,7 @@ export default function BorrelPriceListPoster({ visible }: Props) {
         const productMap = new Map<number, ProductResponse[]>();
         const categoryMap = new Map<number, ProductCategoryResponse>();
 
-        res.data!.forEach((p) => {
+        res.data.forEach((p) => {
           if (productMap.has(p.category.id)) {
             productMap.get(p.category.id)!.push(p);
           } else {

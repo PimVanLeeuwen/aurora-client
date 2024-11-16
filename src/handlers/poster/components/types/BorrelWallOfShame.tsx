@@ -14,7 +14,7 @@ export default function BorrelWallOfShamePoster({ visible }: Props) {
   useEffect(() => {
     getSudoSosWallOfShame()
       .then((res) => {
-        if (res && res.data) setDebtors(res.data!);
+        if (res && res.data) setDebtors(res.data);
       })
       .catch((e) => console.error(e));
   }, []);
