@@ -11,6 +11,7 @@ import { AuthContext } from './contexts/AuthContext';
 import StageEffectsView from './handlers/stage-effects';
 import PosterView from './handlers/poster';
 import TimeTrailRaceView from './handlers/time-trail-race';
+import RoomResponsibleLegacyView from './handlers/room-responsible-legacy';
 
 export enum Handlers {
   SPOTIFY = 'CurrentlyPlayingTrackHandler',
@@ -18,6 +19,7 @@ export enum Handlers {
   POSTER = 'PosterScreenHandler',
   STAGE_EFFECTS = 'StageEffectsHandler',
   TIME_TRAIL_RACE = 'TimeTrailRaceScreenHandler',
+  ROOM_RESPONSIBLE_LEGACY = 'RoomResponsibleLegacyHandler',
 }
 
 export default function HandlerSwitcher() {
@@ -68,6 +70,8 @@ export default function HandlerSwitcher() {
       return <StageEffectsView socket={screenSocket} />;
     case Handlers.TIME_TRAIL_RACE:
       return <TimeTrailRaceView socket={screenSocket} />;
+    case Handlers.ROOM_RESPONSIBLE_LEGACY:
+      return <RoomResponsibleLegacyView />;
     default:
       return <DefaultView />;
   }
