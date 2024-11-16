@@ -57,7 +57,9 @@ export default function PosterView() {
     return () => {
       if (posterTimeout) clearTimeout(posterTimeout);
     };
-  });
+    // We should do this only once, in contrary what ESLint thinks we should do
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (posters && !posterTimeout && !loading) {
