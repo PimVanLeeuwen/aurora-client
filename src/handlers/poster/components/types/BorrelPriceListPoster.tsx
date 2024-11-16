@@ -14,6 +14,7 @@ export default function BorrelPriceListPoster({ visible }: Props) {
     // TODO what to do if data is not fetched?
     getSudoSosPriceList()
       .then((res) => {
+        if (!res || !res.data) return;
         // Mapping from category ID to products
         const productMap = new Map<number, ProductResponse[]>();
         const categoryMap = new Map<number, ProductCategoryResponse>();
