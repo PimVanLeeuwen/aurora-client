@@ -28,7 +28,9 @@ export default function ProgressBar({
       style={{ backgroundColor: !minimal && !hide ? 'rgba(0, 0, 0, 0.5)' : '', height: 80 }}
     >
       <div className="absolute w-full" style={{ height: 5, marginTop: -2, bottom: minimal || hide ? 0 : '' }}>
-        {seconds !== undefined && posterIndex && <ProgressBarSlider seconds={seconds} posterIndex={posterIndex} />}
+        {seconds !== undefined && posterIndex !== undefined && (
+          <ProgressBarSlider seconds={seconds} posterIndex={posterIndex} />
+        )}
       </div>
       <div className={`flex-grow flex justify-center items-center px-6 ${hide ? 'hidden' : ''}`}>
         <div className="relative h-full py-3" style={{ width: 200 }}>

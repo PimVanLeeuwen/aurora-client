@@ -36,7 +36,7 @@ export default function PosterView() {
   };
 
   useEffect(() => {
-    if (!posters || posters.length === 0 || !posterIndex) return;
+    if (!posters || posters.length === 0 || posterIndex === undefined) return;
     if (posterTimeout) clearTimeout(posterTimeout);
 
     if (posterIndex === 0) {
@@ -68,7 +68,7 @@ export default function PosterView() {
     }
   }, [posters, loading, posterTimeout]);
 
-  const selectedPoster = posters && posters.length > 0 && posterIndex ? posters[posterIndex] : null;
+  const selectedPoster = posters && posters.length > 0 && posterIndex !== undefined ? posters[posterIndex] : null;
 
   return (
     <div
