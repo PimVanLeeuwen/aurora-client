@@ -93,25 +93,19 @@ export default function CenturionView({ socket }: Props) {
 
     socket.on('loaded', (mixTapes: MixTape[]) => {
       const mixTape = mixTapes[0];
+
       setMixtape(mixTape ?? null);
       setStatus(Status.READY);
-      setHornCount(-1);
+      setHornCount(undefined);
     });
 
     socket.on('start', () => {
-      setArtists('GEWIS');
-      setSong('Narrowcasting Software ©');
-
-      setHornCount(0);
+      if (hornCount === undefined) setHornCount(-1);
       setStatus(Status.PLAYING);
     });
 
     socket.on('stop', () => {
-      setArtists('GEWIS');
-      setSong('Narrowcasting Software ©');
-
       setStatus(Status.STOPPED);
-      setHornCount(-1);
     });
 
     socket.on('change_track', (event: TrackChangeEvent[][]) => {
@@ -183,7 +177,8 @@ export default function CenturionView({ socket }: Props) {
   };
 
   const renderBackground = () => {
-    if (hornCount && mixtape) return <Background colors={colors} progression={!hornCount ? 0 : hornCount} />;
+    if (hornCount !== undefined && mixtape)
+      return <Background colors={colors} progression={!hornCount ? 0 : hornCount} />;
 
     return (
       <div className="h-screen w-full top-0 left-0 absolute -z-20 bg-black overflow-hidden">
@@ -200,14 +195,14 @@ export default function CenturionView({ socket }: Props) {
 
   return (
     <>
-      {!hornCount && mixtape && (
+      {mixtape && status !== Status.PLAYING && (
         <Information title={mixtape.name} artist={mixtape.artist} albumCover={mixtape.coverUrl} description={status} />
       )}
 
       {status === Status.PLAYING && (
         <div className="h-screen flex items-center justify-center overflow-hidden">
           <div className={clsx('w-fit flex flex-col justify-center text-center', styles.text)}>
-            {hornCount && renderHornCount()}
+            {hornCount !== undefined && hornCount >= 0 && renderHornCount()}
             <div className="flex flex-wrap justify-center text-white text-7xl font-bold mb-10 px-12">
               {makeTextDrunk(artist?.toUpperCase())}
             </div>

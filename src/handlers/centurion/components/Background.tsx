@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import { Helmet } from 'react-helmet';
+import { memo } from 'react';
 import styles from '../centurion.module.css';
 import { CurrentColors } from '../index';
 import { imports, tweenMax } from '../scripts/imports';
@@ -11,7 +12,7 @@ interface Props {
   progression: number;
 }
 
-export default function Background({ colors, progression }: Props) {
+function Background({ colors, progression }: Props) {
   return (
     <div className="h-screen w-full top-0 left-0 absolute -z-20">
       <Helmet>
@@ -38,3 +39,5 @@ export default function Background({ colors, progression }: Props) {
     </div>
   );
 }
+
+export default memo(Background);
