@@ -179,27 +179,33 @@ export default function CenturionView({ socket }: Props) {
 
   const makeTextDrunk = (note?: string) => {
     if (!note) return null;
-    return [...note].map((letter, index) => {
-      // Range [-#shots, #shots]
-      const randomInt = getRandomInt();
+    return note.split(' ').map((word, i) => {
       return (
-        <span
-          key={index}
-          className={clsx(styles.drunk, 'z-20')}
-          style={{
-            ['--random-rotation' as string]: `${randomInt / 3}deg`,
-            ['--random-time' as string]: `${hornCount === 0 ? '500s' : `${(1 / hornCount) * 500}s`}`,
-            display: 'inline-block',
-          }}
-        >
-          {letter === ' ' ? '\u00A0' : letter}
-        </span>
+        <div key={`${word}-${i}`} className="flex flex-nowrap justify-center me-6">
+          {[...word].map((letter, j) => {
+            // Range [-#shots, #shots]
+            const randomInt = getRandomInt();
+            return (
+              <div
+                key={`${letter}-${j}`}
+                className={clsx(styles.drunk, 'z-20')}
+                style={{
+                  ['--random-rotation' as string]: `${randomInt / 3}deg`,
+                  ['--random-time' as string]: `${hornCount === 0 ? '500s' : `${(1 / hornCount) * 500}s`}`,
+                  display: 'inline-block',
+                }}
+              >
+                {letter === ' ' ? '\u00A0' : letter}
+              </div>
+            );
+          })}
+        </div>
       );
     });
   };
 
   const renderHornCount = () => {
-    return <p className="text-white text-[550px] -m-20">{makeTextDrunk(hornCount.toString())}</p>;
+    return <div className="text-white text-[550px] -m-20">{makeTextDrunk(hornCount.toString())}</div>;
   };
 
   const renderBackground = () => {
@@ -228,8 +234,12 @@ export default function CenturionView({ socket }: Props) {
         <div className="h-screen flex items-center justify-center overflow-hidden">
           <div className={clsx('w-fit flex flex-col justify-center text-center', styles.text)}>
             {hornCount >= 0 && renderHornCount()}
-            <p className="text-white text-7xl font-bold mb-10 px-12">{makeTextDrunk(artist?.toUpperCase())}</p>
-            <p className="text-white text-7xl px-12">{makeTextDrunk(song?.toUpperCase())}</p>
+            <div className="flex flex-wrap justify-center text-white text-7xl font-bold mb-10 px-12">
+              {makeTextDrunk(artist?.toUpperCase())}
+            </div>
+            <div className="flex flex-wrap justify-center text-white text-7xl px-12">
+              {makeTextDrunk(song?.toUpperCase())}
+            </div>
           </div>
         </div>
       )}
