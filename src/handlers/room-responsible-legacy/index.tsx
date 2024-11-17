@@ -6,9 +6,11 @@ export default function RoomResponsibleLegacyView() {
   const [url, setUrl] = useState('');
 
   useEffect(() => {
-    getRoomResponsibleLegacyUrl().then((res) => {
-      if (res && res.data) setUrl(res.data);
-    });
+    getRoomResponsibleLegacyUrl()
+      .then((res) => {
+        if (res && res.data) setUrl(res.data);
+      })
+      .catch((e) => console.error(e));
   }, []);
 
   if (!url) {
