@@ -4,10 +4,10 @@ import { getPosters, Poster } from '../../api';
 import PosterCarousel from './components/Carousel';
 
 export interface OverlayProps {
-  poster: Poster;
+  poster?: Poster;
   posterTitle: string;
-  seconds: number;
-  posterIndex: number;
+  seconds?: number;
+  posterIndex?: number;
   nextPoster: () => void;
   pausePoster: () => void;
   borrelMode?: boolean;
@@ -82,7 +82,7 @@ export default function PosterBaseView({ overlay, localPosterRenderer }: Props) 
     }
   }, [posters, loading, posterTimeout]);
 
-  const selectedPoster = posters && posters.length > 0 && posterIndex !== undefined ? posters[posterIndex] : null;
+  const selectedPoster = posters && posters.length > 0 && posterIndex !== undefined ? posters[posterIndex] : undefined;
 
   return (
     <div
@@ -92,7 +92,7 @@ export default function PosterBaseView({ overlay, localPosterRenderer }: Props) 
       <div className="overflow-hidden w-full h-full">
         <PosterCarousel
           posters={posters || []}
-          currentPoster={posterIndex < 0 ? 0 : posterIndex}
+          currentPoster={!posterIndex ? 0 : posterIndex}
           setTitle={setTitle}
           localPosterRenderer={localPosterRenderer}
         />
@@ -103,6 +103,7 @@ export default function PosterBaseView({ overlay, localPosterRenderer }: Props) 
           posterIndex: posterIndex,
           nextPoster: nextPoster,
           pausePoster: pausePoster,
+          borrelMode: borrelMode,
         })}
       </div>
     </div>

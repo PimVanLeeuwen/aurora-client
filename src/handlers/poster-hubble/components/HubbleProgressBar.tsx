@@ -17,8 +17,8 @@ export default function HubbleProgressBar({ seconds, posterIndex, color, hideClo
       style={{ backgroundColor: '', height: '14.3518519%' }}
     >
       <div className="absolute w-full" style={{ height: '3%', marginTop: -2, bottom: 0 }}>
-        {seconds !== undefined && posterIndex >= 0 && (
-          <ProgressBarSlider seconds={seconds} posterIndex={posterIndex} color={color} />
+        {seconds !== undefined && posterIndex && (
+          <ProgressBarSlider seconds={seconds} posterIndex={posterIndex} color={color || '#ffffff'} />
         )}
       </div>
       <div className={`flex-grow flex justify-center items-center px-6`}>
@@ -35,7 +35,7 @@ export default function HubbleProgressBar({ seconds, posterIndex, color, hideClo
           <div className="text-right h-full" style={{ width: '20%' }}>
             {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
             <div className="h-full" onClick={nextPoster}>
-              <Clock color={color} />
+              <Clock color={color || '#ffffff'} />
             </div>
           </div>
         )}

@@ -13,7 +13,7 @@ export default function ProgressBarSlider({ seconds, posterIndex, color }: Props
     setHiding(true);
 
     // ReturnType used instead of number as one of the dependencies uses @types/node as dependency
-    let timeout: ReturnType<typeof setTimeout> = undefined;
+    let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
 
     const startAnimation = () => {
       setHiding(false);

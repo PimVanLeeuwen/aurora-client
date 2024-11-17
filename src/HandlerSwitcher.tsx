@@ -12,6 +12,7 @@ import StageEffectsView from './handlers/stage-effects';
 import TimeTrailRaceView from './handlers/time-trail-race';
 import PosterGewisView from './handlers/poster-gewis';
 import PosterHubbleView from './handlers/poster-hubble';
+import RoomResponsibleLegacyView from './handlers/room-responsible-legacy';
 
 export enum Handlers {
   SPOTIFY = 'CurrentlyPlayingTrackHandler',

@@ -1,5 +1,5 @@
-import { ReactNode, useMemo } from 'react';
-import { MediaPoster, Poster } from '../../../api';
+import { ReactNode, useEffect, useMemo } from 'react';
+import { MediaPoster, Poster, PosterType_PHOTO } from '../../../api';
 import LogoPoster from '../../poster-gewis/components/types/LogoPoster';
 import ImagePoster from '../../poster-gewis/components/types/ImagePoster';
 import ExternalPoster from '../../poster-gewis/components/types/ExternalPoster';
@@ -8,13 +8,13 @@ import VideoPoster from '../../poster-gewis/components/types/VideoPoster';
 interface Props {
   posters: Poster[];
   currentPoster: number;
-  setTitle?: (title: string) => void;
+  setTitle: (title: string) => void;
   localPosterRenderer?: (poster: Poster, visible: boolean, setTitle?: (title: string) => void) => ReactNode;
 }
 
 export default function PosterCarousel({ posters, currentPoster, setTitle, localPosterRenderer }: Props) {
-  const previousPoster = useMemo(() => (currentPoster - 1) % posters.length, [currentPoster]);
-  const nextPoster = useMemo(() => (currentPoster + 1) % posters.length, [currentPoster]);
+  const previousPoster = useMemo(() => (currentPoster - 1) % posters.length, [currentPoster, posters.length]);
+  const nextPoster = useMemo(() => (currentPoster + 1) % posters.length, [currentPoster, posters.length]);
 
   const renderPoster = (poster: Poster, index: number) => {
     if (index !== previousPoster && index !== currentPoster && index !== nextPoster) return null;
