@@ -137,6 +137,7 @@ export default function CenturionView({ socket }: Props) {
     return () => {
       socket.removeAllListeners();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   const getRandomInt = () => {
