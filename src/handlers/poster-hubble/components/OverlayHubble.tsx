@@ -4,7 +4,6 @@ import HubbleOrderView from './HubbleOrderView';
 
 export default function OverlayHubble({
   // poster,
-  // posterTitle,
   seconds,
   posterIndex,
   nextPoster,
