@@ -9,10 +9,7 @@ import OlympicsPoster from './components/types/OlympicsPoster';
 import PhotoPoster from './components/types/PhotoPoster';
 
 export default function PosterGewisView() {
-  const localPosterRenderer = (poster: Poster, visible: boolean, setTitle?: (title: string) => void) => {
-    // TODO: Properly handle this
-    if (setTitle == undefined) return <div>setTitle not defined</div>;
-
+  const localPosterRenderer = (poster: Poster, visible: boolean, setTitle: (title: string) => void) => {
     switch (poster.type as string) {
       case 'photo':
         return (

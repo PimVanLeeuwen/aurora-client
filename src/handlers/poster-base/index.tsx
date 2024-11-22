@@ -15,7 +15,7 @@ export interface OverlayProps {
 
 interface Props {
   overlay: (overlayProps: OverlayProps) => ReactNode;
-  localPosterRenderer?: (poster: Poster, visible: boolean, setTitle?: (title: string) => void) => ReactNode;
+  localPosterRenderer?: (poster: Poster, visible: boolean, setTitle: (title: string) => void) => ReactNode;
 }
 
 export default function PosterBaseView({ overlay, localPosterRenderer }: Props) {

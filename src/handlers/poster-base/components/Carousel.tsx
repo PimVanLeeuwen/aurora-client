@@ -9,7 +9,7 @@ interface Props {
   posters: Poster[];
   currentPoster: number;
   setTitle: (title: string) => void;
-  localPosterRenderer?: (poster: Poster, visible: boolean, setTitle?: (title: string) => void) => ReactNode;
+  localPosterRenderer?: (poster: Poster, visible: boolean, setTitle: (title: string) => void) => ReactNode;
 }
 
 export default function PosterCarousel({ posters, currentPoster, setTitle, localPosterRenderer }: Props) {
