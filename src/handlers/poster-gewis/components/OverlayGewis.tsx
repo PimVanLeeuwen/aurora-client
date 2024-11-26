@@ -1,4 +1,5 @@
 import { OverlayProps } from '../../poster-base';
+import { FooterSize } from '../../../api';
 import GewisProgressBar from './GewisProgressBar.tsx';
 
 export default function OverlayGewis({
@@ -15,8 +16,8 @@ export default function OverlayGewis({
       title={posterTitle}
       seconds={seconds}
       posterIndex={posterIndex}
-      minimal={poster?.footer === 'minimal'}
-      hide={poster?.footer === 'hidden'}
+      minimal={poster?.footer === FooterSize.MINIMAL}
+      hide={poster?.footer === FooterSize.HIDDEN}
       borrelMode={borrelMode}
       nextPoster={nextPoster}
       pausePoster={pausePoster}
