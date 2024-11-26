@@ -1,5 +1,5 @@
+import ProgressBarSlider from '../../poster-base/components/ProgressBarSlider';
 import Clock from './Clock';
-import ProgressBarSlider from './ProgressBarSlider';
 
 interface Props {
   seconds?: number;

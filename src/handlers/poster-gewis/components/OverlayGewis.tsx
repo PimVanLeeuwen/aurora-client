@@ -1,5 +1,5 @@
 import { OverlayProps } from '../../poster-base';
-import ProgressBar from './ProgressBar';
+import GewisProgressBar from './GewisProgressBar.tsx';
 
 export default function OverlayGewis({
   poster,
@@ -11,7 +11,7 @@ export default function OverlayGewis({
   borrelMode,
 }: OverlayProps) {
   return (
-    <ProgressBar
+    <GewisProgressBar
       title={posterTitle}
       seconds={seconds}
       posterIndex={posterIndex}
