@@ -1,9 +1,9 @@
 import { ReactNode, useEffect, useMemo } from 'react';
 import { MediaPoster, Poster, PosterType_PHOTO } from '../../../api';
-import LogoPoster from '../../poster-gewis/components/types/LogoPoster';
-import ImagePoster from '../../poster-gewis/components/types/ImagePoster';
-import ExternalPoster from '../../poster-gewis/components/types/ExternalPoster';
-import VideoPoster from '../../poster-gewis/components/types/VideoPoster';
+import LogoPoster from '../gewis/components/types/LogoPoster';
+import ImagePoster from '../gewis/components/types/ImagePoster';
+import ExternalPoster from '../gewis/components/types/ExternalPoster';
+import VideoPoster from '../gewis/components/types/VideoPoster';
 
 interface Props {
   posters: Poster[];

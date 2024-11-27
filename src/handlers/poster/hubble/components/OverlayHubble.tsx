@@ -1,6 +1,6 @@
-import { OverlayProps } from '../../poster-base';
-import HubbleProgressBar from './HubbleProgressBar';
-import HubbleOrderView from './HubbleOrderView';
+import { OverlayProps } from '../../index.tsx';
+import HubbleProgressBar from './HubbleProgressBar.tsx';
+import HubbleOrderView from './HubbleOrderView.tsx';
 
 export default function OverlayHubble({
   // poster,

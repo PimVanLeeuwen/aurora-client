@@ -1,5 +1,5 @@
 import './components/index.scss';
-import PosterBaseView from '../poster-base';
+import PosterBaseView from '../index.tsx';
 import OverlayHubble from './components/OverlayHubble.tsx';
 
 export default function PosterHubbleView() {

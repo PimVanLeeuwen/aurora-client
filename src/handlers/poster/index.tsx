@@ -1,4 +1,4 @@
-import '../poster-gewis/components/index.scss';
+import './gewis/components/index.scss';
 import { ReactNode, useEffect, useState } from 'react';
 import { getPosters, Poster } from '../../api';
 import PosterCarousel from './components/Carousel';
