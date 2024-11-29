@@ -1,5 +1,12 @@
+import { RequestResult } from '@hey-api/client-fetch';
 import PosterBaseView from '../';
-import { PhotoPoster as ClientPhotoPoster, getGewisPosters, Poster } from '../../api';
+import {
+  PhotoPoster as ClientPhotoPoster,
+  getGewisPosters,
+  Poster,
+  BasePosterResponse,
+  GewisPosterResponse,
+} from '../../../api';
 import OverlayGewis from './components/OverlayGewis';
 import BorrelLogoPoster from './components/types/BorrelLogoPoster';
 import BorrelWallOfShamePoster from './components/types/BorrelWallOfShame';
@@ -32,8 +39,7 @@ export default function PosterGewisView() {
     <PosterBaseView
       overlay={OverlayGewis}
       localPosterRenderer={localPosterRenderer}
-      // @ts-expect-error This should be type converting
-      getPosters={getGewisPosters}
+      getPosters={getGewisPosters as unknown as () => Promise<RequestResult<BasePosterResponse | GewisPosterResponse>>}
     />
   );
 }
