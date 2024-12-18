@@ -7,7 +7,7 @@ import {
   getOlympicsMedalTable,
   MedalTableRecord,
 } from '../../../../../api';
-import VerticalScroll from '../../../../../components/VerticalScroll.tsx';
+import VerticalScroll from '../../../../../components/VerticalScroll';
 
 interface Props {
   visible: boolean;

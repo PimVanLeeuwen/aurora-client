@@ -1,6 +1,6 @@
 import { OverlayProps } from '../../index.tsx';
 import { FooterSize } from '../../../../api';
-import GewisProgressBar from './GewisProgressBar.tsx';
+import GewisProgressBar from './GewisProgressBar';
 
 export default function OverlayGewis({
   poster,
